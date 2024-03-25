@@ -1,4 +1,4 @@
-package com.example.kaloree
+package com.notsatria.kaloree
 
 import io.flutter.embedding.android.FlutterActivity
 
