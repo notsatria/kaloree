@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:kaloree/theme/color_schemes.g.dart';
 import 'package:kaloree/theme/fonts.dart';
 import 'package:kaloree/theme/sizes.dart';
+import 'package:kaloree/widgets/loading.dart';
 
 class CustomFilledButton extends StatelessWidget {
   final String text;
@@ -69,7 +70,7 @@ class CustomOutlinedButton extends StatelessWidget {
           ),
         ),
         child: (isLoading)
-            ? const CircularProgressIndicator.adaptive()
+            ? const Loading()
             : Center(
                 child: (leadingIcon == null)
                     ? Text(

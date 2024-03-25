@@ -82,7 +82,10 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                   padding: const EdgeInsets.symmetric(horizontal: margin_20),
                   child: Column(
                     children: [
-                      CustomFilledButton(text: 'Daftar Sekarang', onTap: () {}),
+                      CustomFilledButton(
+                        text: 'Daftar Sekarang',
+                        onTap: () {},
+                      ),
                       const Gap(13),
                       CustomOutlinedButton(
                         text: 'Masuk dengan Google',

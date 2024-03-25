@@ -33,7 +33,7 @@ class OnBoardingWidget extends StatelessWidget {
               style: interMedium.copyWith(fontSize: 12, color: Colors.white),
             ),
             const Gap(8),
-            Image.asset(image),
+            Image.asset(image, alignment: Alignment.center),
           ],
         ),
       ),

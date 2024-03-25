@@ -45,12 +45,18 @@ class MainApp extends StatelessWidget {
             fontFamily: 'Inter',
             colorScheme: lightScheme,
             extensions: [lightCustomColors],
+            progressIndicatorTheme: ProgressIndicatorThemeData(
+              color: lightColorScheme.primary,
+            ),
           ),
           darkTheme: ThemeData(
             useMaterial3: true,
             fontFamily: 'Inter',
             colorScheme: darkScheme,
             extensions: [darkCustomColors],
+            progressIndicatorTheme: ProgressIndicatorThemeData(
+              color: darkColorScheme.primary,
+            ),
           ),
           home: const OnBoardingView(),
         ),
