@@ -1,22 +1,22 @@
-import 'dart:ui';
+import 'package:flutter/material.dart';
 
-TextStyle interLight = TextStyle(
-  fontFamily: 'Inter',
+TextStyle interLight = const TextStyle(
+  fontFamily: 'Poppins',
   fontWeight: FontWeight.w300,
 );
-TextStyle interRegular = TextStyle(
-  fontFamily: 'Inter',
+TextStyle interRegular = const TextStyle(
+  fontFamily: 'Poppins',
   fontWeight: FontWeight.w400,
 );
-TextStyle interMedium = TextStyle(
-  fontFamily: 'Inter',
+TextStyle interMedium = const TextStyle(
+  fontFamily: 'Poppins',
   fontWeight: FontWeight.w500,
 );
-TextStyle interSemiBold = TextStyle(
-  fontFamily: 'Inter',
+TextStyle interSemiBold = const TextStyle(
+  fontFamily: 'Poppins',
   fontWeight: FontWeight.w600,
 );
-TextStyle interBold = TextStyle(
-  fontFamily: 'Inter',
+TextStyle interBold = const TextStyle(
+  fontFamily: 'Poppins',
   fontWeight: FontWeight.w700,
 );

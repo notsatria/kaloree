@@ -13,9 +13,11 @@ dependencies:
   flutter:
     sdk: flutter
   flutter_bloc: ^8.1.5
+  font_awesome_flutter: ^10.7.0
   gap: ^3.0.1
   get_it: ^7.6.7
   shared_preferences: ^2.2.2
+  smooth_page_indicator: ^1.1.0
 
 dev_dependencies:
   flutter_test:
@@ -26,6 +28,7 @@ flutter:
   uses-material-design: true
   assets:
     - assets/
+    - assets/images/
   fonts:
     - family: Inter
       fonts:

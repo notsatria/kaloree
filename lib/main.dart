@@ -1,5 +1,8 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.dart';
+import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';
 import 'package:kaloree/theme/color_schemes.g.dart';
 import 'package:kaloree/theme/custom_color.g.dart';
 
@@ -31,19 +34,25 @@ class MainApp extends StatelessWidget {
         darkScheme = darkColorScheme;
       }
 
-      return MaterialApp(
-        theme: ThemeData(
-          useMaterial3: true,
-          scaffoldBackgroundColor: Colors.white,
-          fontFamily: 'Inter',
-          colorScheme: lightScheme,
-          extensions: [lightCustomColors],
-        ),
-        darkTheme: ThemeData(
-          useMaterial3: true,
-          fontFamily: 'Inter',
-          colorScheme: darkScheme,
-          extensions: [darkCustomColors],
+      return MultiBlocProvider(
+        providers: [
+          BlocProvider(create: (context) => OnBoardingCubit(0)),
+        ],
+        child: MaterialApp(
+          theme: ThemeData(
+            useMaterial3: true,
+            scaffoldBackgroundColor: Colors.white,
+            fontFamily: 'Inter',
+            colorScheme: lightScheme,
+            extensions: [lightCustomColors],
+          ),
+          darkTheme: ThemeData(
+            useMaterial3: true,
+            fontFamily: 'Inter',
+            colorScheme: darkScheme,
+            extensions: [darkCustomColors],
+          ),
+          home: const OnBoardingView(),
         ),
       );
     });
