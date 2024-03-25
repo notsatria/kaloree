@@ -1,14 +1,20 @@
 name: kaloree
-description: "A new Flutter project."
-publish_to: 'none'
+description: "Food detection and calorie measurement app"
+publish_to: "none"
 version: 0.1.0
 
 environment:
-  sdk: '>=3.2.6 <4.0.0'
+  sdk: ">=3.2.6 <4.0.0"
 
 dependencies:
+  connectivity_plus: ^6.0.1
+  equatable: ^2.0.5
   flutter:
     sdk: flutter
+  flutter_bloc: ^8.1.5
+  gap: ^3.0.1
+  get_it: ^7.6.7
+  shared_preferences: ^2.2.2
 
 dev_dependencies:
   flutter_test:
@@ -17,3 +23,6 @@ dev_dependencies:
 
 flutter:
   uses-material-design: true
+  assets:
+    - fonts/
+    - assets/
