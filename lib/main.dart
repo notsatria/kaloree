@@ -5,6 +5,7 @@ import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.
 import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';
 import 'package:kaloree/theme/color_schemes.g.dart';
 import 'package:kaloree/theme/custom_color.g.dart';
+import 'package:kaloree/utils/platform/app_route.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -59,6 +60,8 @@ class MainApp extends StatelessWidget {
             ),
           ),
           home: const OnBoardingView(),
+          initialRoute: AppRoute.onboarding,
+          onGenerateRoute: AppRoute.onGenerateRoute,
         ),
       );
     });

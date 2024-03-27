@@ -7,6 +7,7 @@ import 'package:kaloree/features/onboarding/presentation/views/widgets/onboardin
 import 'package:kaloree/theme/color_schemes.g.dart';
 import 'package:kaloree/theme/colors.dart';
 import 'package:kaloree/theme/sizes.dart';
+import 'package:kaloree/utils/platform/app_route.dart';
 import 'package:kaloree/widgets/custom_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
@@ -84,12 +85,19 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                     children: [
                       CustomFilledButton(
                         text: 'Daftar Sekarang',
-                        onTap: () {},
+                        backgroundColor: Colors.white,
+                        textColor: lightColorScheme.primary,
+                        onTap: () {
+                          goReplacementNamed(context, AppRoute.login);
+                        },
                       ),
                       const Gap(13),
                       CustomOutlinedButton(
                         text: 'Masuk dengan Google',
                         onTap: () {},
+                        outlineColor: Colors.white,
+                        textColor: Colors.white,
+                        outlineWidth: 3,
                         leadingIcon: const FaIcon(
                           FontAwesomeIcons.google,
                           color: Colors.white,
