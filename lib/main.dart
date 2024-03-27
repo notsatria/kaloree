@@ -5,6 +5,7 @@ import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.
 import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';
 import 'package:kaloree/theme/color_schemes.g.dart';
 import 'package:kaloree/theme/custom_color.g.dart';
+import 'package:kaloree/theme/fonts.dart';
 import 'package:kaloree/utils/platform/app_route.dart';
 
 void main() {
@@ -49,6 +50,13 @@ class MainApp extends StatelessWidget {
             progressIndicatorTheme: ProgressIndicatorThemeData(
               color: lightColorScheme.primary,
             ),
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              iconTheme: const IconThemeData(color: Colors.black),
+              titleTextStyle:
+                  interMedium.copyWith(fontSize: 14, color: Colors.black),
+            ),
           ),
           darkTheme: ThemeData(
             useMaterial3: true,
@@ -57,6 +65,13 @@ class MainApp extends StatelessWidget {
             extensions: [darkCustomColors],
             progressIndicatorTheme: ProgressIndicatorThemeData(
               color: darkColorScheme.primary,
+            ),
+            appBarTheme: AppBarTheme(
+              backgroundColor: Colors.white,
+              elevation: 0,
+              iconTheme: IconThemeData(color: darkColorScheme.onPrimary),
+              titleTextStyle: interMedium.copyWith(
+                  fontSize: 14, color: darkColorScheme.onPrimary),
             ),
           ),
           home: const OnBoardingView(),
