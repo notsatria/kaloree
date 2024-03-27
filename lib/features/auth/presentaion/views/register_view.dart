@@ -11,8 +11,8 @@ import 'package:kaloree/utils/platform/app_route.dart';
 import 'package:kaloree/utils/platform/assets.dart';
 import 'package:kaloree/widgets/custom_button.dart';
 
-class LoginView extends StatelessWidget {
-  const LoginView({super.key});
+class RegisterView extends StatelessWidget {
+  const RegisterView({super.key});
 
   @override
   Widget build(BuildContext context) {
@@ -28,7 +28,7 @@ class LoginView extends StatelessWidget {
         body: Stack(
           children: [
             _buildImageHeader(),
-            _buildLoginViewColumn(context),
+            _buildRegisterViewColumn(context),
           ],
         ),
       ),
@@ -69,7 +69,7 @@ class LoginView extends StatelessWidget {
     );
   }
 
-  Align _buildLoginViewColumn(BuildContext context) {
+  Align _buildRegisterViewColumn(BuildContext context) {
     return Align(
       alignment: Alignment.bottomCenter,
       child: Container(
@@ -96,12 +96,12 @@ class LoginView extends StatelessWidget {
             children: [
               const Gap(35),
               Text(
-                'Login',
+                'Register',
                 style: interBold.copyWith(fontSize: 32),
               ),
               const Gap(4),
               Text(
-                'Hai, Selamat datang kembali!',
+                'Hai, Selamat datang di Kaloree!',
                 style: interRegular.copyWith(fontSize: 14),
               ),
               const Gap(50),
@@ -133,26 +133,26 @@ class LoginView extends StatelessWidget {
                 ),
                 obscureText: true,
               ),
+              const Gap(18),
+              Text(
+                'Konfirmasi Password',
+                style: interMedium.copyWith(fontSize: 16),
+              ),
               const Gap(8),
-              Align(
-                alignment: Alignment.centerRight,
-                child: TextButton(
-                  onPressed: () {},
-                  style: TextButton.styleFrom(
-                    padding: EdgeInsets.zero,
-                  ),
-                  child: Text(
-                    'Lupa Password?',
-                    style: interRegular.copyWith(
-                      fontSize: 14,
-                      color: lightColorScheme.primary,
-                    ),
-                  ),
+              CustomFormField(
+                hintText: 'Konfirmasi Password',
+                keyboardType: TextInputType.visiblePassword,
+                textInputAction: TextInputAction.done,
+                prefixIcon: Icons.lock_outline,
+                suffixIcon: Icon(
+                  Icons.visibility_off_outlined,
+                  color: lightColorScheme.outline,
                 ),
+                obscureText: true,
               ),
               const Gap(20),
               CustomFilledButton(
-                text: 'Masuk',
+                text: 'Daftar',
                 backgroundColor: onBoardingBackgroundColor,
                 textColor: Colors.white,
                 onTap: () {},
@@ -191,7 +191,7 @@ class LoginView extends StatelessWidget {
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
                   Text(
-                    'Belum punya akun?',
+                    'Sudah punya akun?',
                     style: interRegular.copyWith(
                       fontSize: 14,
                       color: lightColorScheme.outline,
@@ -200,13 +200,13 @@ class LoginView extends StatelessWidget {
                   const Gap(4),
                   TextButton(
                     onPressed: () {
-                      goReplacementNamed(context, AppRoute.register);
+                      goReplacementNamed(context, AppRoute.login);
                     },
                     style: TextButton.styleFrom(
                       padding: EdgeInsets.zero,
                     ),
                     child: Text(
-                      'Daftar Sekarang',
+                      'Masuk',
                       style: interRegular.copyWith(
                         fontSize: 14,
                         color: lightColorScheme.primary,

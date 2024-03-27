@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:kaloree/features/auth/presentaion/views/login_view.dart';
+import 'package:kaloree/features/auth/presentaion/views/register_view.dart';
 import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';
 
 class AppRoute {
   static const onboarding = '/';
   static const login = '/login';
+  static const register = '/register';
 
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -16,6 +18,11 @@ class AppRoute {
       case login:
         return MaterialPageRoute<dynamic>(
           builder: (_) => const LoginView(),
+          settings: settings,
+        );
+      case register:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => const RegisterView(),
           settings: settings,
         );
       default:
