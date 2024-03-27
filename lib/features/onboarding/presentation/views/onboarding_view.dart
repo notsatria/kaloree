@@ -116,7 +116,9 @@ class _OnBoardingViewState extends State<OnBoardingView> {
 
   TextButton _buildSkipButton() {
     return TextButton(
-      onPressed: () {},
+      onPressed: () {
+        goReplacementNamed(context, AppRoute.login);
+      },
       style: TextButton.styleFrom(
         foregroundColor: Colors.white,
       ),

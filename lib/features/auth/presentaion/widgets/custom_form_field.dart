@@ -21,26 +21,29 @@ class CustomFormField extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return TextFormField(
-      keyboardType: keyboardType,
-      textInputAction: textInputAction,
-      obscureText: obscureText,
-      style: interRegular.copyWith(
-        fontSize: 16,
-      ),
-      decoration: InputDecoration(
-        hintText: hintText,
-        hintStyle: interRegular.copyWith(
+    return SizedBox(
+      height: 55,
+      child: TextFormField(
+        keyboardType: keyboardType,
+        textInputAction: textInputAction,
+        obscureText: obscureText,
+        style: interRegular.copyWith(
           fontSize: 16,
-          color: lightColorScheme.outline,
         ),
-        prefixIcon: Icon(
-          prefixIcon,
-          color: lightColorScheme.outline,
-        ),
-        suffixIcon: suffixIcon,
-        border: OutlineInputBorder(
-          borderRadius: BorderRadius.circular(8),
+        decoration: InputDecoration(
+          hintText: hintText,
+          hintStyle: interRegular.copyWith(
+            fontSize: 16,
+            color: lightColorScheme.outline,
+          ),
+          prefixIcon: Icon(
+            prefixIcon,
+            color: lightColorScheme.outline,
+          ),
+          suffixIcon: suffixIcon,
+          border: OutlineInputBorder(
+            borderRadius: BorderRadius.circular(8),
+          ),
         ),
       ),
     );

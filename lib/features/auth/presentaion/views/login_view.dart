@@ -104,7 +104,7 @@ class LoginView extends StatelessWidget {
                 'Hai, Selamat datang kembali!',
                 style: interRegular.copyWith(fontSize: 14),
               ),
-              const Gap(50),
+              const Gap(35),
               Text(
                 'Email',
                 style: interMedium.copyWith(fontSize: 16),
@@ -186,7 +186,7 @@ class LoginView extends StatelessWidget {
                   color: lightColorScheme.outline,
                 ),
               ),
-              const Gap(24),
+              const Gap(15),
               Row(
                 mainAxisAlignment: MainAxisAlignment.center,
                 children: [
