@@ -27,7 +27,7 @@ class AppRoute {
           builder: (_) => const RegisterView(),
           settings: settings,
         );
-        case personalInformation:
+      case personalInformation:
         return MaterialPageRoute<dynamic>(
           builder: (_) => const PersonalInformationView(),
           settings: settings,
@@ -52,6 +52,26 @@ class AppRoute {
 void goTo(BuildContext context, Widget page) {
   Navigator.of(context).push(
     MaterialPageRoute(builder: (context) => page),
+  );
+}
+
+void goToAnimated(BuildContext context, Widget page) {
+  Navigator.of(context).push(
+    PageRouteBuilder(
+      pageBuilder: (context, animation, secondaryAnimation) => page,
+      transitionsBuilder: (context, animation, secondaryAnimation, child) {
+        const begin = Offset(1.0, 0.0);
+        const end = Offset.zero;
+        const curve = Curves.ease;
+        var tween =
+            Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+        var offsetAnimation = animation.drive(tween);
+        return SlideTransition(
+          position: offsetAnimation,
+          child: child,
+        );
+      },
+    ),
   );
 }
 
