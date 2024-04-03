@@ -25,9 +25,9 @@ AppBar buildCustomAppBar({
 }
 
 BottomAppBar buildCustomBottomAppBar(
-    {required String text, required void Function() onTap}) {
+    {required String text, required void Function() onTap, Color? color}) {
   return BottomAppBar(
-    color: const Color(0xffEAEAEA),
+    color: (color == null) ? const Color(0xffEAEAEA) : color,
     elevation: 0,
     child: CustomFilledButton(
       text: text,
