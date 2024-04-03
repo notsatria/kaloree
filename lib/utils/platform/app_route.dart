@@ -90,6 +90,18 @@ void goReplacementNamed(BuildContext context, String route,
   Navigator.of(context).pushReplacementNamed(route, arguments: arguments);
 }
 
+void goAndRemoveUntil(BuildContext context, Widget page) {
+  Navigator.pushAndRemoveUntil(
+    context,
+    MaterialPageRoute(builder: (context) => page),
+    (route) => false,
+  );
+}
+
+void goAndRemoveUntilNamed(BuildContext context, String route) {
+  Navigator.pushNamedAndRemoveUntil(context, route, (route) => false);
+}
+
 void pop(BuildContext context) {
   Navigator.of(context).pop();
 }
