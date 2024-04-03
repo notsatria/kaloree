@@ -51,9 +51,10 @@ class MainApp extends StatelessWidget {
               color: lightColorScheme.primary,
             ),
             appBarTheme: AppBarTheme(
-              backgroundColor: Colors.white,
+              backgroundColor: const Color(0xffEAEAEA),
               elevation: 0,
-              iconTheme: const IconThemeData(color: Colors.black),
+              iconTheme: IconThemeData(color: lightColorScheme.outline),
+              centerTitle: true,
               titleTextStyle:
                   interMedium.copyWith(fontSize: 14, color: Colors.black),
             ),
@@ -67,9 +68,10 @@ class MainApp extends StatelessWidget {
               color: darkColorScheme.primary,
             ),
             appBarTheme: AppBarTheme(
-              backgroundColor: Colors.white,
+              backgroundColor: const Color(0xffEAEAEA),
               elevation: 0,
-              iconTheme: IconThemeData(color: darkColorScheme.onPrimary),
+              iconTheme: IconThemeData(color: darkColorScheme.outline),
+              centerTitle: true,
               titleTextStyle: interMedium.copyWith(
                   fontSize: 14, color: darkColorScheme.onPrimary),
             ),

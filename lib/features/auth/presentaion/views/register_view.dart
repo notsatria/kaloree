@@ -2,7 +2,7 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:kaloree/features/auth/presentaion/widgets/custom_form_field.dart';
+import 'package:kaloree/widgets/custom_form_field.dart';
 import 'package:kaloree/theme/color_schemes.g.dart';
 import 'package:kaloree/theme/colors.dart';
 import 'package:kaloree/theme/fonts.dart';
