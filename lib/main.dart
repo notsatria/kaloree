@@ -53,7 +53,8 @@ class MainApp extends StatelessWidget {
             appBarTheme: AppBarTheme(
               backgroundColor: const Color(0xffEAEAEA),
               elevation: 0,
-              iconTheme: IconThemeData(color: lightColorScheme.outline),
+              iconTheme:
+                  IconThemeData(color: lightColorScheme.outline, size: 20),
               centerTitle: true,
               titleTextStyle:
                   interMedium.copyWith(fontSize: 14, color: Colors.black),
@@ -70,7 +71,8 @@ class MainApp extends StatelessWidget {
             appBarTheme: AppBarTheme(
               backgroundColor: const Color(0xffEAEAEA),
               elevation: 0,
-              iconTheme: IconThemeData(color: darkColorScheme.outline),
+              iconTheme:
+                  IconThemeData(color: darkColorScheme.outline, size: 20),
               centerTitle: true,
               titleTextStyle: interMedium.copyWith(
                   fontSize: 14, color: darkColorScheme.onPrimary),

@@ -22,7 +22,7 @@ BottomAppBar buildCustomBottomAppBar(
     color: const Color(0xffEAEAEA),
     elevation: 0,
     child: CustomFilledButton(
-      text: 'Berikutnya',
+      text: text,
       onTap: onTap,
       backgroundColor: onBoardingBackgroundColor,
       textColor: Colors.white,

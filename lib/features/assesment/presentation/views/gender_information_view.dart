@@ -1,10 +1,12 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
+import 'package:kaloree/features/assesment/presentation/views/personal_assesment_view.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_appbar.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_gender_chip.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_progress_indicator.dart';
 import 'package:kaloree/theme/fonts.dart';
 import 'package:kaloree/theme/sizes.dart';
+import 'package:kaloree/utils/platform/app_route.dart';
 
 class GenderInformationView extends StatelessWidget {
   const GenderInformationView({super.key});
@@ -17,7 +19,7 @@ class GenderInformationView extends StatelessWidget {
       bottomNavigationBar: buildCustomBottomAppBar(
         text: 'Berikutnya',
         onTap: () {
-          // 
+          goToAnimated(context, const PersonalAssesmentView());
         },
       ),
       body: Padding(
@@ -29,7 +31,7 @@ class GenderInformationView extends StatelessWidget {
             const CustomProgressIndicator(value: 2),
             const Gap(24),
             Text(
-              'Isi data diri kamu',
+              'Jenis Kelamin',
               style: interMedium.copyWith(fontSize: 24),
             ),
             const Gap(8),
