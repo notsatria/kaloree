@@ -1,8 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:flutter/services.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:kaloree/features/auth/presentaion/widgets/custom_form_field.dart';
 import 'package:kaloree/theme/color_schemes.g.dart';
 import 'package:kaloree/theme/colors.dart';
 import 'package:kaloree/theme/fonts.dart';
@@ -10,6 +8,8 @@ import 'package:kaloree/theme/sizes.dart';
 import 'package:kaloree/utils/platform/app_route.dart';
 import 'package:kaloree/utils/platform/assets.dart';
 import 'package:kaloree/widgets/custom_button.dart';
+import 'package:kaloree/widgets/custom_form_field.dart';
+import 'package:kaloree/widgets/dialog.dart';
 
 class LoginView extends StatelessWidget {
   const LoginView({super.key});
@@ -22,7 +22,7 @@ class LoginView extends StatelessWidget {
         if (didPop) {
           return;
         }
-        _showBackDialog(context);
+        showBackDialog(context);
       },
       child: Scaffold(
         body: Stack(
@@ -32,40 +32,6 @@ class LoginView extends StatelessWidget {
           ],
         ),
       ),
-    );
-  }
-
-  void _showBackDialog(BuildContext context) {
-    showDialog<void>(
-      context: context,
-      builder: (BuildContext context) {
-        return AlertDialog(
-          title: const Text('Keluar dari Kaloree?'),
-          content: const Text(
-            'Kamu yakin keluar dari Kaloree?',
-          ),
-          actions: <Widget>[
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Tidak'),
-              onPressed: () {
-                Navigator.pop(context);
-              },
-            ),
-            TextButton(
-              style: TextButton.styleFrom(
-                textStyle: Theme.of(context).textTheme.labelLarge,
-              ),
-              child: const Text('Keluar'),
-              onPressed: () {
-                SystemNavigator.pop();
-              },
-            ),
-          ],
-        );
-      },
     );
   }
 
@@ -155,7 +121,9 @@ class LoginView extends StatelessWidget {
                 text: 'Masuk',
                 backgroundColor: onBoardingBackgroundColor,
                 textColor: Colors.white,
-                onTap: () {},
+                onTap: () {
+                  goToNamed(context, AppRoute.personalInformation);
+                },
               ),
               const Gap(24),
               Row(
