@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:kaloree/features/assesment/presentation/views/assesment_result_view.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_appbar.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_assesment_form.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_progress_indicator.dart';
@@ -17,11 +16,12 @@ class PersonalAssesmentView extends StatelessWidget {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: const Color(0xffEAEAEA),
+      resizeToAvoidBottomInset: false,
       appBar: buildCustomAppBar(title: 'Asesmen Diri', context: context),
       bottomNavigationBar: buildCustomBottomAppBar(
         text: 'Lihat Hasil',
         onTap: () {
-          goAndRemoveUntil(context, const AssesmentResultView());
+          goAndRemoveUntilNamed(context, AppRoute.assesmentResult);
         },
       ),
       body: Padding(
