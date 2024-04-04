@@ -5,27 +5,29 @@ import 'package:kaloree/theme/color_schemes.g.dart';
 import 'package:kaloree/theme/fonts.dart';
 
 class CustomNavigationItem extends StatelessWidget {
-  final bool isActive;
   final IconData activeIcon;
   final IconData icon;
   final String label;
+  final void Function()? onTap;
+  final int index;
+  final int currentIndex;
   const CustomNavigationItem({
     Key? key,
-    required this.isActive,
+    required this.activeIcon,
     required this.icon,
     required this.label,
-    required this.activeIcon,
+    this.onTap, required this.index, required this.currentIndex,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
-    final selectedIcon = (isActive) ? activeIcon : icon;
+    final selectedIcon = (currentIndex == index) ? activeIcon : icon;
     final selectedColor =
-        (isActive) ? lightColorScheme.primary : lightColorScheme.secondary;
+        (currentIndex == index) ? lightColorScheme.primary : lightColorScheme.secondary;
 
     return Expanded(
       child: InkResponse(
-        onTap: () {},
+        onTap: onTap,
         splashFactory: InkRipple.splashFactory,
         radius: 30,
         child: Column(
