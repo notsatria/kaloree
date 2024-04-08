@@ -101,7 +101,6 @@ class AssesmentResultView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Gap(10),
                   Text(
                     'Hai, \nDamar Satria',
                     style: interBold.copyWith(

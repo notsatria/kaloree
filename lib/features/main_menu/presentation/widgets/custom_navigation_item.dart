@@ -16,14 +16,17 @@ class CustomNavigationItem extends StatelessWidget {
     required this.activeIcon,
     required this.icon,
     required this.label,
-    this.onTap, required this.index, required this.currentIndex,
+    this.onTap,
+    required this.index,
+    required this.currentIndex,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     final selectedIcon = (currentIndex == index) ? activeIcon : icon;
-    final selectedColor =
-        (currentIndex == index) ? lightColorScheme.primary : lightColorScheme.secondary;
+    final selectedColor = (currentIndex == index)
+        ? lightColorScheme.primary
+        : lightColorScheme.secondary;
 
     return Expanded(
       child: InkResponse(
@@ -54,19 +57,31 @@ class CustomScanNavigationItem extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
-    return Container(
-      height: 90,
-      width: 90,
-      decoration: BoxDecoration(
-        color: const Color(0xff6DBB8A),
-        shape: BoxShape.circle,
-        border: Border.all(
-            width: 6, color: const Color(0xffA7F3C0).withOpacity(0.96)),
-      ),
-      child: const Icon(
-        Icons.document_scanner,
-        size: 28,
-        color: Colors.white,
+    return CircleAvatar(
+      backgroundColor: Colors.white,
+      radius: 58,
+      child: Container(
+        height: 90,
+        width: 90,
+        decoration: BoxDecoration(
+          color: const Color(0xff6DBB8A),
+          shape: BoxShape.circle,
+          border: Border.all(
+              width: 6, color: const Color(0xffA7F3C0).withOpacity(0.96)),
+          boxShadow: const [
+            BoxShadow(
+              color: Color(0x0f000000),
+              offset: Offset(0, 4),
+              blurRadius: 10,
+              spreadRadius: 0,
+            ),
+          ],
+        ),
+        child: const Icon(
+          Icons.document_scanner,
+          size: 28,
+          color: Colors.white,
+        ),
       ),
     );
   }
