@@ -1,7 +1,11 @@
 import 'package:flutter/material.dart';
-import 'package:kaloree/features/assesment/presentation/views/personal_information.dart';
+import 'package:kaloree/features/assesment/presentation/views/assesment_result_view.dart';
+import 'package:kaloree/features/assesment/presentation/views/gender_information_view.dart';
+import 'package:kaloree/features/assesment/presentation/views/personal_assesment_view.dart';
+import 'package:kaloree/features/assesment/presentation/views/personal_information_view.dart';
 import 'package:kaloree/features/auth/presentaion/views/login_view.dart';
 import 'package:kaloree/features/auth/presentaion/views/register_view.dart';
+import 'package:kaloree/features/main_menu/presentation/views/main_view.dart';
 import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';
 
 class AppRoute {
@@ -9,6 +13,10 @@ class AppRoute {
   static const login = '/auth/login';
   static const register = '/auth/register';
   static const personalInformation = '/personal-information';
+  static const genderInformation = '/personal-information/gender';
+  static const assesment = '/personal-information/assesment';
+  static const assesmentResult = '/personal-information/assesment/result';
+  static const main = '/main';
 
   static Route<dynamic>? onGenerateRoute(RouteSettings settings) {
     switch (settings.name) {
@@ -30,6 +38,62 @@ class AppRoute {
       case personalInformation:
         return MaterialPageRoute<dynamic>(
           builder: (_) => const PersonalInformationView(),
+          settings: settings,
+        );
+      case genderInformation:
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const GenderInformationView(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.ease;
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        );
+      case assesment:
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const PersonalAssesmentView(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.ease;
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        );
+      case assesmentResult:
+        return PageRouteBuilder(
+          pageBuilder: (context, animation, secondaryAnimation) =>
+              const AssesmentResultView(),
+          transitionsBuilder: (context, animation, secondaryAnimation, child) {
+            const begin = Offset(1.0, 0.0);
+            const end = Offset.zero;
+            const curve = Curves.ease;
+            var tween =
+                Tween(begin: begin, end: end).chain(CurveTween(curve: curve));
+            var offsetAnimation = animation.drive(tween);
+            return SlideTransition(
+              position: offsetAnimation,
+              child: child,
+            );
+          },
+        );
+      case main:
+        return MaterialPageRoute<dynamic>(
+          builder: (_) => const MainView(),
           settings: settings,
         );
       default:

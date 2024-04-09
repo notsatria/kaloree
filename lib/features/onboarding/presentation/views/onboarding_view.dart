@@ -37,6 +37,7 @@ class _OnBoardingViewState extends State<OnBoardingView> {
   Widget build(BuildContext context) {
     return Scaffold(
       backgroundColor: onBoardingBackgroundColor,
+      resizeToAvoidBottomInset: false,
       body: BlocBuilder<OnBoardingCubit, int>(
         builder: (context, state) {
           final pages = context.read<OnBoardingCubit>().pages;

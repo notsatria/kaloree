@@ -5,6 +5,7 @@ import 'package:kaloree/theme/color_schemes.g.dart';
 import 'package:kaloree/theme/colors.dart';
 import 'package:kaloree/theme/fonts.dart';
 import 'package:kaloree/theme/sizes.dart';
+import 'package:kaloree/utils/platform/app_route.dart';
 import 'package:kaloree/utils/platform/assets.dart';
 import 'package:kaloree/widgets/dialog.dart';
 
@@ -52,7 +53,9 @@ class AssesmentResultView extends StatelessWidget {
               child: buildCustomBottomAppBar(
                 text: 'Kembali ke Beranda',
                 color: Colors.white,
-                onTap: () {},
+                onTap: () {
+                  goAndRemoveUntilNamed(context, AppRoute.main);
+                },
               ),
             ),
             Positioned(
@@ -98,7 +101,6 @@ class AssesmentResultView extends StatelessWidget {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.start,
                 children: [
-                  const Gap(10),
                   Text(
                     'Hai, \nDamar Satria',
                     style: interBold.copyWith(
@@ -154,10 +156,13 @@ class AssesmentResultView extends StatelessWidget {
                     value: 'Berat Badan Turun',
                   ),
                   const Gap(15),
-                  _buildClassificationResult(
-                    image: iconMathFormula,
-                    title: 'Klasifikasi Status Gizi',
-                    value: 'Normal',
+                  InkWell(
+                    onTap: () {},
+                    child: _buildClassificationResult(
+                      image: iconMathFormula,
+                      title: 'Tekan untuk pelajari',
+                      value: 'Rumus yang digunakan',
+                    ),
                   ),
                 ],
               ),

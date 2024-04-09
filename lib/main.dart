@@ -1,6 +1,7 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaloree/features/main_menu/presentation/cubit/bottom_navigation_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';
 import 'package:kaloree/theme/color_schemes.g.dart';
@@ -39,6 +40,7 @@ class MainApp extends StatelessWidget {
       return MultiBlocProvider(
         providers: [
           BlocProvider(create: (context) => OnBoardingCubit(0)),
+          BlocProvider(create: (context) => BottomNavigationCubit()),
         ],
         child: MaterialApp(
           theme: ThemeData(

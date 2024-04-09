@@ -8,3 +8,5 @@ const headerArt = 'assets/images/header_art.png';
 const iconHealthSquare = 'assets/icons/health_square.png';
 const iconHeartPlus = 'assets/icons/heart_plus.png';
 const iconMathFormula = 'assets/icons/math_formula.png';
+
+const badminton = 'assets/images/badminton.png';

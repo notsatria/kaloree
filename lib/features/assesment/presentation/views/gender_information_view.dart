@@ -1,6 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:kaloree/features/assesment/presentation/views/personal_assesment_view.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_appbar.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_gender_chip.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_progress_indicator.dart';
@@ -19,7 +18,7 @@ class GenderInformationView extends StatelessWidget {
       bottomNavigationBar: buildCustomBottomAppBar(
         text: 'Berikutnya',
         onTap: () {
-          goToAnimated(context, const PersonalAssesmentView());
+          goToNamed(context, AppRoute.assesment);
         },
       ),
       body: Padding(
