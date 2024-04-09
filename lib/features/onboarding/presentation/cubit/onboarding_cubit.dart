@@ -1,5 +1,5 @@
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:kaloree/utils/platform/assets.dart';
+import 'package:kaloree/core/utils/platform/assets.dart';
 
 class OnBoardingCubit extends Cubit<int> {
   OnBoardingCubit(super.initialState);

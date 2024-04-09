@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:kaloree/theme/fonts.dart';
+import 'package:kaloree/core/theme/fonts.dart';
 
 class OnBoardingWidget extends StatelessWidget {
   final String title;

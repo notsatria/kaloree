@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:kaloree/theme/fonts.dart';
-import 'package:kaloree/utils/platform/assets.dart';
+import 'package:kaloree/core/theme/fonts.dart';
+import 'package:kaloree/core/utils/platform/assets.dart';
 
 class SportCard extends StatelessWidget {
   const SportCard({super.key});

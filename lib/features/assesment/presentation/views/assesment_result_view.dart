@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_appbar.dart';
-import 'package:kaloree/theme/color_schemes.g.dart';
-import 'package:kaloree/theme/colors.dart';
-import 'package:kaloree/theme/fonts.dart';
-import 'package:kaloree/theme/sizes.dart';
-import 'package:kaloree/utils/platform/app_route.dart';
-import 'package:kaloree/utils/platform/assets.dart';
-import 'package:kaloree/widgets/dialog.dart';
+import 'package:kaloree/core/theme/color_schemes.g.dart';
+import 'package:kaloree/core/theme/colors.dart';
+import 'package:kaloree/core/theme/fonts.dart';
+import 'package:kaloree/core/theme/sizes.dart';
+import 'package:kaloree/core/utils/platform/app_route.dart';
+import 'package:kaloree/core/utils/platform/assets.dart';
+import 'package:kaloree/core/widgets/dialog.dart';
 
 class AssesmentResultView extends StatelessWidget {
   const AssesmentResultView({super.key});

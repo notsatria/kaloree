@@ -1,8 +1,8 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:kaloree/theme/color_schemes.g.dart';
-import 'package:kaloree/theme/fonts.dart';
+import 'package:kaloree/core/theme/color_schemes.g.dart';
+import 'package:kaloree/core/theme/fonts.dart';
 
 class CustomNavigationItem extends StatelessWidget {
   final IconData activeIcon;

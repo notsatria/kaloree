@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kaloree/theme/colors.dart';
-import 'package:kaloree/utils/platform/app_route.dart';
-import 'package:kaloree/widgets/custom_button.dart';
+import 'package:kaloree/core/theme/colors.dart';
+import 'package:kaloree/core/utils/platform/app_route.dart';
+import 'package:kaloree/core/widgets/custom_button.dart';
 
 AppBar buildCustomAppBar({
   required String title,
