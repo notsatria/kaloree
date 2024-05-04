@@ -4,7 +4,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaloree/core/theme/app_theme.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/custom_color.g.dart';
-import 'package:kaloree/core/utils/platform/app_route.dart';
+import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/features/main_menu/presentation/cubit/bottom_navigation_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';

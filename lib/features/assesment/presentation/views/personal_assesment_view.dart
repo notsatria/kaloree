@@ -6,7 +6,7 @@ import 'package:kaloree/features/assesment/presentation/widgets/custom_progress_
 import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
-import 'package:kaloree/core/utils/platform/app_route.dart';
+import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/core/widgets/custom_form_field.dart';
 
 class PersonalAssesmentView extends StatelessWidget {

@@ -5,7 +5,7 @@ import 'package:kaloree/features/assesment/presentation/widgets/custom_gender_ch
 import 'package:kaloree/features/assesment/presentation/widgets/custom_progress_indicator.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
-import 'package:kaloree/core/utils/platform/app_route.dart';
+import 'package:kaloree/core/routes/app_route.dart';
 
 class GenderInformationView extends StatelessWidget {
   const GenderInformationView({super.key});

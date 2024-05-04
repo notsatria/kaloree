@@ -7,7 +7,7 @@ import 'package:kaloree/features/onboarding/presentation/views/widgets/onboardin
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/theme/sizes.dart';
-import 'package:kaloree/core/utils/platform/app_route.dart';
+import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/core/widgets/custom_button.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
