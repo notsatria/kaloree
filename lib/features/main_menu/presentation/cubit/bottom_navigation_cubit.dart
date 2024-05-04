@@ -1,7 +1,8 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaloree/features/home/presentation/views/home_view.dart';
+import 'package:kaloree/features/profile/presentation/views/profile_view.dart';
 
 part 'bottom_navigation_state.dart';
 
@@ -19,7 +20,7 @@ class BottomNavigationCubit extends Cubit<BottomNavigationState> {
     const HomeView(),
     const Placeholder(),
     const Placeholder(),
-    const Placeholder()
+    const ProfileView()
   ];
 
   Widget get currentPage => pageList[selectedIndex];
