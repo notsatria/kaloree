@@ -19,6 +19,7 @@ dependencies:
   get_it: ^7.6.7
   image: ^4.1.7
   image_cropping: ^0.0.14
+  image_picker: ^1.0.8
   shared_preferences: ^2.2.2
   smooth_page_indicator: ^1.1.0
   syncfusion_flutter_gauges: ^25.1.38
