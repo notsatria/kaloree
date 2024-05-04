@@ -14,7 +14,6 @@ class MainView extends StatelessWidget {
           floatingActionButton: const CustomScanNavigationItem(),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
-          
           body: context.read<BottomNavigationCubit>().currentPage,
           bottomNavigationBar: Container(
             width: double.infinity,

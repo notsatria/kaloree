@@ -1,13 +1,13 @@
 import 'package:dynamic_color/dynamic_color.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaloree/core/theme/app_theme.dart';
+import 'package:kaloree/core/theme/color_schemes.g.dart';
+import 'package:kaloree/core/theme/custom_color.g.dart';
+import 'package:kaloree/core/utils/platform/app_route.dart';
 import 'package:kaloree/features/main_menu/presentation/cubit/bottom_navigation_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';
-import 'package:kaloree/theme/color_schemes.g.dart';
-import 'package:kaloree/theme/custom_color.g.dart';
-import 'package:kaloree/theme/fonts.dart';
-import 'package:kaloree/utils/platform/app_route.dart';
 
 void main() {
   WidgetsFlutterBinding.ensureInitialized();
@@ -43,43 +43,8 @@ class MainApp extends StatelessWidget {
           BlocProvider(create: (context) => BottomNavigationCubit()),
         ],
         child: MaterialApp(
-          theme: ThemeData(
-            useMaterial3: true,
-            scaffoldBackgroundColor: Colors.white,
-            fontFamily: 'Inter',
-            colorScheme: lightScheme,
-            extensions: [lightCustomColors],
-            progressIndicatorTheme: ProgressIndicatorThemeData(
-              color: lightColorScheme.primary,
-            ),
-            appBarTheme: AppBarTheme(
-              backgroundColor: const Color(0xffEAEAEA),
-              elevation: 0,
-              iconTheme:
-                  IconThemeData(color: lightColorScheme.outline, size: 20),
-              centerTitle: true,
-              titleTextStyle:
-                  interMedium.copyWith(fontSize: 14, color: Colors.black),
-            ),
-          ),
-          darkTheme: ThemeData(
-            useMaterial3: true,
-            fontFamily: 'Inter',
-            colorScheme: darkScheme,
-            extensions: [darkCustomColors],
-            progressIndicatorTheme: ProgressIndicatorThemeData(
-              color: darkColorScheme.primary,
-            ),
-            appBarTheme: AppBarTheme(
-              backgroundColor: const Color(0xffEAEAEA),
-              elevation: 0,
-              iconTheme:
-                  IconThemeData(color: darkColorScheme.outline, size: 20),
-              centerTitle: true,
-              titleTextStyle: interMedium.copyWith(
-                  fontSize: 14, color: darkColorScheme.onPrimary),
-            ),
-          ),
+          theme: AppTheme.lightTheme(lightScheme),
+          darkTheme: AppTheme.darkTheme(darkScheme),
           home: const OnBoardingView(),
           initialRoute: AppRoute.onboarding,
           onGenerateRoute: AppRoute.onGenerateRoute,

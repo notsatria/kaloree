@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:kaloree/features/home/presentation/widgets/sport_card.dart';
-import 'package:kaloree/theme/color_schemes.g.dart';
-import 'package:kaloree/theme/fonts.dart';
-import 'package:kaloree/theme/sizes.dart';
+import 'package:kaloree/core/theme/color_schemes.g.dart';
+import 'package:kaloree/core/theme/fonts.dart';
+import 'package:kaloree/core/theme/sizes.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class HomeView extends StatelessWidget {

@@ -1,7 +1,7 @@
 import 'package:flutter/material.dart';
-import 'package:kaloree/theme/fonts.dart';
-import 'package:kaloree/theme/sizes.dart';
-import 'package:kaloree/widgets/loading.dart';
+import 'package:kaloree/core/theme/fonts.dart';
+import 'package:kaloree/core/theme/sizes.dart';
+import 'package:kaloree/core/widgets/loading.dart';
 
 class CustomFilledButton extends StatelessWidget {
   final String text;

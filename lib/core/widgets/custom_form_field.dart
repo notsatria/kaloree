@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kaloree/theme/color_schemes.g.dart';
-import 'package:kaloree/theme/fonts.dart';
+import 'package:kaloree/core/theme/color_schemes.g.dart';
+import 'package:kaloree/core/theme/fonts.dart';
 
 class CustomFormField extends StatelessWidget {
   final String hintText;

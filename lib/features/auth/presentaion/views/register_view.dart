@@ -1,15 +1,15 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-import 'package:kaloree/theme/color_schemes.g.dart';
-import 'package:kaloree/theme/colors.dart';
-import 'package:kaloree/theme/fonts.dart';
-import 'package:kaloree/theme/sizes.dart';
-import 'package:kaloree/utils/platform/app_route.dart';
-import 'package:kaloree/utils/platform/assets.dart';
-import 'package:kaloree/widgets/custom_button.dart';
-import 'package:kaloree/widgets/custom_form_field.dart';
-import 'package:kaloree/widgets/dialog.dart';
+import 'package:kaloree/core/theme/color_schemes.g.dart';
+import 'package:kaloree/core/theme/colors.dart';
+import 'package:kaloree/core/theme/fonts.dart';
+import 'package:kaloree/core/theme/sizes.dart';
+import 'package:kaloree/core/utils/platform/app_route.dart';
+import 'package:kaloree/core/utils/platform/assets.dart';
+import 'package:kaloree/core/widgets/custom_button.dart';
+import 'package:kaloree/core/widgets/custom_form_field.dart';
+import 'package:kaloree/core/widgets/dialog.dart';
 
 class RegisterView extends StatelessWidget {
   const RegisterView({super.key});
