@@ -1,9 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:kaloree/features/home/presentation/widgets/sport_card.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
+import 'package:kaloree/features/home/presentation/widgets/food_card.dart';
+import 'package:kaloree/features/home/presentation/widgets/sport_card.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
 class HomeView extends StatelessWidget {
@@ -51,27 +52,36 @@ class HomeView extends StatelessWidget {
                 const Gap(10),
                 _buildDailySummary(),
                 const Gap(12),
-                Row(
-                  mainAxisAlignment: MainAxisAlignment.spaceBetween,
-                  children: [
-                    Text(
-                      'Rekomendasi Olahraga',
-                      style: interBold.copyWith(fontSize: 15),
-                    ),
-                    Text(
-                      'Lihat semua',
-                      style: interMedium.copyWith(
-                          fontSize: 14, color: lightColorScheme.onSurface),
-                    ),
-                  ],
-                ),
+                _buildSubtitleText(text: 'Rekomendasi Olahraga'),
                 const Gap(12),
-                const SportCard()
+                const SportCard(),
+                const Gap(24),
+                _buildSubtitleText(text: 'Rekomendasi Makanan'),
+                const Gap(12),
+                const FoodCard(),
+                const Gap(50)
               ],
             ),
           ),
         ],
       ),
+    );
+  }
+
+  Row _buildSubtitleText({required String text}) {
+    return Row(
+      mainAxisAlignment: MainAxisAlignment.spaceBetween,
+      children: [
+        Text(
+          text,
+          style: interBold.copyWith(fontSize: 15),
+        ),
+        Text(
+          'Lihat semua',
+          style: interMedium.copyWith(
+              fontSize: 14, color: lightColorScheme.onSurface),
+        ),
+      ],
     );
   }
 
