@@ -1,13 +1,31 @@
-import 'package:bloc/bloc.dart';
 import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaloree/features/auth/domain/usecases/user_sign_up.dart';
 
 part 'auth_event.dart';
 part 'auth_state.dart';
 
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
-  AuthBloc() : super(AuthInitial()) {
-    on<AuthEvent>((event, emit) {
-      // TODO: implement event handler
-    });
+  final UserSignUp _userSignUp;
+
+  AuthBloc({
+    required UserSignUp userSignUp,
+  })  : _userSignUp = userSignUp,
+        super(AuthInitial()) {
+    on<AuthEvent>((_, emit) => emit(AuthLoading()));
+
+    on<AuthSignUp>(_onAuthSignUp);
+  }
+
+  void _onAuthSignUp(AuthSignUp event, Emitter<AuthState> emit) async {
+    final result = await _userSignUp(UserSignUpParams(
+      email: event.email,
+      password: event.password,
+    ));
+
+    result.fold(
+      (failure) => emit(AuthFailure(failure.message)),
+      (_) => emit(AuthSuccess()),
+    );
   }
 }
