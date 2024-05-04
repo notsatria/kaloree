@@ -9,7 +9,7 @@ import 'package:kaloree/core/helpers/isolate_inference.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
 class ImageClassificationHelper {
-  static const modelPath = 'assets/models/cancer_classification.tflite';
+  static const modelPath = 'assets/models/mobilenet_quant.tflite';
   static const labelsPath = 'assets/models/labels.txt';
 
   late final Interpreter interpreter;
@@ -39,6 +39,9 @@ class ImageClassificationHelper {
     inputTensor = interpreter.getInputTensors().first;
     // Get tensor output shape [1, 1001]
     outputTensor = interpreter.getOutputTensors().first;
+
+    log('Input tensor : $inputTensor');
+    log('Output tensor : $outputTensor');
 
     log('Interpreter loaded successfully');
   }

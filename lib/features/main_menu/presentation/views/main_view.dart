@@ -1,7 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaloree/core/utils/platform/app_route.dart';
 import 'package:kaloree/features/main_menu/presentation/cubit/bottom_navigation_cubit.dart';
 import 'package:kaloree/features/main_menu/presentation/widgets/custom_navigation_item.dart';
+import 'package:kaloree/features/scan/views/gallery.dart';
 
 class MainView extends StatelessWidget {
   const MainView({super.key});
@@ -11,7 +13,9 @@ class MainView extends StatelessWidget {
     return BlocBuilder<BottomNavigationCubit, BottomNavigationState>(
       builder: (context, state) {
         return Scaffold(
-          floatingActionButton: const CustomScanNavigationItem(),
+          floatingActionButton: CustomScanNavigationItem(
+            onTap: () => goTo(context, const GalleryScreen()),
+          ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,
           body: context.read<BottomNavigationCubit>().currentPage,
