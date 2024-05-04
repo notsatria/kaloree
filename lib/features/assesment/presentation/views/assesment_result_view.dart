@@ -5,8 +5,8 @@ import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
-import 'package:kaloree/core/utils/platform/app_route.dart';
-import 'package:kaloree/core/utils/platform/assets.dart';
+import 'package:kaloree/core/routes/app_route.dart';
+import 'package:kaloree/core/platform/assets.dart';
 import 'package:kaloree/core/widgets/dialog.dart';
 
 class AssesmentResultView extends StatelessWidget {
