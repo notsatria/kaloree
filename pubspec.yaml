@@ -17,12 +17,12 @@ dependencies:
   font_awesome_flutter: ^10.7.0
   gap: ^3.0.1
   get_it: ^7.6.7
+  image: ^4.1.7
   image_cropping: ^0.0.14
   shared_preferences: ^2.2.2
   smooth_page_indicator: ^1.1.0
   syncfusion_flutter_gauges: ^25.1.38
   tflite_flutter: ^0.10.4
-  
 
 dev_dependencies:
   flutter_test:
