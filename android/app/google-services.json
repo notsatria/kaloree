@@ -1,0 +1,29 @@
+{
+  "project_info": {
+    "project_number": "431046998538",
+    "project_id": "kaloree-b1523",
+    "storage_bucket": "kaloree-b1523.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:431046998538:android:fe24d6c2da990ecbfafdf3",
+        "android_client_info": {
+          "package_name": "com.notsatria.kaloree"
+        }
+      },
+      "oauth_client": [],
+      "api_key": [
+        {
+          "current_key": "AIzaSyAMavV_UlvzBQQb5KdaNYS7EU2eRsoVZys"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": []
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
