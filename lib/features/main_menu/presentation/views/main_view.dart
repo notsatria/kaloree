@@ -62,9 +62,9 @@ class MainView extends StatelessWidget {
                 ),
                 const Expanded(child: SizedBox()),
                 CustomNavigationItem(
-                  icon: Icons.sports_gymnastics_outlined,
-                  activeIcon: Icons.sports_gymnastics,
-                  label: 'Olahraga',
+                  icon: Icons.history_outlined,
+                  activeIcon: Icons.history,
+                  label: 'Riwayat',
                   currentIndex:
                       context.read<BottomNavigationCubit>().selectedIndex,
                   index: 2,
