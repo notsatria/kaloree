@@ -1,18 +1,33 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
+import 'package:kaloree/core/platform/assets.dart';
+import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
-import 'package:kaloree/core/routes/app_route.dart';
-import 'package:kaloree/core/platform/assets.dart';
 import 'package:kaloree/core/widgets/custom_button.dart';
-import 'package:kaloree/core/widgets/custom_form_field.dart';
 import 'package:kaloree/core/widgets/dialog.dart';
+import 'package:kaloree/features/auth/presentaion/widgets/auth_form_field.dart';
 
-class LoginView extends StatelessWidget {
+class LoginView extends StatefulWidget {
   const LoginView({super.key});
+
+  @override
+  State<LoginView> createState() => _LoginViewState();
+}
+
+class _LoginViewState extends State<LoginView> {
+  TextEditingController emailController = TextEditingController();
+  TextEditingController passwordController = TextEditingController();
+
+  @override
+  void dispose() {
+    emailController.dispose();
+    passwordController.dispose();
+    super.dispose();
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -76,7 +91,8 @@ class LoginView extends StatelessWidget {
                 style: interMedium.copyWith(fontSize: 16),
               ),
               const Gap(8),
-              const CustomFormField(
+              AuthFormField(
+                controller: emailController,
                 hintText: 'Email',
                 keyboardType: TextInputType.emailAddress,
                 textInputAction: TextInputAction.next,
@@ -88,7 +104,8 @@ class LoginView extends StatelessWidget {
                 style: interMedium.copyWith(fontSize: 16),
               ),
               const Gap(8),
-              CustomFormField(
+              AuthFormField(
+                controller: passwordController,
                 hintText: 'Password',
                 keyboardType: TextInputType.visiblePassword,
                 textInputAction: TextInputAction.done,
