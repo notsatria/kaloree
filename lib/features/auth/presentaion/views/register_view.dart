@@ -10,6 +10,7 @@ import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
+import 'package:kaloree/core/utils/show_dialog.dart';
 import 'package:kaloree/core/utils/show_snackbar.dart';
 import 'package:kaloree/core/widgets/custom_button.dart';
 import 'package:kaloree/core/widgets/dialog.dart';
@@ -29,12 +30,15 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController passwordConfController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
   bool _isLoading = false;
+  bool _isObscurePass = true;
+  bool _isObscureConfPass = true;
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
     passwordConfController.dispose();
+    _isLoading = false;
     super.dispose();
   }
 
@@ -96,7 +100,12 @@ class _RegisterViewState extends State<RegisterView> {
                 _isLoading = false;
               }
               if (state is AuthSuccess) {
-                goReplacementNamed(context, AppRoute.main);
+                goReplacementNamed(context, AppRoute.assesment);
+                showCustomDialog(
+                  context,
+                  'Registrasi Berhasil',
+                  'Selamat datang di Kaloree! Silahkan lengkapi data diri anda untuk melanjutkan',
+                );
               }
             },
             builder: (context, state) {
@@ -149,11 +158,18 @@ class _RegisterViewState extends State<RegisterView> {
                       keyboardType: TextInputType.visiblePassword,
                       textInputAction: TextInputAction.done,
                       prefixIcon: Icons.lock_outline,
-                      suffixIcon: Icon(
-                        Icons.visibility_off_outlined,
-                        color: lightColorScheme.outline,
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isObscurePass = !_isObscurePass;
+                          });
+                        },
+                        child: Icon(
+                          Icons.visibility_off_outlined,
+                          color: lightColorScheme.outline,
+                        ),
                       ),
-                      obscureText: true,
+                      obscureText: _isObscurePass,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Password tidak boleh kosong';
@@ -179,11 +195,18 @@ class _RegisterViewState extends State<RegisterView> {
                       keyboardType: TextInputType.visiblePassword,
                       textInputAction: TextInputAction.done,
                       prefixIcon: Icons.lock_outline,
-                      suffixIcon: Icon(
-                        Icons.visibility_off_outlined,
-                        color: lightColorScheme.outline,
+                      suffixIcon: GestureDetector(
+                        onTap: () {
+                          setState(() {
+                            _isObscureConfPass = !_isObscureConfPass;
+                          });
+                        },
+                        child: Icon(
+                          Icons.visibility_off_outlined,
+                          color: lightColorScheme.outline,
+                        ),
                       ),
-                      obscureText: true,
+                      obscureText: _isObscureConfPass,
                       validator: (value) {
                         if (value!.isEmpty) {
                           return 'Password tidak boleh kosong';
