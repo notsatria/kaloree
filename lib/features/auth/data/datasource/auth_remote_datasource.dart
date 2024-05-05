@@ -6,6 +6,11 @@ abstract interface class AuthRemoteDataSource {
     required String email,
     required String password,
   });
+
+  Future<void> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  });
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -25,6 +30,27 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
         throw EmailAlreadyInUseException();
       } else if (e.code == 'weak-password') {
         throw WeakPasswordException();
+      }
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> signInWithEmailAndPassword({
+    required String email,
+    required String password,
+  }) async {
+    try {
+      await firebaseAuth.signInWithEmailAndPassword(
+        email: email,
+        password: password,
+      );
+    } on FirebaseAuthException catch (e) {
+      if (e.code == 'user-not-found') {
+        throw UserNotFoundException();
+      } else if (e.code == 'wrong-password') {
+        throw WrongPasswordException();
       }
     } catch (e) {
       throw ServerException(e.toString());

@@ -15,3 +15,15 @@ class WeakPasswordException implements Exception {
 
   WeakPasswordException([this.message = 'Password lemah']);
 }
+
+class UserNotFoundException implements Exception {
+  final String message;
+
+  UserNotFoundException([this.message = 'User tidak ditemukan']);
+}
+
+class WrongPasswordException implements Exception {
+  final String message;
+
+  WrongPasswordException([this.message = 'Password salah']);
+}
