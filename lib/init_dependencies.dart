@@ -1,3 +1,4 @@
+import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kaloree/features/auth/data/datasource/auth_remote_datasource.dart';
@@ -13,12 +14,13 @@ Future<void> initDependencies() async {
   _initAuth();
 
   serviceLocator.registerLazySingleton(() => FirebaseAuth.instance);
+  serviceLocator.registerLazySingleton(() => FirebaseFirestore.instance);
 }
 
 void _initAuth() {
   //  Datasources
   serviceLocator.registerFactory<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(serviceLocator()),
+    () => AuthRemoteDataSourceImpl(serviceLocator(), serviceLocator()),
   );
 
   // repositories

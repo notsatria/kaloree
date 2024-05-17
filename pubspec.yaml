@@ -8,6 +8,7 @@ environment:
 
 dependencies:
   camera: ^0.10.5+9
+  cloud_firestore: ^4.15.8
   connectivity_plus: ^6.0.1
   dynamic_color: ^1.7.0
   equatable: ^2.0.5
