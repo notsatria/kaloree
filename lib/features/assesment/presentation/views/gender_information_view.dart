@@ -7,9 +7,14 @@ import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
 import 'package:kaloree/core/routes/app_route.dart';
 
-class GenderInformationView extends StatelessWidget {
+class GenderInformationView extends StatefulWidget {
   const GenderInformationView({super.key});
 
+  @override
+  State<GenderInformationView> createState() => _GenderInformationViewState();
+}
+
+class _GenderInformationViewState extends State<GenderInformationView> {
   @override
   Widget build(BuildContext context) {
     return Scaffold(

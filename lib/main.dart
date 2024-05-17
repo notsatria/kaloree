@@ -6,6 +6,7 @@ import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/core/theme/app_theme.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/custom_color.g.dart';
+import 'package:kaloree/features/assesment/presentation/bloc/assesment_bloc.dart';
 import 'package:kaloree/features/auth/presentaion/bloc/auth_bloc.dart';
 import 'package:kaloree/features/main_menu/presentation/cubit/bottom_navigation_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.dart';
@@ -51,6 +52,8 @@ class MainApp extends StatelessWidget {
           BlocProvider(create: (context) => BottomNavigationCubit()),
           BlocProvider<AuthBloc>(
               create: (context) => serviceLocator<AuthBloc>()),
+          BlocProvider<AssesmentBloc>(
+              create: (context) => serviceLocator<AssesmentBloc>()),
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme(lightScheme),
