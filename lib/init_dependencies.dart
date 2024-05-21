@@ -5,6 +5,7 @@ import 'package:kaloree/features/assesment/data/datasource/assesment_remote_data
 import 'package:kaloree/features/assesment/data/repositories/assesment_repository_impl.dart';
 import 'package:kaloree/features/assesment/domain/repositories/assesment_repository.dart';
 import 'package:kaloree/features/assesment/domain/usecases/user_save_assesment.dart';
+import 'package:kaloree/features/assesment/domain/usecases/user_update_gender.dart';
 import 'package:kaloree/features/assesment/presentation/bloc/assesment_bloc.dart';
 import 'package:kaloree/features/auth/data/datasource/auth_remote_datasource.dart';
 import 'package:kaloree/features/auth/data/repositories/auth_repository_impl.dart';
@@ -66,8 +67,14 @@ void _initAssesment() {
     () => UserSaveAssesment(serviceLocator()),
   );
 
+  serviceLocator.registerFactory(
+    () => UserUpdateGender(serviceLocator()),
+  );
+
   // blocs
   serviceLocator.registerLazySingleton(
-    () => AssesmentBloc(userSaveAssesment: serviceLocator()),
+    () => AssesmentBloc(
+        userSaveAssesment: serviceLocator(),
+        userUpdateGender: serviceLocator()),
   );
 }

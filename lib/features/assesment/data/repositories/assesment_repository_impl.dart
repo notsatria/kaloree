@@ -35,4 +35,36 @@ class AssesmentRepositoryImpl implements AssesmentRepository {
       return left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> updateGender({required int gender}) async {
+    try {
+      await assesmentRemoteDataSource.updateGender(gender: gender);
+
+      return right(null);
+    } on ServerException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> updateLastAssesmentData({
+    required int weight,
+    required int height,
+    required int activityStatus,
+    required int healthPurpose,
+  }) async {
+    try {
+      await assesmentRemoteDataSource.updateLastAssesmentData(
+        weight: weight,
+        height: height,
+        activityStatus: activityStatus,
+        healthPurpose: healthPurpose,
+      );
+
+      return right(null);
+    } on ServerException catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 }

@@ -37,7 +37,7 @@ class _GenderInformationViewState extends State<GenderInformationView> {
                 selectedGender = 1;
               }
               context.read<AssesmentBloc>().add(
-                    SavePersonalInfo(gender: selectedGender),
+                    UpdateGender(gender: selectedGender),
                   );
               goToNamed(context, AppRoute.assesment);
             },

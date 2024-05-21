@@ -29,8 +29,8 @@ class SavePersonalInfo extends AssesmentEvent {
   });
 }
 
-class UploadPersonalInfo extends AssesmentEvent {
-  final PersonalInfoSaved personalInfoSaved;
+class UpdateGender extends AssesmentEvent {
+  final int gender;
 
- const  UploadPersonalInfo({required this.personalInfoSaved});
+  const UpdateGender({required this.gender});
 }

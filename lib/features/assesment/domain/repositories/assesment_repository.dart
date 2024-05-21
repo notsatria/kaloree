@@ -11,4 +11,13 @@ abstract interface class AssesmentRepository {
     required int activityStatus,
     required int healthPurpose,
   });
+
+  Future<Either<Failure, void>> updateGender({required int gender});
+
+  Future<Either<Failure, void>> updateLastAssesmentData({
+    required int weight,
+    required int height,
+    required int activityStatus,
+    required int healthPurpose,
+  });
 }

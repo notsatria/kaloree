@@ -37,10 +37,12 @@ class _PersonalInformationViewState extends State<PersonalInformationView> {
             text: 'Berikutnya',
             onTap: () {
               if (formKey.currentState!.validate()) {
-                context.read<AssesmentBloc>().add(SavePersonalInfo(
-                      fullName: nameController.text,
-                      dateOfBirth: dateOfBirthController.text,
-                    ));
+                context.read<AssesmentBloc>().add(
+                      SavePersonalInfo(
+                        fullName: nameController.text,
+                        dateOfBirth: selectedDate.toString(),
+                      ),
+                    );
                 goToNamed(context, AppRoute.genderInformation);
               }
             },
@@ -126,13 +128,14 @@ class _PersonalInformationViewState extends State<PersonalInformationView> {
     final pickedDate = await showDatePicker(
       context: context,
       initialDate: selectedDate,
-      firstDate: DateTime(1945),
+      firstDate: DateTime(1950),
       lastDate: DateTime.now(),
     );
 
     if (pickedDate != null && pickedDate != selectedDate) {
       setState(() {
         selectedDate = pickedDate;
+        debugPrint("Selected date: $selectedDate");
         dateOfBirthController.text = DateFormat.yMMMMd().format(selectedDate);
       });
     }

@@ -1,21 +1,28 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaloree/features/assesment/domain/usecases/user_save_assesment.dart';
+import 'package:kaloree/features/assesment/domain/usecases/user_update_gender.dart';
 
 part 'assesment_event.dart';
 part 'assesment_state.dart';
 
 class AssesmentBloc extends Bloc<AssesmentEvent, AssesmentState> {
   final UserSaveAssesment _userSaveAssesment;
-  AssesmentBloc({required UserSaveAssesment userSaveAssesment})
+  final UserUpdateGender _userUpdateGender;
+  AssesmentBloc(
+      {required UserSaveAssesment userSaveAssesment,
+      required UserUpdateGender userUpdateGender})
       : _userSaveAssesment = userSaveAssesment,
+        _userUpdateGender = userUpdateGender,
         super(AssesmentInitial()) {
-    on<SavePersonalInfo>(_onSavePersonalInfo);
+    on<AssesmentEvent>((_, emit) => emit(AssesmentLoading()));
 
-    on<UploadPersonalInfo>(_onUploadPersonalInfo);
+    on<SavePersonalInfo>(_onUploadPersonalInfo);
+
+    on<UpdateGender>(_onUpdateGender);
   }
 
-  void _onSavePersonalInfo(
+  void _onUploadPersonalInfo(
       SavePersonalInfo event, Emitter<AssesmentState> emit) async {
     final result = await _userSaveAssesment(
       UserSaveAssesmentParams(
@@ -35,19 +42,9 @@ class AssesmentBloc extends Bloc<AssesmentEvent, AssesmentState> {
     );
   }
 
-  void _onUploadPersonalInfo(
-      UploadPersonalInfo event, Emitter<AssesmentState> emit) async {
-    final result = await _userSaveAssesment(
-      UserSaveAssesmentParams(
-        fullName: event.personalInfoSaved.fullName,
-        dateOfBirth: event.personalInfoSaved.dateOfBirth,
-        gender: event.personalInfoSaved.gender,
-        weight: event.personalInfoSaved.weight,
-        height: event.personalInfoSaved.height,
-        activityStatus: event.personalInfoSaved.activityStatus,
-        healthPurpose: event.personalInfoSaved.healthPurpose,
-      ),
-    );
+  void _onUpdateGender(UpdateGender event, Emitter<AssesmentState> emit) async {
+    final result =
+        await _userUpdateGender(UserUpdateGenderParams(gender: event.gender));
 
     result.fold(
       (failure) => emit(AssesmentFailure(failure.message)),

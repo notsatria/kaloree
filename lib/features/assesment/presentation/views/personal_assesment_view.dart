@@ -47,11 +47,6 @@ class _PersonalAssesmentViewState extends State<PersonalAssesmentView> {
                       healthPurpose: selectedHealthPurpose!.value,
                     ),
                   );
-              context.read<AssesmentBloc>().add(
-                    const UploadPersonalInfo(
-                      personalInfoSaved: PersonalInfoSaved(),
-                    ),
-                  );
               goAndRemoveUntilNamed(context, AppRoute.assesmentResult);
             },
           ),

@@ -100,7 +100,7 @@ class _RegisterViewState extends State<RegisterView> {
                 _isLoading = false;
               }
               if (state is AuthSuccess) {
-                goReplacementNamed(context, AppRoute.assesment);
+                goReplacementNamed(context, AppRoute.personalInformation);
                 showCustomDialog(
                   context,
                   'Registrasi Berhasil',
