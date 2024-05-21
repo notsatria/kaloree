@@ -57,9 +57,6 @@ class AssesmentRemoteDataSourceImpl implements AssesmentRemoteDataSource {
         // Check if the health profile document already exists
         DocumentSnapshot healthProfileSnapshot =
             await transaction.get(healthProfileDoc);
-        if (healthProfileSnapshot.exists) {
-          throw ServerException("Health profile already exists");
-        }
 
         DateTime dob = DateFormat("yyyy-MM-dd").parse(dateOfBirth);
         int age = _calculateAge(dob);
@@ -84,6 +81,14 @@ class AssesmentRemoteDataSourceImpl implements AssesmentRemoteDataSource {
         transaction.update(userDoc, {
           'fullName': fullName,
         });
+
+        if (healthProfileSnapshot.exists) {
+          transaction.update(healthProfileDoc, {
+            'age': age,
+            'dateOfBirth': dateOfBirth,
+            'updatedAt': DateTime.now().toString(),
+          });
+        }
       });
     } catch (e) {
       throw ServerException(e.toString());
