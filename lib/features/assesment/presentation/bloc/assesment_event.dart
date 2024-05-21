@@ -34,3 +34,17 @@ class UpdateGender extends AssesmentEvent {
 
   const UpdateGender({required this.gender});
 }
+
+class UpdateLastAssesment extends AssesmentEvent {
+  final int weight;
+  final int height;
+  final int activityStatus;
+  final int healthPurpose;
+
+  const UpdateLastAssesment({
+    required this.weight,
+    required this.height,
+    required this.activityStatus,
+    required this.healthPurpose,
+  });
+}

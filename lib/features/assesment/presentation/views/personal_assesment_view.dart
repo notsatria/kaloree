@@ -40,7 +40,7 @@ class _PersonalAssesmentViewState extends State<PersonalAssesmentView> {
             text: 'Lihat Hasil',
             onTap: () {
               context.read<AssesmentBloc>().add(
-                    SavePersonalInfo(
+                    UpdateLastAssesment(
                       height: int.parse(heightController.text),
                       weight: int.parse(weightController.text),
                       activityStatus: selectedActivityStatus!.value,
