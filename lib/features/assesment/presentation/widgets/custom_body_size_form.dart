@@ -1,45 +1,35 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 
-class CustomFormField extends StatelessWidget {
+class CustomBodySizeForm extends StatelessWidget {
   final String hintText;
-  final TextInputType? keyboardType;
-  final TextInputAction? textInputAction;
-  final IconData prefixIcon;
-  final Widget? suffixIcon;
-  final bool obscureText;
-  final TextEditingController? controller;
-  final void Function()? onTap;
-  final bool readOnly;
+  final TextInputType keyboardType;
+  final TextInputAction textInputAction;
+  final String suffixText;
+  final TextEditingController controller;
   final String? Function(String?)? validator;
-  const CustomFormField({
-    super.key,
+
+  const CustomBodySizeForm({
+    Key? key,
     required this.hintText,
-    this.keyboardType,
-    this.textInputAction,
-    required this.prefixIcon,
-    this.obscureText = false,
-    this.suffixIcon,
-    this.controller,
-    this.onTap,
-    this.readOnly = false,
-    this.validator,
-  });
+    required this.keyboardType,
+    required this.textInputAction,
+    required this.suffixText,
+    required this.controller, this.validator,
+  }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      onTap: onTap,
       controller: controller,
-      readOnly: readOnly,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
-      obscureText: obscureText,
-      validator: validator,
       style: interRegular.copyWith(
         fontSize: 16,
       ),
+      validator: validator,
       decoration: InputDecoration(
         errorStyle: interRegular.copyWith(
           fontSize: 12,
@@ -53,11 +43,6 @@ class CustomFormField extends StatelessWidget {
           fontSize: 16,
           color: lightColorScheme.outline,
         ),
-        prefixIcon: Icon(
-          prefixIcon,
-          color: lightColorScheme.outline,
-        ),
-        suffixIcon: suffixIcon,
         border: _border(),
         focusedBorder: _border(lightColorScheme.primary),
       ),

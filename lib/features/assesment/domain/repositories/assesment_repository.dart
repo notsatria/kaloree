@@ -8,7 +8,6 @@ abstract interface class AssesmentRepository {
     required int gender,
     required int weight,
     required int height,
-    required String userId,
     required int activityStatus,
     required int healthPurpose,
   });

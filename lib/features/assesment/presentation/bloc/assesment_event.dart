@@ -28,3 +28,9 @@ class SavePersonalInfo extends AssesmentEvent {
     this.healthPurpose = 0,
   });
 }
+
+class UploadPersonalInfo extends AssesmentEvent {
+  final PersonalInfoSaved personalInfoSaved;
+
+ const  UploadPersonalInfo({required this.personalInfoSaved});
+}

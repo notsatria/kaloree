@@ -53,7 +53,7 @@ void _initAuth() {
 void _initAssesment() {
   //  Datasources
   serviceLocator.registerFactory<AssesmentRemoteDataSource>(
-    () => AssesmentRemoteDataSourceImpl(serviceLocator()),
+    () => AssesmentRemoteDataSourceImpl(serviceLocator(), serviceLocator()),
   );
 
   // repositories
@@ -68,6 +68,6 @@ void _initAssesment() {
 
   // blocs
   serviceLocator.registerLazySingleton(
-    () => AssesmentBloc(),
+    () => AssesmentBloc(userSaveAssesment: serviceLocator()),
   );
 }

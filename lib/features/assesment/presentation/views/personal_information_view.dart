@@ -27,47 +27,48 @@ class _PersonalInformationViewState extends State<PersonalInformationView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocProvider(
-      create: (context) => AssesmentBloc(),
-      child: Scaffold(
-        backgroundColor: const Color(0xffEAEAEA),
-        appBar: buildCustomAppBar(
-            title: 'Data Diri', context: context, canPop: false),
-        bottomNavigationBar: buildCustomBottomAppBar(
-          text: 'Berikutnya',
-          onTap: () {
-            if (formKey.currentState!.validate()) {
-              context.read<AssesmentBloc>().add(SavePersonalInfo(
-                    fullName: nameController.text,
-                    dateOfBirth: dateOfBirthController.text,
-                  ));
-              goToNamed(context, AppRoute.genderInformation);
-            }
-          },
-        ),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: margin_20),
-          child: Column(
-            crossAxisAlignment: CrossAxisAlignment.start,
-            children: [
-              const Gap(16),
-              const CustomProgressIndicator(value: 1),
-              const Gap(24),
-              Text(
-                'Isi data diri kamu',
-                style: interMedium.copyWith(fontSize: 24),
-              ),
-              const Gap(8),
-              Text(
-                'Lengkapi data diri kamu untuk mengetahui hasil asesmen kamu',
-                style: interRegular.copyWith(fontSize: 14),
-              ),
-              const Gap(14),
-              _buildFormCard(),
-            ],
+    return BlocBuilder<AssesmentBloc, AssesmentState>(
+      builder: (context, state) {
+        return Scaffold(
+          backgroundColor: const Color(0xffEAEAEA),
+          appBar: buildCustomAppBar(
+              title: 'Data Diri', context: context, canPop: false),
+          bottomNavigationBar: buildCustomBottomAppBar(
+            text: 'Berikutnya',
+            onTap: () {
+              if (formKey.currentState!.validate()) {
+                context.read<AssesmentBloc>().add(SavePersonalInfo(
+                      fullName: nameController.text,
+                      dateOfBirth: dateOfBirthController.text,
+                    ));
+                goToNamed(context, AppRoute.genderInformation);
+              }
+            },
           ),
-        ),
-      ),
+          body: Padding(
+            padding: const EdgeInsets.symmetric(horizontal: margin_20),
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                const Gap(16),
+                const CustomProgressIndicator(value: 1),
+                const Gap(24),
+                Text(
+                  'Isi data diri kamu',
+                  style: interMedium.copyWith(fontSize: 24),
+                ),
+                const Gap(8),
+                Text(
+                  'Lengkapi data diri kamu untuk mengetahui hasil asesmen kamu',
+                  style: interRegular.copyWith(fontSize: 14),
+                ),
+                const Gap(14),
+                _buildFormCard(),
+              ],
+            ),
+          ),
+        );
+      },
     );
   }
 

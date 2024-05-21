@@ -9,6 +9,19 @@ sealed class AssesmentState extends Equatable {
 
 final class AssesmentInitial extends AssesmentState {}
 
+final class AssesmentLoading extends AssesmentState {}
+
+final class AssesmentSuccess extends AssesmentState {}
+
+final class AssesmentFailure extends AssesmentState {
+  final String message;
+
+  const AssesmentFailure(this.message);
+
+  @override
+  List<Object> get props => [message];
+}
+
 final class PersonalInfoSaved extends AssesmentState {
   final String fullName;
   final String dateOfBirth;

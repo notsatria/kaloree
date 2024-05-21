@@ -16,7 +16,6 @@ class AssesmentRepositoryImpl implements AssesmentRepository {
     required int gender,
     required int weight,
     required int height,
-    required String userId,
     required int activityStatus,
     required int healthPurpose,
   }) async {
@@ -27,7 +26,6 @@ class AssesmentRepositoryImpl implements AssesmentRepository {
         gender: gender,
         weight: weight,
         height: height,
-        userId: userId,
         activityStatus: activityStatus,
         healthPurpose: healthPurpose,
       );
