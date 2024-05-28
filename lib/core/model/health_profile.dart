@@ -9,11 +9,11 @@ class HealthProfile {
   final int height;
   final int weight;
   final String userId;
-  final int? dailyCaloriesNeed;
   final int activityStatus;
   final int healthPurpose;
-  final String? nutritionClassification;
   final String updatedAt;
+  final double? bmiIndex;
+  final double? bmr;
 
   HealthProfile({
     required this.uid,
@@ -23,11 +23,11 @@ class HealthProfile {
     required this.height,
     required this.weight,
     required this.userId,
-    this.dailyCaloriesNeed,
     required this.activityStatus,
     required this.healthPurpose,
-    this.nutritionClassification,
     required this.updatedAt,
+    this.bmiIndex,
+    this.bmr,
   });
 
   HealthProfile copyWith({
@@ -43,6 +43,8 @@ class HealthProfile {
     int? healthPurpose,
     String? nutritionClassification,
     String? updatedAt,
+    double? bmiIndex,
+    double? bmr,
   }) {
     return HealthProfile(
       uid: uid ?? this.uid,
@@ -52,12 +54,11 @@ class HealthProfile {
       height: height ?? this.height,
       weight: weight ?? this.weight,
       userId: userId ?? this.userId,
-      dailyCaloriesNeed: dailyCaloriesNeed ?? this.dailyCaloriesNeed,
       activityStatus: activityStatus ?? this.activityStatus,
       healthPurpose: healthPurpose ?? this.healthPurpose,
-      nutritionClassification:
-          nutritionClassification ?? this.nutritionClassification,
       updatedAt: updatedAt ?? this.updatedAt,
+      bmiIndex: bmiIndex ?? this.bmiIndex,
+      bmr: bmr ?? this.bmr,
     );
   }
 
@@ -70,11 +71,11 @@ class HealthProfile {
       'height': height,
       'weight': weight,
       'userId': userId,
-      'dailyCaloriesNeed': dailyCaloriesNeed,
       'activityStatus': activityStatus,
       'healthPurpose': healthPurpose,
-      'nutritionClassification': nutritionClassification,
       'updatedAt': updatedAt,
+      'bmiIndex': bmiIndex,
+      'bmr': bmr,
     };
   }
 
@@ -87,13 +88,11 @@ class HealthProfile {
       height: map['height'] as int,
       weight: map['weight'] as int,
       userId: map['userId'] as String,
-      dailyCaloriesNeed: map['dailyCaloriesNeed'] as int,
       activityStatus: map['activityStatus'] as int,
       healthPurpose: map['healthPurpose'] as int,
-      nutritionClassification: map['nutritionClassification'] != null
-          ? map['nutritionClassification'] as String
-          : null,
       updatedAt: map['updatedAt'] as String,
+      bmiIndex: map['bmiIndex'] as double,
+      bmr: map['bmr'] as double,
     );
   }
 
@@ -104,7 +103,7 @@ class HealthProfile {
 
   @override
   String toString() {
-    return 'HealthProfile(uid: $uid, gender: $gender, dateOfBirth: $dateOfBirth, age: $age, height: $height, weight: $weight, userId: $userId, dailyCaloriesNeed: $dailyCaloriesNeed, activityStatus: $activityStatus, healthPurpose: $healthPurpose, nutritionClassification: $nutritionClassification, updatedAt: $updatedAt)';
+    return 'HealthProfile(uid: $uid, gender: $gender, dateOfBirth: $dateOfBirth, age: $age, height: $height, weight: $weight, userId: $userId, activityStatus: $activityStatus, healthPurpose: $healthPurpose, updatedAt: $updatedAt, bmiIndex: $bmiIndex, bmr $bmr)';
   }
 
   @override
@@ -118,11 +117,11 @@ class HealthProfile {
         other.height == height &&
         other.weight == weight &&
         other.userId == userId &&
-        other.dailyCaloriesNeed == dailyCaloriesNeed &&
         other.activityStatus == activityStatus &&
         other.healthPurpose == healthPurpose &&
-        other.nutritionClassification == nutritionClassification &&
-        other.updatedAt == updatedAt;
+        other.updatedAt == updatedAt &&
+        other.bmiIndex == bmiIndex &&
+        other.bmr == bmr;
   }
 
   @override
@@ -134,10 +133,10 @@ class HealthProfile {
         height.hashCode ^
         weight.hashCode ^
         userId.hashCode ^
-        dailyCaloriesNeed.hashCode ^
         activityStatus.hashCode ^
         healthPurpose.hashCode ^
-        nutritionClassification.hashCode ^
-        updatedAt.hashCode;
+        updatedAt.hashCode ^
+        bmiIndex.hashCode ^
+        bmr.hashCode;
   }
 }

@@ -1,13 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:kaloree/features/assesment/presentation/widgets/custom_appbar.dart';
+import 'package:kaloree/core/platform/assets.dart';
+import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
-import 'package:kaloree/core/routes/app_route.dart';
-import 'package:kaloree/core/platform/assets.dart';
 import 'package:kaloree/core/widgets/dialog.dart';
+import 'package:kaloree/features/assesment/presentation/widgets/custom_appbar.dart';
 
 class AssesmentResultView extends StatelessWidget {
   const AssesmentResultView({super.key});
@@ -134,7 +134,7 @@ class AssesmentResultView extends StatelessWidget {
                 children: [
                   _buildClassificationResult(
                     icon: Icons.directions_run,
-                    title: 'Status Aktifitas Fisik',
+                    title: 'Status Aktivitas Fisik',
                     value: 'Kerja Ringan-Sedang',
                   ),
                   const Gap(15),

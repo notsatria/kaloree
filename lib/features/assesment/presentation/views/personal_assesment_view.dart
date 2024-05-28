@@ -157,7 +157,28 @@ class _PersonalAssesmentViewState extends State<PersonalAssesmentView> {
               );
             }).toList(),
           ),
-          const Gap(24),
+          const Gap(12),
+          GestureDetector(
+            onTap: () {
+              _showAktitvitasFisikDialogInformation();
+            },
+            child: Row(
+              children: [
+                Icon(
+                  Icons.info,
+                  size: 16,
+                  color: lightColorScheme.primary,
+                ),
+                const Gap(4),
+                Text(
+                  'Info tentang Aktivitas Fisik',
+                  style: interRegular.copyWith(
+                      fontSize: 12, color: lightColorScheme.primary),
+                ),
+              ],
+            ),
+          ),
+          const Gap(12),
           DropdownMenu<HealthPurpose>(
             width: getMaxWidth(context) / 1.23,
             controller: healthPurposeController,
@@ -198,16 +219,77 @@ class _PersonalAssesmentViewState extends State<PersonalAssesmentView> {
       ),
     );
   }
+
+  Future<dynamic> _showAktitvitasFisikDialogInformation() {
+    return showDialog(
+      context: context,
+      builder: (context) {
+        return AlertDialog.adaptive(
+          title: const Text('Status Aktivitas Fisik'),
+          content: SizedBox(
+            height: getMaxHeight(context) / 7,
+            child: Column(children: [
+              Row(
+                children: [
+                  Text('Sangat Jarang: ',
+                      style: interBold.copyWith(fontSize: 12)),
+                  Text(
+                    'Sangat jarang berolahraga',
+                    style: interRegular.copyWith(fontSize: 12),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text('Jarang: ', style: interBold.copyWith(fontSize: 12)),
+                  Text(
+                    'Jarang berolahraga (1-3 kali/minggu)',
+                    style: interRegular.copyWith(fontSize: 12),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text('Normal: ', style: interBold.copyWith(fontSize: 12)),
+                  Text(
+                    'Berolahraga (3-5 kali/minggu)',
+                    style: interRegular.copyWith(fontSize: 12),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text('Sering: ', style: interBold.copyWith(fontSize: 12)),
+                  Text(
+                    'Sering berolahraga (6-7 kali/minggu)',
+                    style: interRegular.copyWith(fontSize: 12),
+                  ),
+                ],
+              ),
+              Row(
+                children: [
+                  Text('Sangat Sering: ',
+                      style: interBold.copyWith(fontSize: 12)),
+                  Text(
+                    'Sangat sering olahraga',
+                    style: interRegular.copyWith(fontSize: 12),
+                  ),
+                ],
+              ),
+            ]),
+          ),
+        );
+      },
+    );
+  }
 }
 
 enum ActivityStatus {
-  istirahat('Istirahat di Tempat Tidur', 0),
-  sangatRingan('Kerja Sangat Ringan', 1),
-  ringan('Kerja Ringan', 2),
-  ringanSedang('Kerja Ringan-Sedang', 3),
-  sedang('Kerja Sedang', 4),
-  berat('Kerja Berat', 5),
-  beratSekali('Kerja Berat Sekali', 6);
+  sangatJarang('Sangat Jarang', 0),
+  jarang('Jarang', 1),
+  normal('Normal', 2),
+  sering('Sering', 3),
+  sangatSering('Sangat Sering', 4);
 
   const ActivityStatus(this.label, this.value);
   final String label;
