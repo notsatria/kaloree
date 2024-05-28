@@ -95,16 +95,6 @@ class AssesmentRemoteDataSourceImpl implements AssesmentRemoteDataSource {
     }
   }
 
-  int _calculateAge(DateTime dateOfBirth) {
-    DateTime today = DateTime.now();
-    int age = today.year - dateOfBirth.year;
-    if (today.month < dateOfBirth.month ||
-        (today.month == dateOfBirth.month && today.day < dateOfBirth.day)) {
-      age--;
-    }
-    return age;
-  }
-
   @override
   Future<void> updateGender({required int gender}) async {
     try {
@@ -131,19 +121,103 @@ class AssesmentRemoteDataSourceImpl implements AssesmentRemoteDataSource {
   }) async {
     try {
       final user = firebaseAuth.currentUser;
-      CollectionReference healtProfileCollection = firebaseFirestore
+      DocumentReference healthProfileDoc = firebaseFirestore
           .collection("users")
           .doc(user!.uid)
-          .collection("health_profile");
+          .collection("health_profile")
+          .doc(user.uid);
 
-      await healtProfileCollection.doc(user.uid).update({
+      DocumentReference userDoc =
+          firebaseFirestore.collection("users").doc(user.uid);
+
+      // Retrieve the existing health profile
+      DocumentSnapshot healthProfileSnapshot = await healthProfileDoc.get();
+
+      if (!healthProfileSnapshot.exists) {
+        throw ServerException("Health profile does not exist");
+      }
+
+      // Get the existing data
+      Map<String, dynamic> existingData =
+          healthProfileSnapshot.data() as Map<String, dynamic>;
+
+      int activityStatus = existingData['activityStatus'];
+      int age = existingData['age'];
+      int gender = existingData['gender'];
+
+      await healthProfileDoc.update({
         'weight': weight,
         'height': height,
         'activityStatus': activityStatus,
         'healthPurpose': activityStatus,
+        'bmiIndex': _calculateBMIIndex(weight: weight, height: height),
+        'bmr': _calculateBMR(
+          gender: gender,
+          activityStatus: activityStatus,
+          weight: weight,
+          height: height,
+          age: age,
+        )
+      });
+
+      await userDoc.update({
+        'isAssesmentComplete': true,
       });
     } catch (e) {
       ServerException(e.toString());
     }
+  }
+
+  double _calculateBMIIndex({required int weight, required int height}) {
+    double heightInMeters = height / 100;
+    return weight / (heightInMeters * heightInMeters);
+  }
+
+  double _calculateBMR({
+    required int gender,
+    required int activityStatus,
+    required int weight,
+    required int height,
+    required int age,
+  }) {
+    double bmr = 0.0;
+    double activityLevel = 1.2;
+    if (gender == 0) {
+      bmr = 66 + (13.7 * weight) + (5 * height) - (6.78 * age);
+    } else {
+      bmr = 655 + (9.6 * weight) + (1.8 * height) - (4.7 * age);
+    }
+
+    switch (activityStatus) {
+      case 0:
+        activityLevel = 1.2;
+        break;
+      case 1:
+        activityLevel = 1.375;
+        break;
+      case 2:
+        activityLevel = 1.55;
+        break;
+      case 3:
+        activityLevel = 1.725;
+        break;
+      case 4:
+        activityLevel = 1.9;
+        break;
+      default:
+        activityLevel = 1.2;
+    }
+
+    return bmr * activityLevel;
+  }
+
+  int _calculateAge(DateTime dateOfBirth) {
+    DateTime today = DateTime.now();
+    int age = today.year - dateOfBirth.year;
+    if (today.month < dateOfBirth.month ||
+        (today.month == dateOfBirth.month && today.day < dateOfBirth.day)) {
+      age--;
+    }
+    return age;
   }
 }
