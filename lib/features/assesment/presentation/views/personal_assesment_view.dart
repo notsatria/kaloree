@@ -30,50 +30,53 @@ class _PersonalAssesmentViewState extends State<PersonalAssesmentView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AssesmentBloc, AssesmentState>(
-      builder: (context, state) {
-        return Scaffold(
-          backgroundColor: const Color(0xffEAEAEA),
-          resizeToAvoidBottomInset: false,
-          appBar: buildCustomAppBar(title: 'Asesmen Diri', context: context),
-          bottomNavigationBar: buildCustomBottomAppBar(
-            text: 'Lihat Hasil',
-            onTap: () {
-              context.read<AssesmentBloc>().add(
-                    UpdateLastAssesment(
-                      height: int.parse(heightController.text),
-                      weight: int.parse(weightController.text),
-                      activityStatus: selectedActivityStatus!.value,
-                      healthPurpose: selectedHealthPurpose!.value,
-                    ),
-                  );
-              goAndRemoveUntilNamed(context, AppRoute.assesmentResult);
-            },
-          ),
-          body: Padding(
-            padding: const EdgeInsets.symmetric(horizontal: margin_20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
-              children: [
-                const Gap(16),
-                const CustomProgressIndicator(value: 3),
-                const Gap(24),
-                Text(
-                  'Asesmen Diri',
-                  style: interMedium.copyWith(fontSize: 24),
-                ),
-                const Gap(8),
-                Text(
-                  'Lengkapi data diri kamu untuk mengetahui hasil asesmen kamu',
-                  style: interRegular.copyWith(fontSize: 14),
-                ),
-                const Gap(14),
-                _buildFormCard(),
-              ],
-            ),
-          ),
-        );
+    return BlocListener<AssesmentBloc, AssesmentState>(
+      listener: (context, state) {
+        debugPrint("State in PersonalAssesmentView: $state");
+        if (state is AssesmentComplete) {
+          goAndRemoveUntilNamed(context, AppRoute.assesmentResult);
+        }
       },
+      child: Scaffold(
+        backgroundColor: const Color(0xffEAEAEA),
+        resizeToAvoidBottomInset: false,
+        appBar: buildCustomAppBar(title: 'Asesmen Diri', context: context),
+        bottomNavigationBar: buildCustomBottomAppBar(
+          text: 'Lihat Hasil',
+          onTap: () {
+            context.read<AssesmentBloc>().add(
+                  UpdateLastAssesment(
+                    height: int.parse(heightController.text),
+                    weight: int.parse(weightController.text),
+                    activityStatus: selectedActivityStatus!.value,
+                    healthPurpose: selectedHealthPurpose!.value,
+                  ),
+                );
+          },
+        ),
+        body: Padding(
+          padding: const EdgeInsets.symmetric(horizontal: margin_20),
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.start,
+            children: [
+              const Gap(16),
+              const CustomProgressIndicator(value: 3),
+              const Gap(24),
+              Text(
+                'Asesmen Diri',
+                style: interMedium.copyWith(fontSize: 24),
+              ),
+              const Gap(8),
+              Text(
+                'Lengkapi data diri kamu untuk mengetahui hasil asesmen kamu',
+                style: interRegular.copyWith(fontSize: 14),
+              ),
+              const Gap(14),
+              _buildFormCard(),
+            ],
+          ),
+        ),
+      ),
     );
   }
 
@@ -186,6 +189,7 @@ class _PersonalAssesmentViewState extends State<PersonalAssesmentView> {
             onSelected: (HealthPurpose? healthPurpose) {
               setState(() {
                 selectedHealthPurpose = healthPurpose;
+                debugPrint("selectedHealthPurpose $selectedHealthPurpose");
               });
             },
             hintText: 'Tujuan Kesehatan',

@@ -4,6 +4,7 @@ import 'package:flutter/foundation.dart';
 import 'package:intl/intl.dart';
 import 'package:kaloree/core/errors/exceptions.dart';
 import 'package:kaloree/core/model/health_profile.dart';
+import 'package:kaloree/core/model/user_model.dart';
 import 'package:uuid/uuid.dart';
 
 abstract interface class AssesmentRemoteDataSource {
@@ -25,6 +26,10 @@ abstract interface class AssesmentRemoteDataSource {
     required int activityStatus,
     required int healthPurpose,
   });
+
+  Future<HealthProfile> getUserHealthProfile();
+
+  Future<UserModel> getUser();
 }
 
 class AssesmentRemoteDataSourceImpl implements AssesmentRemoteDataSource {
@@ -141,23 +146,24 @@ class AssesmentRemoteDataSourceImpl implements AssesmentRemoteDataSource {
       Map<String, dynamic> existingData =
           healthProfileSnapshot.data() as Map<String, dynamic>;
 
-      int activityStatus = existingData['activityStatus'];
       int age = existingData['age'];
       int gender = existingData['gender'];
+      double bmi = _calculateBMIIndex(weight: weight, height: height);
 
       await healthProfileDoc.update({
         'weight': weight,
         'height': height,
         'activityStatus': activityStatus,
-        'healthPurpose': activityStatus,
-        'bmiIndex': _calculateBMIIndex(weight: weight, height: height),
+        'healthPurpose': healthPurpose,
+        'bmiIndex': bmi,
         'bmr': _calculateBMR(
           gender: gender,
           activityStatus: activityStatus,
           weight: weight,
           height: height,
           age: age,
-        )
+        ),
+        'nutritionClassification': _classifyNutritionByBMI(bmi),
       });
 
       await userDoc.update({
@@ -165,6 +171,78 @@ class AssesmentRemoteDataSourceImpl implements AssesmentRemoteDataSource {
       });
     } catch (e) {
       ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<HealthProfile> getUserHealthProfile() async {
+    try {
+      final user = firebaseAuth.currentUser;
+      if (user == null) {
+        throw ServerException("User not authenticated");
+      }
+
+      DocumentReference healthProfileDoc = firebaseFirestore
+          .collection("users")
+          .doc(user.uid)
+          .collection("health_profile")
+          .doc(user.uid);
+
+      DocumentSnapshot healthProfileSnapshot = await healthProfileDoc.get();
+
+      if (healthProfileSnapshot.exists) {
+        Map<String, dynamic> data =
+            healthProfileSnapshot.data() as Map<String, dynamic>;
+        return HealthProfile.fromMap(data);
+      } else {
+        throw ServerException("Health profile not found");
+      }
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<UserModel> getUser() async {
+    try {
+      final user = firebaseAuth.currentUser;
+      if (user == null) {
+        throw ServerException("User not authenticated");
+      }
+      DocumentSnapshot userDocSnapshot =
+          await firebaseFirestore.collection("users").doc(user.uid).get();
+
+      DocumentReference healthProfileDoc = firebaseFirestore
+          .collection("users")
+          .doc(user.uid)
+          .collection("health_profile")
+          .doc(user.uid);
+
+      DocumentSnapshot healthProfileSnapshot = await healthProfileDoc.get();
+
+      Map<String, dynamic> data =
+          healthProfileSnapshot.data() as Map<String, dynamic>;
+      final healthProfile = HealthProfile.fromMap(data);
+
+      if (userDocSnapshot.exists) {
+        Map<String, dynamic> data =
+            userDocSnapshot.data() as Map<String, dynamic>;
+        return UserModel(
+          email: data['email'],
+          uid: data['uid'],
+          updatedAt: data['updatedAt'],
+          fullName: data['fullName'],
+          healthProfile: healthProfile,
+          isAssesmentComplete: data['isAssesmentComplete'],
+          profilePicture: data['profilePicture'],
+        );
+      } else {
+        debugPrint("Error on getUser: User not found");
+        throw ServerException("User not found");
+      }
+    } catch (e) {
+      debugPrint("Error on getUser: $e");
+      throw ServerException(e.toString());
     }
   }
 
@@ -219,5 +297,19 @@ class AssesmentRemoteDataSourceImpl implements AssesmentRemoteDataSource {
       age--;
     }
     return age;
+  }
+
+  String _classifyNutritionByBMI(double bmi) {
+    if (bmi < 18.5) {
+      return 'Kurus';
+    } else if (bmi >= 18.5 && bmi < 24.9) {
+      return 'Normal';
+    } else if (bmi >= 25 && bmi < 29.9) {
+      return 'Gemuk';
+    } else if (bmi >= 30) {
+      return 'Obesitas';
+    } else {
+      return 'Invalid BMI';
+    }
   }
 }

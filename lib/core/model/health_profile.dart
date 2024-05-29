@@ -14,6 +14,7 @@ class HealthProfile {
   final String updatedAt;
   final double? bmiIndex;
   final double? bmr;
+  final String? nutritionClassification;
 
   HealthProfile({
     required this.uid,
@@ -28,6 +29,7 @@ class HealthProfile {
     required this.updatedAt,
     this.bmiIndex,
     this.bmr,
+    this.nutritionClassification,
   });
 
   HealthProfile copyWith({
@@ -38,13 +40,12 @@ class HealthProfile {
     int? height,
     int? weight,
     String? userId,
-    int? dailyCaloriesNeed,
     int? activityStatus,
     int? healthPurpose,
-    String? nutritionClassification,
     String? updatedAt,
     double? bmiIndex,
     double? bmr,
+    String? nutritionClassification,
   }) {
     return HealthProfile(
       uid: uid ?? this.uid,
@@ -59,6 +60,8 @@ class HealthProfile {
       updatedAt: updatedAt ?? this.updatedAt,
       bmiIndex: bmiIndex ?? this.bmiIndex,
       bmr: bmr ?? this.bmr,
+      nutritionClassification:
+          nutritionClassification ?? this.nutritionClassification,
     );
   }
 
@@ -76,24 +79,25 @@ class HealthProfile {
       'updatedAt': updatedAt,
       'bmiIndex': bmiIndex,
       'bmr': bmr,
+      'nutritionClassification': nutritionClassification,
     };
   }
 
   factory HealthProfile.fromMap(Map<String, dynamic> map) {
     return HealthProfile(
-      uid: map['uid'] as String,
-      gender: map['gender'] as int,
-      dateOfBirth: map['dateOfBirth'] as String,
-      age: map['age'] as int,
-      height: map['height'] as int,
-      weight: map['weight'] as int,
-      userId: map['userId'] as String,
-      activityStatus: map['activityStatus'] as int,
-      healthPurpose: map['healthPurpose'] as int,
-      updatedAt: map['updatedAt'] as String,
-      bmiIndex: map['bmiIndex'] as double,
-      bmr: map['bmr'] as double,
-    );
+        uid: map['uid'] as String,
+        gender: map['gender'] as int,
+        dateOfBirth: map['dateOfBirth'] as String,
+        age: map['age'] as int,
+        height: map['height'] as int,
+        weight: map['weight'] as int,
+        userId: map['userId'] as String,
+        activityStatus: map['activityStatus'] as int,
+        healthPurpose: map['healthPurpose'] as int,
+        updatedAt: map['updatedAt'] as String,
+        bmiIndex: map['bmiIndex'] as double,
+        bmr: map['bmr'] as double,
+        nutritionClassification: map['nutritionClassification'] as String);
   }
 
   String toJson() => json.encode(toMap());
@@ -103,7 +107,7 @@ class HealthProfile {
 
   @override
   String toString() {
-    return 'HealthProfile(uid: $uid, gender: $gender, dateOfBirth: $dateOfBirth, age: $age, height: $height, weight: $weight, userId: $userId, activityStatus: $activityStatus, healthPurpose: $healthPurpose, updatedAt: $updatedAt, bmiIndex: $bmiIndex, bmr $bmr)';
+    return 'HealthProfile(uid: $uid, gender: $gender, dateOfBirth: $dateOfBirth, age: $age, height: $height, weight: $weight, userId: $userId, activityStatus: $activityStatus, healthPurpose: $healthPurpose, updatedAt: $updatedAt, bmiIndex: $bmiIndex, bmr $bmr, nutritionClassification: $nutritionClassification)';
   }
 
   @override
@@ -121,7 +125,8 @@ class HealthProfile {
         other.healthPurpose == healthPurpose &&
         other.updatedAt == updatedAt &&
         other.bmiIndex == bmiIndex &&
-        other.bmr == bmr;
+        other.bmr == bmr &&
+        other.nutritionClassification == nutritionClassification;
   }
 
   @override
@@ -137,6 +142,7 @@ class HealthProfile {
         healthPurpose.hashCode ^
         updatedAt.hashCode ^
         bmiIndex.hashCode ^
-        bmr.hashCode;
+        bmr.hashCode ^
+        nutritionClassification.hashCode;
   }
 }

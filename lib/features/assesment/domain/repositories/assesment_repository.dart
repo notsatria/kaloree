@@ -1,5 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:kaloree/core/errors/failure.dart';
+import 'package:kaloree/core/model/health_profile.dart';
+import 'package:kaloree/core/model/user_model.dart';
 
 abstract interface class AssesmentRepository {
   Future<Either<Failure, void>> saveUserAssesmentData({
@@ -20,4 +22,8 @@ abstract interface class AssesmentRepository {
     required int activityStatus,
     required int healthPurpose,
   });
+
+  Future<Either<Failure, HealthProfile>> getUserHealthProfile();
+
+  Future<Either<Failure, UserModel>> getUser();
 }
