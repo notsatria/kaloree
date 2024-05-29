@@ -25,6 +25,8 @@ abstract interface class AssesmentRemoteDataSource {
     required int activityStatus,
     required int healthPurpose,
   });
+
+  Future<HealthProfile> getUserHealthProfile();
 }
 
 class AssesmentRemoteDataSourceImpl implements AssesmentRemoteDataSource {
@@ -144,20 +146,22 @@ class AssesmentRemoteDataSourceImpl implements AssesmentRemoteDataSource {
       int activityStatus = existingData['activityStatus'];
       int age = existingData['age'];
       int gender = existingData['gender'];
+      double bmi = _calculateBMIIndex(weight: weight, height: height);
 
       await healthProfileDoc.update({
         'weight': weight,
         'height': height,
         'activityStatus': activityStatus,
         'healthPurpose': activityStatus,
-        'bmiIndex': _calculateBMIIndex(weight: weight, height: height),
+        'bmiIndex': bmi,
         'bmr': _calculateBMR(
           gender: gender,
           activityStatus: activityStatus,
           weight: weight,
           height: height,
           age: age,
-        )
+        ),
+        'nutritionClassification': _classifyNutritionByBMI(bmi),
       });
 
       await userDoc.update({
@@ -165,6 +169,34 @@ class AssesmentRemoteDataSourceImpl implements AssesmentRemoteDataSource {
       });
     } catch (e) {
       ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<HealthProfile> getUserHealthProfile() async {
+    try {
+      final user = firebaseAuth.currentUser;
+      if (user == null) {
+        throw ServerException("User not authenticated");
+      }
+
+      DocumentReference healthProfileDoc = firebaseFirestore
+          .collection("users")
+          .doc(user.uid)
+          .collection("health_profile")
+          .doc(user.uid);
+
+      DocumentSnapshot healthProfileSnapshot = await healthProfileDoc.get();
+
+      if (healthProfileSnapshot.exists) {
+        Map<String, dynamic> data =
+            healthProfileSnapshot.data() as Map<String, dynamic>;
+        return HealthProfile.fromMap(data);
+      } else {
+        throw ServerException("Health profile not found");
+      }
+    } catch (e) {
+      throw ServerException(e.toString());
     }
   }
 
@@ -219,5 +251,19 @@ class AssesmentRemoteDataSourceImpl implements AssesmentRemoteDataSource {
       age--;
     }
     return age;
+  }
+
+  String _classifyNutritionByBMI(double bmi) {
+    if (bmi < 18.5) {
+      return 'Kurus';
+    } else if (bmi >= 18.5 && bmi < 24.9) {
+      return 'Normal';
+    } else if (bmi >= 25 && bmi < 29.9) {
+      return 'Gemuk';
+    } else if (bmi >= 30) {
+      return 'Obesitas';
+    } else {
+      return 'Invalid BMI';
+    }
   }
 }

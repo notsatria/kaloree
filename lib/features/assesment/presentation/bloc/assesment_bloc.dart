@@ -1,5 +1,9 @@
 import 'package:equatable/equatable.dart';
+import 'package:flutter/foundation.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaloree/core/model/health_profile.dart';
+import 'package:kaloree/core/usecase/usecase.dart';
+import 'package:kaloree/features/assesment/domain/usecases/user_get_health_profile.dart';
 import 'package:kaloree/features/assesment/domain/usecases/user_save_assesment.dart';
 import 'package:kaloree/features/assesment/domain/usecases/user_update_gender.dart';
 import 'package:kaloree/features/assesment/domain/usecases/user_update_last_assesment_data.dart';
@@ -11,14 +15,17 @@ class AssesmentBloc extends Bloc<AssesmentEvent, AssesmentState> {
   final UserSaveAssesment _userSaveAssesment;
   final UserUpdateGender _userUpdateGender;
   final UserUpdateLastAssesment _userUpdateLastAssesment;
+  final UserGetHealthProfile _userGetHealthProfile;
 
   AssesmentBloc({
     required UserSaveAssesment userSaveAssesment,
     required UserUpdateGender userUpdateGender,
     required UserUpdateLastAssesment userUpdateLastAssesment,
+    required UserGetHealthProfile userGetHealthProfile,
   })  : _userSaveAssesment = userSaveAssesment,
         _userUpdateGender = userUpdateGender,
         _userUpdateLastAssesment = userUpdateLastAssesment,
+        _userGetHealthProfile = userGetHealthProfile,
         super(AssesmentInitial()) {
     on<AssesmentEvent>((_, emit) => emit(AssesmentLoading()));
 
@@ -27,6 +34,8 @@ class AssesmentBloc extends Bloc<AssesmentEvent, AssesmentState> {
     on<UpdateGender>(_onUpdateGender);
 
     on<UpdateLastAssesment>(_onUpdateLastAssesment);
+
+    on<GetUserHealthProfile>(_onGetUserHealthProfile);
   }
 
   void _onUploadPersonalInfo(
@@ -71,7 +80,19 @@ class AssesmentBloc extends Bloc<AssesmentEvent, AssesmentState> {
 
     result.fold(
       (failure) => emit(AssesmentFailure(failure.message)),
-      (_) => emit(AssesmentSuccess()),
+      (_) => emit(AssesmentComplete()),
+    );
+  }
+
+  void _onGetUserHealthProfile(
+      GetUserHealthProfile event, Emitter<AssesmentState> emit) async {
+    final result = await _userGetHealthProfile(NoParams());
+
+    debugPrint('Result _onGEtUserHealthProfile: $result');
+
+    result.fold(
+      (failure) => emit(AssesmentFailure(failure.message)),
+      (r) => emit(GetUserProfileSuccess(r)),
     );
   }
 }

@@ -13,6 +13,14 @@ final class AssesmentLoading extends AssesmentState {}
 
 final class AssesmentSuccess extends AssesmentState {}
 
+final class AssesmentComplete extends AssesmentState {}
+
+final class GetUserProfileSuccess extends AssesmentState {
+  final HealthProfile healthProfile;
+
+  const GetUserProfileSuccess(this.healthProfile);
+}
+
 final class AssesmentFailure extends AssesmentState {
   final String message;
 

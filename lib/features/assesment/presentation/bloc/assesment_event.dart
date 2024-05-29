@@ -48,3 +48,5 @@ class UpdateLastAssesment extends AssesmentEvent {
     required this.healthPurpose,
   });
 }
+
+class GetUserHealthProfile extends AssesmentEvent {}
