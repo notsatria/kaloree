@@ -49,4 +49,6 @@ class UpdateLastAssesment extends AssesmentEvent {
   });
 }
 
+class GetUserData extends AssesmentEvent {}
+
 class GetUserHealthProfile extends AssesmentEvent {}

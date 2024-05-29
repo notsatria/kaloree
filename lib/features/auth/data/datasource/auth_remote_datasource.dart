@@ -42,7 +42,7 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           throw ServerException('Failed to create user.');
         }
 
-        final user = user_model.User(
+        final user = user_model.UserModel(
           uid: firebaseUser.uid,
           email: email,
           fullName: "",

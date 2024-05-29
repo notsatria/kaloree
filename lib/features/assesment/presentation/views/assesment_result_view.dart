@@ -9,7 +9,6 @@ import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
 import 'package:kaloree/core/utils/show_snackbar.dart';
 import 'package:kaloree/core/widgets/dialog.dart';
-import 'package:kaloree/core/widgets/loading.dart';
 import 'package:kaloree/features/assesment/presentation/bloc/assesment_bloc.dart';
 import 'package:kaloree/features/assesment/presentation/views/personal_assesment_view.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_appbar.dart';
@@ -26,7 +25,7 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
   void initState() {
     super.initState();
     debugPrint("Initstate: running GetUserHealthProfile");
-    context.read<AssesmentBloc>().add(GetUserHealthProfile());
+    context.read<AssesmentBloc>().add(GetUserData());
   }
 
   @override
@@ -43,15 +42,17 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
         listener: (context, state) {
           if (state is AssesmentFailure) {
             showSnackbar(context, state.message);
+          } else if (state is GetUserDataFailed) {
+            debugPrint('Error on GetUserDataFailed: ${state.message}');
           }
         },
         builder: (context, state) {
           debugPrint("State: $state");
-          if (state is AssesmentLoading) {
-            return const Loading();
-          } else if (state is GetUserProfileSuccess) {
-            final healthProfile = state.healthProfile;
-            final bmr = healthProfile.bmr?.toInt();
+          if (state is GetUserDataSuccess) {
+            final userData = state.userModel;
+            final healthProfile = userData.healthProfile;
+            final bmr = healthProfile?.bmr?.toInt();
+
             return Scaffold(
               backgroundColor: onBoardingBackgroundColor,
               appBar: buildCustomAppBar(
@@ -77,7 +78,7 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
                         ),
                       ),
                       child: _buildClassificationActivitiesResult(
-                        activityStatus: healthProfile.activityStatus,
+                        activityStatus: healthProfile!.activityStatus,
                         healthPurpose: healthProfile.healthPurpose,
                         nutritionClassification:
                             healthProfile.nutritionClassification!,
@@ -138,7 +139,7 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
                       crossAxisAlignment: CrossAxisAlignment.start,
                       children: [
                         Text(
-                          'Hai, \nDamar Satria',
+                          'Hai, \n${userData.fullName}',
                           style: interBold.copyWith(
                               fontSize: 28, color: lightColorScheme.primary),
                         ),

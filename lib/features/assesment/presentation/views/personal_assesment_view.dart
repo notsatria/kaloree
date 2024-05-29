@@ -189,6 +189,7 @@ class _PersonalAssesmentViewState extends State<PersonalAssesmentView> {
             onSelected: (HealthPurpose? healthPurpose) {
               setState(() {
                 selectedHealthPurpose = healthPurpose;
+                debugPrint("selectedHealthPurpose $selectedHealthPurpose");
               });
             },
             hintText: 'Tujuan Kesehatan',

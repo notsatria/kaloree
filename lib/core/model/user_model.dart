@@ -3,8 +3,9 @@ import 'dart:convert';
 
 import 'package:flutter/foundation.dart';
 import 'package:kaloree/core/model/classification_result.dart';
+import 'package:kaloree/core/model/health_profile.dart';
 
-class User {
+class UserModel {
   final String uid;
   final String email;
   final String? fullName;
@@ -12,8 +13,9 @@ class User {
   final bool? isAssesmentComplete;
   final List<ClassificationResult>? classificationResultList;
   final String updatedAt;
+  final HealthProfile? healthProfile;
 
-  User({
+  UserModel({
     required this.uid,
     required this.email,
     this.fullName,
@@ -21,9 +23,10 @@ class User {
     this.isAssesmentComplete,
     this.classificationResultList,
     required this.updatedAt,
+    this.healthProfile,
   });
 
-  User copyWith({
+  UserModel copyWith({
     String? uid,
     String? email,
     String? fullName,
@@ -31,8 +34,9 @@ class User {
     bool? isAssesmentComplete,
     List<ClassificationResult>? classificationResultList,
     String? updatedAt,
+    HealthProfile? healthProfile,
   }) {
-    return User(
+    return UserModel(
       uid: uid ?? this.uid,
       email: email ?? this.email,
       fullName: fullName ?? this.fullName,
@@ -41,6 +45,7 @@ class User {
       classificationResultList:
           classificationResultList ?? this.classificationResultList,
       updatedAt: updatedAt ?? this.updatedAt,
+      healthProfile: healthProfile ?? this.healthProfile,
     );
   }
 
@@ -57,8 +62,8 @@ class User {
     };
   }
 
-  factory User.fromMap(Map<String, dynamic> map) {
-    return User(
+  factory UserModel.fromMap(Map<String, dynamic> map) {
+    return UserModel(
       uid: map['uid'] as String,
       email: map['email'] as String,
       fullName: map['fullName'] != null ? map['fullName'] as String : null,
@@ -82,16 +87,16 @@ class User {
 
   String toJson() => json.encode(toMap());
 
-  factory User.fromJson(String source) =>
-      User.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory UserModel.fromJson(String source) =>
+      UserModel.fromMap(json.decode(source) as Map<String, dynamic>);
 
   @override
   String toString() {
-    return 'User(uid: $uid, email: $email, fullName: $fullName, profilePicture: $profilePicture, isAssesmentComplete: $isAssesmentComplete, classificationResultList: $classificationResultList, updatedAt: $updatedAt)';
+    return 'UserModel(uid: $uid, email: $email, fullName: $fullName, profilePicture: $profilePicture, isAssesmentComplete: $isAssesmentComplete, classificationResultList: $classificationResultList, updatedAt: $updatedAt)';
   }
 
   @override
-  bool operator ==(covariant User other) {
+  bool operator ==(covariant UserModel other) {
     if (identical(this, other)) return true;
 
     return other.uid == uid &&

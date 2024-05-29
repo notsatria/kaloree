@@ -4,6 +4,7 @@ import 'package:get_it/get_it.dart';
 import 'package:kaloree/features/assesment/data/datasource/assesment_remote_datasource.dart';
 import 'package:kaloree/features/assesment/data/repositories/assesment_repository_impl.dart';
 import 'package:kaloree/features/assesment/domain/repositories/assesment_repository.dart';
+import 'package:kaloree/features/assesment/domain/usecases/get_user_data.dart';
 import 'package:kaloree/features/assesment/domain/usecases/user_get_health_profile.dart';
 import 'package:kaloree/features/assesment/domain/usecases/user_save_assesment.dart';
 import 'package:kaloree/features/assesment/domain/usecases/user_update_gender.dart';
@@ -80,6 +81,10 @@ void _initAssesment() {
   serviceLocator.registerFactory(
     () => UserGetHealthProfile(serviceLocator()),
   );
+  
+  serviceLocator.registerFactory(
+    () => GetUserDataUseCase(serviceLocator()),
+  );
 
   // blocs
   serviceLocator.registerLazySingleton(
@@ -88,6 +93,7 @@ void _initAssesment() {
       userUpdateGender: serviceLocator(),
       userUpdateLastAssesment: serviceLocator(),
       userGetHealthProfile: serviceLocator(),
+      getUserDataUseCase: serviceLocator()
     ),
   );
 }
