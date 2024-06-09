@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:flutter/foundation.dart';
 import 'package:kaloree/core/errors/exceptions.dart';
 import 'package:kaloree/core/model/user_model.dart' as user_model;
 
@@ -9,7 +10,7 @@ abstract interface class AuthRemoteDataSource {
     required String password,
   });
 
-  Future<void> signInWithEmailAndPassword({
+  Future<user_model.UserModel> signInWithEmailAndPassword({
     required String email,
     required String password,
   });
@@ -67,20 +68,26 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   }
 
   @override
-  Future<void> signInWithEmailAndPassword({
+  Future<user_model.UserModel> signInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
     try {
-      await firebaseAuth.signInWithEmailAndPassword(
+      final auth = await firebaseAuth.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-    } on FirebaseAuthException catch (e) {
-      if (e.code == 'user-not-found') {
-        throw UserNotFoundException();
-      } else if (e.code == 'wrong-password') {
-        throw WrongPasswordException();
+
+      DocumentReference userCollection =
+          firebaseFirestore.collection('users').doc(auth.user?.uid);
+      DocumentSnapshot userSnapshot = await userCollection.get();
+
+      if (userSnapshot.exists) {
+        Map<String, dynamic> data = userSnapshot.data() as Map<String, dynamic>;
+        debugPrint("User: ${user_model.UserModel.fromMap(data)}");
+        return user_model.UserModel.fromMap(data);
+      } else {
+        throw ServerException("User Snaphot doesnt exists");
       }
     } catch (e) {
       throw ServerException(e.toString());

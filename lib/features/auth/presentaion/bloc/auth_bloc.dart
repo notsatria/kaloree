@@ -1,5 +1,6 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaloree/core/model/user_model.dart';
 import 'package:kaloree/features/auth/domain/usecases/user_sign_in.dart';
 import 'package:kaloree/features/auth/domain/usecases/user_sign_up.dart';
 
@@ -31,7 +32,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     result.fold(
       (failure) => emit(AuthFailure(failure.message)),
-      (_) => emit(AuthSuccess()),
+      (_) => emit(AuthRegisterSuccess()),
     );
   }
 
@@ -43,7 +44,7 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
 
     result.fold(
       (failure) => emit(AuthFailure(failure.message)),
-      (_) => emit(AuthSuccess()),
+      (res) => emit(AuthLoginSuccess(res)),
     );
   }
 }
