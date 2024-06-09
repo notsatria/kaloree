@@ -5,11 +5,12 @@ import 'dart:isolate';
 import 'package:camera/camera.dart';
 import 'package:flutter/services.dart';
 import 'package:image/image.dart';
-import 'package:kaloree/core/helpers/isolate_inference.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
 
+import 'isolate_inference.dart';
+
 class ImageClassificationHelper {
-  static const modelPath = 'assets/models/mobilenet_quant.tflite';
+  static const modelPath = 'assets/models/model.tflite';
   static const labelsPath = 'assets/models/labels.txt';
 
   late final Interpreter interpreter;
@@ -22,15 +23,20 @@ class ImageClassificationHelper {
   Future<void> _loadModel() async {
     final options = InterpreterOptions();
 
-    // Use XNNPACK delegate for Android
+    // Use XNNPACK Delegate
     if (Platform.isAndroid) {
       options.addDelegate(XNNPackDelegate());
     }
 
     // Use GPU Delegate
     // doesn't work on emulator
-    if (Platform.isAndroid) {
-      options.addDelegate(GpuDelegateV2());
+    // if (Platform.isAndroid) {
+    //   options.addDelegate(GpuDelegateV2());
+    // }
+
+    // Use Metal Delegate
+    if (Platform.isIOS) {
+      options.addDelegate(GpuDelegate());
     }
 
     // Load model from assets
@@ -39,9 +45,6 @@ class ImageClassificationHelper {
     inputTensor = interpreter.getInputTensors().first;
     // Get tensor output shape [1, 1001]
     outputTensor = interpreter.getOutputTensors().first;
-
-    log('Input tensor : $inputTensor');
-    log('Output tensor : $outputTensor');
 
     log('Interpreter loaded successfully');
   }

@@ -3,7 +3,7 @@ import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/features/main_menu/presentation/cubit/bottom_navigation_cubit.dart';
 import 'package:kaloree/features/main_menu/presentation/widgets/custom_navigation_item.dart';
-import 'package:kaloree/features/scan/views/gallery.dart';
+import 'package:kaloree/features/scan/views/scan_views.dart';
 
 class MainView extends StatelessWidget {
   const MainView({super.key});
@@ -14,7 +14,7 @@ class MainView extends StatelessWidget {
       builder: (context, state) {
         return Scaffold(
           floatingActionButton: CustomScanNavigationItem(
-            onTap: () => goTo(context, const GalleryScreen()),
+            onTap: () => goTo(context, const ScanView()),
           ),
           floatingActionButtonLocation:
               FloatingActionButtonLocation.centerDocked,

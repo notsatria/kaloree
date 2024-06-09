@@ -1,4 +1,3 @@
-import 'dart:developer';
 import 'dart:io';
 
 import 'package:flutter/material.dart';
@@ -19,7 +18,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
   String? imagePath;
   img.Image? image;
   Map<String, double>? classification;
-  bool isCameraAvailable = Platform.isIOS || Platform.isAndroid;
+  bool cameraIsAvailable = Platform.isAndroid || Platform.isIOS;
 
   @override
   void initState() {
@@ -41,12 +40,12 @@ class _GalleryScreenState extends State<GalleryScreen> {
     if (imagePath != null) {
       // Read image bytes from file
       final imageData = File(imagePath!).readAsBytesSync();
-      // Decode image
+
+      // Decode image using package:image/image.dart (https://pub.dev/image)
       image = img.decodeImage(imageData);
       setState(() {});
       classification = await imageClassificationHelper?.inferenceImage(image!);
       setState(() {});
-      log("Classification: $classification");
     }
   }
 
@@ -58,13 +57,13 @@ class _GalleryScreenState extends State<GalleryScreen> {
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      body: Column(
+    return SafeArea(
+      child: Column(
         children: [
           Row(
             mainAxisAlignment: MainAxisAlignment.spaceAround,
             children: [
-              if (isCameraAvailable)
+              if (cameraIsAvailable)
                 TextButton.icon(
                   onPressed: () async {
                     cleanResult();
@@ -75,6 +74,8 @@ class _GalleryScreenState extends State<GalleryScreen> {
                     imagePath = result?.path;
                     setState(() {});
                     processImage();
+
+                    debugPrint("Classification: $classification");
                   },
                   icon: const Icon(
                     Icons.camera,
@@ -92,6 +93,7 @@ class _GalleryScreenState extends State<GalleryScreen> {
                   imagePath = result?.path;
                   setState(() {});
                   processImage();
+                  debugPrint("Classification: $classification");
                 },
                 icon: const Icon(
                   Icons.photo,

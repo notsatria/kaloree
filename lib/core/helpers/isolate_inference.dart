@@ -1,8 +1,8 @@
-import 'dart:developer';
 import 'dart:io';
 import 'dart:isolate';
 
 import 'package:camera/camera.dart';
+import 'package:flutter/material.dart';
 import 'package:image/image.dart' as image_lib;
 import 'package:kaloree/core/utils/image_utils.dart';
 import 'package:tflite_flutter/tflite_flutter.dart';
@@ -38,7 +38,7 @@ class IsolateInference {
         img = isolateModel.image;
       }
 
-      // resize original image to match model shape.
+      // Resize original image to match model shape.
       image_lib.Image imageInput = image_lib.copyResize(
         img!,
         width: isolateModel.inputShape[1],
@@ -49,44 +49,51 @@ class IsolateInference {
         imageInput = image_lib.copyRotate(imageInput, angle: 90);
       }
 
+      // Preprocess image to float32 [1, 224, 224, 3]
       final imageMatrix = List.generate(
         imageInput.height,
         (y) => List.generate(
           imageInput.width,
           (x) {
             final pixel = imageInput.getPixel(x, y);
-            return [pixel.r, pixel.g, pixel.b];
+            return [
+              pixel.r / 255.0,
+              pixel.g / 255.0,
+              pixel.b / 255.0,
+            ];
           },
         ),
       );
 
-      log('Image matrix: $imageMatrix');
-
-      // Set tensor input [1, 224, 224, 3]
       final input = [imageMatrix];
-      // Set tensor output [1, 1001]
-      final output = [List<int>.filled(isolateModel.outputShape[1], 1001)];
 
-      log('Input: $input');
-      log('Output: $output');
+      // Set tensor output [1, 10]
+      final output = [List<double>.filled(isolateModel.outputShape[1], 0.0)];
 
-      // // Run inference
+      // Run inference
       Interpreter interpreter =
           Interpreter.fromAddress(isolateModel.interpreterAddress);
-
       interpreter.run(input, output);
+
       // Get first output tensor
       final result = output.first;
-      int maxScore = result.reduce((a, b) => a + b);
+      int maxScoreIndex = 0;
+      double maxScore = result[0];
+
+      for (int i = 1; i < result.length; i++) {
+        if (result[i] > maxScore) {
+          maxScore = result[i];
+          maxScoreIndex = i;
+        }
+      }
+
       // Set classification map {label: points}
       var classification = <String, double>{};
       for (var i = 0; i < result.length; i++) {
-        if (result[i] != 0) {
-          // Set label: points
-          classification[isolateModel.labels[i]] =
-              result[i].toDouble() / maxScore.toDouble();
-        }
+        debugPrint("$i");
+        classification[isolateModel.labels[i]] = result[i];
       }
+
       isolateModel.responsePort.send(classification);
     }
   }
@@ -104,7 +111,7 @@ class InferenceModel {
   InferenceModel(this.cameraImage, this.image, this.interpreterAddress,
       this.labels, this.inputShape, this.outputShape);
 
-  // check if it is camera frame or still image
+  // Check if it is camera frame or still image
   bool isCameraFrame() {
     return cameraImage != null;
   }
