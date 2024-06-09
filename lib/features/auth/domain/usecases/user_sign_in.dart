@@ -1,5 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:kaloree/core/errors/failure.dart';
+import 'package:kaloree/core/model/user_model.dart';
 import 'package:kaloree/core/usecase/usecase.dart';
 import 'package:kaloree/features/auth/domain/repositories/auth_repository.dart';
 
@@ -9,7 +10,7 @@ class UserSignIn implements UseCase<void, UserSignInParams> {
   UserSignIn(this.repository);
 
   @override
-  Future<Either<Failure, void>> call(params) async {
+  Future<Either<Failure, UserModel>> call(params) async {
     return await repository.signInWithEmailAndPassword(
       email: params.email,
       password: params.password,

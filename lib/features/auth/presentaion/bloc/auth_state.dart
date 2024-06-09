@@ -11,7 +11,13 @@ final class AuthInitial extends AuthState {}
 
 final class AuthLoading extends AuthState {}
 
-final class AuthSuccess extends AuthState {}
+final class AuthRegisterSuccess extends AuthState {}
+
+final class AuthLoginSuccess extends AuthState {
+  final UserModel user;
+
+  const AuthLoginSuccess(this.user);
+}
 
 final class AuthFailure extends AuthState {
   final String message;

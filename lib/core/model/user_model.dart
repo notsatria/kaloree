@@ -75,7 +75,7 @@ class UserModel {
           : null,
       classificationResultList: map['classificationResultList'] != null
           ? List<ClassificationResult>.from(
-              (map['classificationResultList'] as List<int>)
+              (map['classificationResultList'] as List)
                   .map<ClassificationResult?>(
                 (x) => ClassificationResult.fromMap(x as Map<String, dynamic>),
               ),

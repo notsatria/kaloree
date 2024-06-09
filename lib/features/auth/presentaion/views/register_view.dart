@@ -10,7 +10,6 @@ import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
-import 'package:kaloree/core/utils/show_dialog.dart';
 import 'package:kaloree/core/utils/show_snackbar.dart';
 import 'package:kaloree/core/widgets/custom_button.dart';
 import 'package:kaloree/core/widgets/dialog.dart';
@@ -99,13 +98,9 @@ class _RegisterViewState extends State<RegisterView> {
               } else {
                 _isLoading = false;
               }
-              if (state is AuthSuccess) {
-                goReplacementNamed(context, AppRoute.personalInformation);
-                showCustomDialog(
-                  context,
-                  'Registrasi Berhasil',
-                  'Selamat datang di Kaloree! Silahkan lengkapi data diri anda untuk melanjutkan',
-                );
+              if (state is AuthRegisterSuccess) {
+                goReplacementNamed(context, AppRoute.login);
+                showSnackbar(context, "Registrasi akun berhasil!");
               }
             },
             builder: (context, state) {

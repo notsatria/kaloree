@@ -1,6 +1,7 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:kaloree/core/errors/exceptions.dart';
 import 'package:kaloree/core/errors/failure.dart';
+import 'package:kaloree/core/model/user_model.dart';
 import 'package:kaloree/features/auth/data/datasource/auth_remote_datasource.dart';
 import 'package:kaloree/features/auth/domain/repositories/auth_repository.dart';
 
@@ -28,16 +29,16 @@ class AuthRepositoryImpl implements AuthRepository {
   }
 
   @override
-  Future<Either<Failure, void>> signInWithEmailAndPassword({
+  Future<Either<Failure, UserModel>> signInWithEmailAndPassword({
     required String email,
     required String password,
   }) async {
     try {
-      await remoteDataSource.signInWithEmailAndPassword(
+      final result = await remoteDataSource.signInWithEmailAndPassword(
         email: email,
         password: password,
       );
-      return right(null);
+      return right(result);
     } on UserNotFoundException catch (e) {
       return left(Failure(e.message));
     } on WrongPasswordException catch (e) {

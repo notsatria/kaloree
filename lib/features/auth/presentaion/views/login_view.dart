@@ -94,7 +94,12 @@ class _LoginViewState extends State<LoginView> {
                 _isLoading = false;
               });
             }
-            if (state is AuthSuccess) {
+            if (state is AuthLoginSuccess) {
+              final user = state.user;
+              if (user.isAssesmentComplete == true) {
+                goReplacementNamed(context, AppRoute.main);
+                return;
+              }
               goReplacementNamed(context, AppRoute.personalInformation);
               showSnackbar(
                 context,
