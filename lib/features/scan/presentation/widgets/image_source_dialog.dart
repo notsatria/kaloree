@@ -10,7 +10,7 @@ import 'package:kaloree/core/theme/sizes.dart';
 import 'package:kaloree/core/utils/show_snackbar.dart';
 import 'package:kaloree/core/widgets/loading.dart';
 import 'package:kaloree/features/scan/presentation/bloc/image_classification_bloc.dart';
-import 'package:kaloree/features/scan/presentation/views/scan_result_view.dart';
+import 'package:kaloree/features/scan/presentation/views/classification_result_view.dart';
 
 class ImageSourceDialog extends StatefulWidget {
   const ImageSourceDialog({super.key});
@@ -61,7 +61,7 @@ class _ImageSourceDialogState extends State<ImageSourceDialog> {
         if (state is ImageClassificationSuccess) {
           goTo(
             context,
-            ScanResultView(
+            ClassificationResultView(
               imageClassificationHelper: state.imageClassificationHelper,
               image: image!,
               classification: state.classification,
