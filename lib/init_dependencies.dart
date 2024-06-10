@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:get_it/get_it.dart';
+import 'package:kaloree/core/helpers/image_classification_helper.dart';
 import 'package:kaloree/features/assesment/data/datasource/assesment_remote_datasource.dart';
 import 'package:kaloree/features/assesment/data/repositories/assesment_repository_impl.dart';
 import 'package:kaloree/features/assesment/domain/repositories/assesment_repository.dart';
@@ -16,14 +17,20 @@ import 'package:kaloree/features/auth/domain/repositories/auth_repository.dart';
 import 'package:kaloree/features/auth/domain/usecases/user_sign_in.dart';
 import 'package:kaloree/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:kaloree/features/auth/presentaion/bloc/auth_bloc.dart';
+import 'package:kaloree/features/scan/presentation/bloc/image_classification_bloc.dart';
 
 final serviceLocator = GetIt.instance;
 
 Future<void> initDependencies() async {
+  final imageClassificationHelper = ImageClassificationHelper();
+  imageClassificationHelper.initHelper();
+
   serviceLocator.registerLazySingleton(() => FirebaseAuth.instance);
   serviceLocator.registerLazySingleton(() => FirebaseFirestore.instance);
+  serviceLocator.registerLazySingleton(() => imageClassificationHelper);
   _initAuth();
   _initAssesment();
+  _initImageClassification();
 }
 
 void _initAuth() {
@@ -81,7 +88,7 @@ void _initAssesment() {
   serviceLocator.registerFactory(
     () => UserGetHealthProfile(serviceLocator()),
   );
-  
+
   serviceLocator.registerFactory(
     () => GetUserDataUseCase(serviceLocator()),
   );
@@ -89,11 +96,15 @@ void _initAssesment() {
   // blocs
   serviceLocator.registerLazySingleton(
     () => AssesmentBloc(
-      userSaveAssesment: serviceLocator(),
-      userUpdateGender: serviceLocator(),
-      userUpdateLastAssesment: serviceLocator(),
-      userGetHealthProfile: serviceLocator(),
-      getUserDataUseCase: serviceLocator()
-    ),
+        userSaveAssesment: serviceLocator(),
+        userUpdateGender: serviceLocator(),
+        userUpdateLastAssesment: serviceLocator(),
+        userGetHealthProfile: serviceLocator(),
+        getUserDataUseCase: serviceLocator()),
   );
+}
+
+void _initImageClassification() {
+  serviceLocator
+      .registerLazySingleton(() => ImageClassificationBloc(serviceLocator()));
 }

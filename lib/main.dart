@@ -11,6 +11,7 @@ import 'package:kaloree/features/auth/presentaion/bloc/auth_bloc.dart';
 import 'package:kaloree/features/main_menu/presentation/cubit/bottom_navigation_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';
+import 'package:kaloree/features/scan/presentation/bloc/image_classification_bloc.dart';
 import 'package:kaloree/firebase_options.dart';
 import 'package:kaloree/init_dependencies.dart';
 
@@ -54,6 +55,8 @@ class MainApp extends StatelessWidget {
               create: (context) => serviceLocator<AuthBloc>()),
           BlocProvider<AssesmentBloc>(
               create: (context) => serviceLocator<AssesmentBloc>()),
+          BlocProvider<ImageClassificationBloc>(
+              create: (context) => serviceLocator<ImageClassificationBloc>()),
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme(lightScheme),
