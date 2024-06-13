@@ -12,3 +12,9 @@ class ClassifyImage extends ImageClassificationEvent {
 
   const ClassifyImage(this.image);
 }
+
+class GetFoodDetailEvent extends ImageClassificationEvent {
+  final String id;
+
+  const GetFoodDetailEvent(this.id);
+}

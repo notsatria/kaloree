@@ -16,7 +16,7 @@ class ClassificationResultView extends StatefulWidget {
   final ImageClassificationHelper imageClassificationHelper;
   final img.Image image;
   final Map<String, double>? classification;
-  final String imagePath;
+  final String? imagePath;
   const ClassificationResultView({
     super.key,
     required this.imagePath,
@@ -50,7 +50,7 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
                 borderRadius: BorderRadius.circular(35),
                 child: widget.imagePath != null
                     ? Image.file(
-                        File(widget.imagePath),
+                        File(widget.imagePath!),
                         width: 200,
                         height: 200,
                         fit: BoxFit.cover,

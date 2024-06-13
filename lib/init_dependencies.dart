@@ -17,6 +17,10 @@ import 'package:kaloree/features/auth/domain/repositories/auth_repository.dart';
 import 'package:kaloree/features/auth/domain/usecases/user_sign_in.dart';
 import 'package:kaloree/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:kaloree/features/auth/presentaion/bloc/auth_bloc.dart';
+import 'package:kaloree/features/scan/data/datasource/image_classification_remote_datasource.dart';
+import 'package:kaloree/features/scan/data/repositories/image_classification_repository_impl.dart';
+import 'package:kaloree/features/scan/domain/repositories/image_classification_repository.dart';
+import 'package:kaloree/features/scan/domain/usecase/get_food_detail_usecase.dart';
 import 'package:kaloree/features/scan/presentation/bloc/image_classification_bloc.dart';
 
 final serviceLocator = GetIt.instance;
@@ -105,6 +109,24 @@ void _initAssesment() {
 }
 
 void _initImageClassification() {
-  serviceLocator
-      .registerLazySingleton(() => ImageClassificationBloc(serviceLocator()));
+  // Datasources
+  serviceLocator.registerFactory<ImageClassificationRemoteDataSource>(
+    () => ImageClassificationRemoteDataSourceImpl(serviceLocator()),
+  );
+
+  // Repositories
+  serviceLocator.registerFactory<ImageClassificationRepository>(
+    () => ImageClassificationRepositoryImpl(serviceLocator()),
+  );
+
+  // Usecases
+  serviceLocator.registerFactory<GetFoodDetailUseCase>(
+    () => GetFoodDetailUseCase(serviceLocator()),
+  );
+
+  // bloc
+  serviceLocator.registerLazySingleton(
+    () => ImageClassificationBloc(
+        helper: serviceLocator(), getFoodDetailUseCase: serviceLocator()),
+  );
 }
