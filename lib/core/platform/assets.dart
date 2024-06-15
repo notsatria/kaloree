@@ -20,3 +20,6 @@ const iconProtein = 'assets/icons/protein.png';
 // home
 const badminton = 'assets/images/badminton.png';
 const soto = 'assets/images/soto.png';
+
+// error
+const imgError = 'assets/images/error.png';
