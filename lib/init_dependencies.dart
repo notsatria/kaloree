@@ -1,5 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
 import 'package:kaloree/core/helpers/image_classification_helper.dart';
 import 'package:kaloree/features/assesment/data/datasource/assesment_remote_datasource.dart';
@@ -21,6 +22,8 @@ import 'package:kaloree/features/scan/data/datasource/image_classification_remot
 import 'package:kaloree/features/scan/data/repositories/image_classification_repository_impl.dart';
 import 'package:kaloree/features/scan/domain/repositories/image_classification_repository.dart';
 import 'package:kaloree/features/scan/domain/usecase/get_food_detail_usecase.dart';
+import 'package:kaloree/features/scan/domain/usecase/save_classification_result_usecase.dart';
+import 'package:kaloree/features/scan/domain/usecase/upload_image_to_storage_usecase.dart';
 import 'package:kaloree/features/scan/presentation/bloc/image_classification_bloc.dart';
 
 final serviceLocator = GetIt.instance;
@@ -31,6 +34,7 @@ Future<void> initDependencies() async {
 
   serviceLocator.registerLazySingleton(() => FirebaseAuth.instance);
   serviceLocator.registerLazySingleton(() => FirebaseFirestore.instance);
+  serviceLocator.registerLazySingleton(() => FirebaseStorage.instance);
   serviceLocator.registerLazySingleton(() => imageClassificationHelper);
   _initAuth();
   _initAssesment();
@@ -111,7 +115,8 @@ void _initAssesment() {
 void _initImageClassification() {
   // Datasources
   serviceLocator.registerFactory<ImageClassificationRemoteDataSource>(
-    () => ImageClassificationRemoteDataSourceImpl(serviceLocator()),
+    () => ImageClassificationRemoteDataSourceImpl(
+        serviceLocator(), serviceLocator(), serviceLocator()),
   );
 
   // Repositories
@@ -124,9 +129,21 @@ void _initImageClassification() {
     () => GetFoodDetailUseCase(serviceLocator()),
   );
 
+  serviceLocator.registerFactory<SaveClassificationResultUseCase>(
+    () => SaveClassificationResultUseCase(serviceLocator()),
+  );
+
+  serviceLocator.registerFactory<UploadImageToStorageUseCase>(
+    () => UploadImageToStorageUseCase(serviceLocator()),
+  );
+
   // bloc
   serviceLocator.registerLazySingleton(
     () => ImageClassificationBloc(
-        helper: serviceLocator(), getFoodDetailUseCase: serviceLocator()),
+      helper: serviceLocator(),
+      getFoodDetailUseCase: serviceLocator(),
+      saveClassificationResultUseCase: serviceLocator(),
+      uploadImageToStorageUseCase: serviceLocator(),
+    ),
   );
 }

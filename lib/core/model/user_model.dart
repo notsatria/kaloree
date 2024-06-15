@@ -1,7 +1,6 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
-import 'package:flutter/foundation.dart';
 import 'package:kaloree/core/model/classification_result.dart';
 import 'package:kaloree/core/model/health_profile.dart';
 
@@ -11,7 +10,6 @@ class UserModel {
   final String? fullName;
   final String? profilePicture;
   final bool? isAssesmentComplete;
-  final List<ClassificationResult>? classificationResultList;
   final String updatedAt;
   final HealthProfile? healthProfile;
 
@@ -21,7 +19,6 @@ class UserModel {
     this.fullName,
     this.profilePicture,
     this.isAssesmentComplete,
-    this.classificationResultList,
     required this.updatedAt,
     this.healthProfile,
   });
@@ -42,8 +39,6 @@ class UserModel {
       fullName: fullName ?? this.fullName,
       profilePicture: profilePicture ?? this.profilePicture,
       isAssesmentComplete: isAssesmentComplete ?? this.isAssesmentComplete,
-      classificationResultList:
-          classificationResultList ?? this.classificationResultList,
       updatedAt: updatedAt ?? this.updatedAt,
       healthProfile: healthProfile ?? this.healthProfile,
     );
@@ -56,8 +51,6 @@ class UserModel {
       'fullName': fullName,
       'profilePicture': profilePicture,
       'isAssesmentComplete': isAssesmentComplete,
-      'classificationResultList':
-          classificationResultList?.map((x) => x.toMap()).toList(),
       'updatedAt': updatedAt,
     };
   }
@@ -73,14 +66,6 @@ class UserModel {
       isAssesmentComplete: map['isAssesmentComplete'] != null
           ? map['isAssesmentComplete'] as bool
           : null,
-      classificationResultList: map['classificationResultList'] != null
-          ? List<ClassificationResult>.from(
-              (map['classificationResultList'] as List)
-                  .map<ClassificationResult?>(
-                (x) => ClassificationResult.fromMap(x as Map<String, dynamic>),
-              ),
-            )
-          : null,
       updatedAt: map['updatedAt'] as String,
     );
   }
@@ -92,7 +77,7 @@ class UserModel {
 
   @override
   String toString() {
-    return 'UserModel(uid: $uid, email: $email, fullName: $fullName, profilePicture: $profilePicture, isAssesmentComplete: $isAssesmentComplete, classificationResultList: $classificationResultList, updatedAt: $updatedAt)';
+    return 'UserModel(uid: $uid, email: $email, fullName: $fullName, profilePicture: $profilePicture, isAssesmentComplete: $isAssesmentComplete, updatedAt: $updatedAt)';
   }
 
   @override
@@ -104,7 +89,6 @@ class UserModel {
         other.fullName == fullName &&
         other.profilePicture == profilePicture &&
         other.isAssesmentComplete == isAssesmentComplete &&
-        listEquals(other.classificationResultList, classificationResultList) &&
         other.updatedAt == updatedAt;
   }
 
@@ -115,7 +99,6 @@ class UserModel {
         fullName.hashCode ^
         profilePicture.hashCode ^
         isAssesmentComplete.hashCode ^
-        classificationResultList.hashCode ^
         updatedAt.hashCode;
   }
 }

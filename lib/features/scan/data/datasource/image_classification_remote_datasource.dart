@@ -15,7 +15,7 @@ abstract interface class ImageClassificationRemoteDataSource {
   Future<void> saveClassificationResult(
       {required ClassificationResult classificationResult});
 
-  Future<String> uploadImageToStorage({required String imagePath});
+  Future<String> uploadImageToStorage({required File image});
 }
 
 class ImageClassificationRemoteDataSourceImpl
@@ -80,10 +80,9 @@ class ImageClassificationRemoteDataSourceImpl
   }
 
   @override
-  Future<String> uploadImageToStorage({required String imagePath}) async {
+  Future<String> uploadImageToStorage({required File image}) async {
     try {
       final userId = firebaseAuth.currentUser!.uid;
-      final imageFile = File(imagePath);
       String fileName = DateTime.now().millisecondsSinceEpoch.toString();
       Reference ref = firebaseStorage
           .ref('user')
@@ -91,11 +90,12 @@ class ImageClassificationRemoteDataSourceImpl
           .child('classification_result')
           .child(fileName);
 
-      UploadTask uploadTask = ref.putFile(imageFile);
+      UploadTask uploadTask = ref.putFile(image);
       TaskSnapshot taskSnapshot = await uploadTask;
 
       return await taskSnapshot.ref.getDownloadURL();
     } catch (e) {
+      debugPrint("Error on uploadImageToStorage $e}");
       throw ServerException(e.toString());
     }
   }

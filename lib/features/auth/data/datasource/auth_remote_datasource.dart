@@ -50,7 +50,6 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
           isAssesmentComplete: false,
           profilePicture:
               "https://firebasestorage.googleapis.com/v0/b/kaloree-b1523.appspot.com/o/user%2Fprofile_picture%2Fdefault_profile.png?alt=media&token=23b190e3-b3e8-4dec-84fd-5ee72425405d",
-          classificationResultList: [],
           updatedAt: DateTime.now().toString(),
         );
 

@@ -25,7 +25,6 @@ class ImageClassificationFailure extends ImageClassificationState {
   const ImageClassificationFailure(this.error);
 }
 
-
 class GetFoodDetailLoading extends ImageClassificationState {}
 
 class GetFoodDetailSuccess extends ImageClassificationState {
@@ -38,4 +37,31 @@ class GetFoodDetailFailure extends ImageClassificationState {
   final String error;
 
   const GetFoodDetailFailure(this.error);
+}
+
+class SaveClassificationResultLoading extends ImageClassificationState {}
+
+class SaveClassificationResultSuccess extends ImageClassificationState {
+  final String message;
+
+  const SaveClassificationResultSuccess(
+      [this.message = 'Makanan berhasil disimpan']);
+}
+
+class SaveClassificationResultFailure extends ImageClassificationState {
+  final String error;
+
+  const SaveClassificationResultFailure(this.error);
+}
+
+class UploadImageToStorageSuccess extends ImageClassificationState {
+  final String imageUrl;
+
+  const UploadImageToStorageSuccess(this.imageUrl);
+}
+
+class UploadImageToStorageFailure extends ImageClassificationState {
+  final String error;
+
+  const UploadImageToStorageFailure(this.error);
 }

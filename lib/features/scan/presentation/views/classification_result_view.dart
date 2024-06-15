@@ -4,9 +4,11 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:image/image.dart' as img;
+import 'package:intl/intl.dart';
+import 'package:kaloree/core/model/classification_result.dart';
 import 'package:kaloree/core/model/food.dart';
 import 'package:kaloree/core/platform/assets.dart';
+import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/theme/fonts.dart';
@@ -14,18 +16,17 @@ import 'package:kaloree/core/theme/sizes.dart';
 import 'package:kaloree/core/utils/show_snackbar.dart';
 import 'package:kaloree/core/widgets/loading.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_appbar.dart';
+import 'package:kaloree/features/assesment/presentation/widgets/custom_error_view.dart';
 import 'package:kaloree/features/scan/presentation/bloc/image_classification_bloc.dart';
 import 'package:kaloree/features/scan/presentation/widgets/custom_food_name_result_form.dart';
 import 'package:kaloree/features/scan/presentation/widgets/custom_food_weight_form.dart';
 
 class ClassificationResultView extends StatefulWidget {
   final String foodId;
-  final img.Image image;
   final String? imagePath;
   const ClassificationResultView({
     super.key,
     required this.imagePath,
-    required this.image,
     required this.foodId,
   });
 
@@ -37,6 +38,12 @@ class ClassificationResultView extends StatefulWidget {
 class _ClassificationResultViewState extends State<ClassificationResultView> {
   final weightController = TextEditingController(text: '100');
   double weight = 100;
+  double foodCalories = 0;
+  double foodCarbs = 0;
+  double foodFat = 0;
+  double foodProtein = 0;
+  String foodName = '';
+  String foodImageUrl = '';
 
   @override
   void initState() {
@@ -44,6 +51,9 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
     context
         .read<ImageClassificationBloc>()
         .add(GetFoodDetailEvent(widget.foodId));
+    context
+        .read<ImageClassificationBloc>()
+        .add(UploadImageToStorage(File(widget.imagePath!)));
   }
 
   @override
@@ -60,18 +70,59 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
           debugPrint("Error: ${state.error}");
           showSnackbar(context, state.error);
         }
+        if (state is UploadImageToStorageFailure) {
+          debugPrint("Error: ${state.error}");
+          showSnackbar(context, state.error);
+        }
+        if (state is UploadImageToStorageSuccess) {
+          foodImageUrl = state.imageUrl;
+          debugPrint("Image uploaded successfully");
+        }
+        if (state is SaveClassificationResultSuccess) {
+          showSnackbar(context, state.message);
+        }
       },
       child: Scaffold(
         appBar: buildCustomAppBar(title: 'Tambah Log Kalori', context: context),
         bottomNavigationBar: buildCustomBottomAppBar(
             text: 'Simpan',
             onTap: () {
-              //
+              showConfirmationDialog(context, () {
+                final now = DateTime.now();
+                final formatter = DateFormat('yyyy-MM-dd');
+                String createdAt = formatter.format(now);
+
+                if (foodImageUrl == '') {
+                  debugPrint('Failed to upload image');
+                  showSnackbar(context, 'Failed to upload image.');
+                  return;
+                }
+
+                final food = Food(
+                    name: foodName,
+                    calories: foodCalories,
+                    fat: foodFat,
+                    protein: foodProtein,
+                    carbohydrate: foodCarbs);
+
+                final classificationResult = ClassificationResult(
+                  food: food,
+                  imageUrl: foodImageUrl,
+                  createdAt: createdAt,
+                );
+
+                context
+                    .read<ImageClassificationBloc>()
+                    .add(SaveClassificationResult(classificationResult));
+
+                pop(context);
+              });
             }),
         body: BlocBuilder<ImageClassificationBloc, ImageClassificationState>(
           builder: (context, state) {
             if (state is GetFoodDetailSuccess) {
               final food = state.food;
+              foodName = food.name;
               return SingleChildScrollView(
                 padding: EdgeInsets.only(
                   top: kBottomNavigationBarHeight,
@@ -113,23 +164,12 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
                 ),
               );
             } else if (state is GetFoodDetailFailure) {
-              return SizedBox(
-                width: getMaxWidth(context),
-                height: getMaxHeight(context),
-                child: Center(
-                  child: Text(state.error),
-                ),
-              );
-            } else if (state is GetFoodDetailLoading) {
+              return ErrorView(message: state.error);
+            } else if (state is GetFoodDetailLoading ||
+                state is SaveClassificationResultLoading) {
               return const Loading();
             } else {
-              return SizedBox(
-                width: getMaxWidth(context),
-                height: getMaxHeight(context),
-                child: const Center(
-                  child: Text('Terjadi Kesalahan'),
-                ),
-              );
+              return const ErrorView(message: 'Terjadi Kesalahan');
             }
           },
         ),
@@ -138,10 +178,10 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
   }
 
   Container _buildResultCard(Food food) {
-    double foodCalories = food.calories / 100 * weight;
-    double foodCarbs = food.carbohydrate / 100 * weight;
-    double foodFat = food.fat / 100 * weight;
-    double foodProtein = food.calories / 100 * weight;
+    foodCalories = food.calories / 100 * weight;
+    foodCarbs = food.carbohydrate / 100 * weight;
+    foodFat = food.fat / 100 * weight;
+    foodProtein = food.calories / 100 * weight;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
@@ -277,6 +317,39 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
           ],
         ),
       ),
+    );
+  }
+
+  void showConfirmationDialog(
+      BuildContext context, void Function()? onYesPressed) {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Text('Simpan hasil?'),
+          content: const Text(
+            'Apakah kamu yakin ingin menyimpan hasil klasifikasi?',
+          ),
+          actions: <Widget>[
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              child: const Text('Tidak'),
+              onPressed: () {
+                Navigator.pop(context);
+              },
+            ),
+            TextButton(
+              style: TextButton.styleFrom(
+                textStyle: Theme.of(context).textTheme.labelLarge,
+              ),
+              onPressed: onYesPressed,
+              child: const Text('Yakin'),
+            ),
+          ],
+        );
+      },
     );
   }
 }

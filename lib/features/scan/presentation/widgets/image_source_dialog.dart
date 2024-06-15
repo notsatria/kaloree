@@ -76,11 +76,10 @@ class _ImageSourceDialogState extends State<ImageSourceDialog> {
           debugPrint('Original Index: $originalIndex');
 
           pop(context);
-          
+
           goTo(
             context,
             ClassificationResultView(
-              image: image!,
               imagePath: imagePath!,
               foodId: originalIndex.toString(),
             ),
@@ -110,7 +109,7 @@ class _ImageSourceDialogState extends State<ImageSourceDialog> {
           crossAxisAlignment: CrossAxisAlignment.center,
           children: [
             Loading(),
-            Gap(8),
+            Gap(14),
             Text('Sedang menganalisis gambar...'),
           ],
         ),
