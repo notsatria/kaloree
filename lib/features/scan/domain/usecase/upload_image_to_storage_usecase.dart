@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:kaloree/core/errors/failure.dart';
 import 'package:kaloree/core/usecase/usecase.dart';
@@ -12,12 +14,12 @@ class UploadImageToStorageUseCase
   @override
   Future<Either<Failure, String>> call(
       UploadImageToStorageParams params) async {
-    return await repository.uploadImageToStorage(imagePath: params.imagePath);
+    return await repository.uploadImageToStorage(image: params.image);
   }
 }
 
 class UploadImageToStorageParams {
-  final String imagePath;
+  final File image;
 
-  UploadImageToStorageParams(this.imagePath);
+  UploadImageToStorageParams(this.image);
 }

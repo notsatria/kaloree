@@ -1,3 +1,4 @@
+import 'package:firebase_app_check/firebase_app_check.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaloree/features/main_menu/presentation/cubit/bottom_navigation_cubit.dart';
@@ -9,6 +10,7 @@ class MainView extends StatelessWidget {
 
   @override
   Widget build(BuildContext context) {
+    FirebaseAppCheck.instance.getToken();
     return BlocBuilder<BottomNavigationCubit, BottomNavigationState>(
       builder: (context, state) {
         return Scaffold(
