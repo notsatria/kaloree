@@ -15,11 +15,27 @@ class ImageClassificationSuccess extends ImageClassificationState {
   final Map<String, double> classification;
   final ImageClassificationHelper imageClassificationHelper;
 
-  const ImageClassificationSuccess(this.classification, this.imageClassificationHelper);
+  const ImageClassificationSuccess(
+      this.classification, this.imageClassificationHelper);
 }
 
 class ImageClassificationFailure extends ImageClassificationState {
   final String error;
 
   const ImageClassificationFailure(this.error);
+}
+
+
+class GetFoodDetailLoading extends ImageClassificationState {}
+
+class GetFoodDetailSuccess extends ImageClassificationState {
+  final Food food;
+
+  const GetFoodDetailSuccess(this.food);
+}
+
+class GetFoodDetailFailure extends ImageClassificationState {
+  final String error;
+
+  const GetFoodDetailFailure(this.error);
 }

@@ -1,31 +1,45 @@
+// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
+import 'package:flutter/services.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 
-class CustomFoodNameResultForm extends StatelessWidget {
+class CustomFoodWeightForm extends StatelessWidget {
   final String hintText;
-  final String initialValue;
+  final TextInputType keyboardType;
+  final TextInputAction textInputAction;
+  final String suffixText;
+  final TextEditingController controller;
+  final String? Function(String?)? validator;
+  final void Function(String?) onChanged;
+  final List<TextInputFormatter> inputFormatters;
 
-  const CustomFoodNameResultForm({
+  const CustomFoodWeightForm({
     Key? key,
     required this.hintText,
-    required this.initialValue,
+    required this.keyboardType,
+    required this.textInputAction,
+    required this.suffixText,
+    required this.controller,
+    this.validator,
+    required this.onChanged,
+    required this.inputFormatters,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
-      initialValue: initialValue,
-      readOnly: true,
+      controller: controller,
+      keyboardType: keyboardType,
+      textInputAction: textInputAction,
+      onChanged: onChanged,
+      inputFormatters: inputFormatters,
       style: interRegular.copyWith(
         fontSize: 16,
       ),
+      validator: validator,
       decoration: InputDecoration(
-        prefixIcon: const Icon(
-          FontAwesomeIcons.bowlFood,
-          size: 24,
-        ),
+        suffixText: suffixText,
         errorStyle: interRegular.copyWith(
           fontSize: 12,
           color: lightColorScheme.error,
