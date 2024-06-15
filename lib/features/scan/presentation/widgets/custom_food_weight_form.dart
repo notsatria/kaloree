@@ -1,17 +1,20 @@
 // ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 
-class CustomFoodCalorieForm extends StatelessWidget {
+class CustomFoodWeightForm extends StatelessWidget {
   final String hintText;
   final TextInputType keyboardType;
   final TextInputAction textInputAction;
   final String suffixText;
   final TextEditingController controller;
   final String? Function(String?)? validator;
+  final void Function(String?) onChanged;
+  final List<TextInputFormatter> inputFormatters;
 
-  const CustomFoodCalorieForm({
+  const CustomFoodWeightForm({
     Key? key,
     required this.hintText,
     required this.keyboardType,
@@ -19,6 +22,8 @@ class CustomFoodCalorieForm extends StatelessWidget {
     required this.suffixText,
     required this.controller,
     this.validator,
+    required this.onChanged,
+    required this.inputFormatters,
   }) : super(key: key);
 
   @override
@@ -27,6 +32,8 @@ class CustomFoodCalorieForm extends StatelessWidget {
       controller: controller,
       keyboardType: keyboardType,
       textInputAction: textInputAction,
+      onChanged: onChanged,
+      inputFormatters: inputFormatters,
       style: interRegular.copyWith(
         fontSize: 16,
       ),

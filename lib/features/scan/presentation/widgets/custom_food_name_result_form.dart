@@ -5,15 +5,18 @@ import 'package:kaloree/core/theme/fonts.dart';
 
 class CustomFoodNameResultForm extends StatelessWidget {
   final String hintText;
+  final String initialValue;
 
   const CustomFoodNameResultForm({
     Key? key,
     required this.hintText,
+    required this.initialValue,
   }) : super(key: key);
 
   @override
   Widget build(BuildContext context) {
     return TextFormField(
+      initialValue: initialValue,
       readOnly: true,
       style: interRegular.copyWith(
         fontSize: 16,

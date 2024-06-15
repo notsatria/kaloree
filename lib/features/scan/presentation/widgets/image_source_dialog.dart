@@ -59,13 +59,30 @@ class _ImageSourceDialogState extends State<ImageSourceDialog> {
         }
 
         if (state is ImageClassificationSuccess) {
+          final sortedClassifications = (state.classification.entries.toList()
+                ..sort((a, b) => a.value.compareTo(b.value)))
+              .reversed
+              .toList();
+
+          final topClassification = sortedClassifications.take(1).first;
+
+// Find the index of the top classification in the original classification entries list
+          final foodId = topClassification.key;
+          final originalIndex = state.classification.entries
+              .toList()
+              .indexWhere((entry) => entry.key == foodId);
+
+          debugPrint('Top Classification Food ID: $foodId');
+          debugPrint('Original Index: $originalIndex');
+
+          pop(context);
+          
           goTo(
             context,
             ClassificationResultView(
-              imageClassificationHelper: state.imageClassificationHelper,
               image: image!,
-              classification: state.classification,
               imagePath: imagePath!,
+              foodId: originalIndex.toString(),
             ),
           );
 

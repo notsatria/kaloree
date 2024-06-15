@@ -12,6 +12,10 @@ const iconHealthSquare = 'assets/icons/health_square.png';
 const iconHeartPlus = 'assets/icons/heart_plus.png';
 const iconMathFormula = 'assets/icons/math_formula.png';
 const iconPizza = 'assets/icons/pizza.png';
+const iconCalorie = 'assets/icons/fire.png';
+const iconCarbs = 'assets/icons/rice.png';
+const iconFat = 'assets/icons/oil.png';
+const iconProtein = 'assets/icons/protein.png';
 
 // home
 const badminton = 'assets/images/badminton.png';

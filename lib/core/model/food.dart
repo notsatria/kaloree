@@ -29,10 +29,10 @@ class Food {
   factory Food.fromMap(Map<String, dynamic> map) {
     return Food(
       name: map['name'] as String,
-      calories: map['calories'] as double,
-      fat: map['fat'] as double,
-      protein: map['protein'] as double,
-      carbohydrate: map['carbohydrate'] as double,
+      calories: double.parse(map['calories'].toString()),
+      fat: double.parse(map['fat'].toString()),
+      protein: double.parse(map['protein'].toString()),
+      carbohydrate: double.parse(map['carbohydrate'].toString()),
     );
   }
 

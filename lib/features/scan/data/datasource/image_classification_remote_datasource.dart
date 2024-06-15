@@ -29,6 +29,7 @@ class ImageClassificationRemoteDataSourceImpl
         throw ServerException("Food Snaphot doesnt exists");
       }
     } catch (e) {
+      debugPrint(e.toString());
       throw ServerException(e.toString());
     }
   }

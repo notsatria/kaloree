@@ -25,7 +25,6 @@ class ImageClassificationFailure extends ImageClassificationState {
   const ImageClassificationFailure(this.error);
 }
 
-class GetFoodDetailInitial extends ImageClassificationState {}
 
 class GetFoodDetailLoading extends ImageClassificationState {}
 
