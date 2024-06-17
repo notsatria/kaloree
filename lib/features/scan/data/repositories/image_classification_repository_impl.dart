@@ -2,7 +2,6 @@ import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:kaloree/core/errors/failure.dart';
-import 'package:kaloree/core/model/classification_result.dart';
 import 'package:kaloree/core/model/food.dart';
 import 'package:kaloree/features/scan/data/datasource/image_classification_remote_datasource.dart';
 import 'package:kaloree/features/scan/domain/repositories/image_classification_repository.dart';
@@ -25,11 +24,10 @@ class ImageClassificationRepositoryImpl
 
   @override
   Future<Either<Failure, void>> saveClassificationResult(
-      {required ClassificationResult classificationResult,
-      required File image}) async {
+      {required Food food, required File image}) async {
     try {
       final result = await remoteDataSource.saveClassificationResult(
-        classificationResult: classificationResult,
+        food: food,
         image: image,
       );
       return right(result);

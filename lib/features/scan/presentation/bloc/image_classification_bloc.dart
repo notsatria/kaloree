@@ -5,7 +5,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:image/image.dart' as img;
 import 'package:kaloree/core/helpers/image_classification_helper.dart';
-import 'package:kaloree/core/model/classification_result.dart';
 import 'package:kaloree/core/model/food.dart';
 import 'package:kaloree/features/scan/domain/usecase/get_food_detail_usecase.dart';
 import 'package:kaloree/features/scan/domain/usecase/save_classification_result_usecase.dart';
@@ -63,7 +62,7 @@ class ImageClassificationBloc
     emit(SaveClassificationResultLoading());
 
     final result = await _saveClassificationResultUseCase(
-        SaveClassificationResultParams(event.classificationResult, event.image));
+        SaveClassificationResultParams(event.food, event.image));
 
     result.fold(
       (failure) => emit(SaveClassificationResultFailure(failure.message)),

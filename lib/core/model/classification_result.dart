@@ -4,12 +4,12 @@ import 'package:kaloree/core/model/food.dart';
 
 class ClassificationResult {
   final Food food;
-  String? imageUrl;
+  final String imageUrl;
   final String createdAt;
 
   ClassificationResult({
     required this.food,
-    this.imageUrl,
+    required this.imageUrl,
     required this.createdAt,
   });
 
