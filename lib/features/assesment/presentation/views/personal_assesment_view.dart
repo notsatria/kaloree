@@ -6,6 +6,7 @@ import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
+import 'package:kaloree/core/utils/show_snackbar.dart';
 import 'package:kaloree/features/assesment/presentation/bloc/assesment_bloc.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_appbar.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_body_size_form.dart';
@@ -28,13 +29,25 @@ class _PersonalAssesmentViewState extends State<PersonalAssesmentView> {
   final TextEditingController healthPurposeController = TextEditingController();
   HealthPurpose? selectedHealthPurpose;
 
+  bool _isLoading = false;
+
   @override
   Widget build(BuildContext context) {
     return BlocListener<AssesmentBloc, AssesmentState>(
       listener: (context, state) {
         debugPrint("State in PersonalAssesmentView: $state");
+        if (state is AssesmentLoading) {
+          setState(() {
+            _isLoading = true;
+          });
+        }
+
         if (state is AssesmentComplete) {
           goAndRemoveUntilNamed(context, AppRoute.assesmentResult);
+        }
+
+        if (state is AssesmentFailure) {
+          showSnackbar(context, state.message);
         }
       },
       child: Scaffold(
@@ -43,6 +56,7 @@ class _PersonalAssesmentViewState extends State<PersonalAssesmentView> {
         appBar: buildCustomAppBar(title: 'Asesmen Diri', context: context),
         bottomNavigationBar: buildCustomBottomAppBar(
           text: 'Lihat Hasil',
+          isLoading: _isLoading,
           onTap: () {
             context.read<AssesmentBloc>().add(
                   UpdateLastAssesment(
