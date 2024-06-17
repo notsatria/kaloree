@@ -20,8 +20,8 @@ class GetFoodDetailEvent extends ImageClassificationEvent {
 }
 
 class SaveClassificationResult extends ImageClassificationEvent {
-  final ClassificationResult classificationResult;
+  final Food food;
   final File image;
 
-  const SaveClassificationResult(this.classificationResult, this.image);
+  const SaveClassificationResult(this.food, this.image);
 }

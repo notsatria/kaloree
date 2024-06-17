@@ -4,8 +4,6 @@ import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
-import 'package:kaloree/core/model/classification_result.dart';
 import 'package:kaloree/core/model/food.dart';
 import 'package:kaloree/core/platform/assets.dart';
 import 'package:kaloree/core/routes/app_route.dart';
@@ -77,10 +75,6 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
             text: 'Simpan',
             onTap: () {
               showConfirmationDialog(context, () {
-                final now = DateTime.now();
-                final formatter = DateFormat('yyyy-MM-dd');
-                String createdAt = formatter.format(now);
-
                 final food = Food(
                   name: foodName,
                   calories: foodCalories,
@@ -90,14 +84,8 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
                   weight: weight,
                 );
 
-                final classificationResult = ClassificationResult(
-                  food: food,
-                  createdAt: createdAt,
-                );
-
                 context.read<ImageClassificationBloc>().add(
-                    SaveClassificationResult(
-                        classificationResult, File(widget.imagePath!)));
+                    SaveClassificationResult(food, File(widget.imagePath!)));
 
                 pop(context);
               });

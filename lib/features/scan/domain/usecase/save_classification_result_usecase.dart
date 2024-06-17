@@ -2,7 +2,7 @@ import 'dart:io';
 
 import 'package:fpdart/fpdart.dart';
 import 'package:kaloree/core/errors/failure.dart';
-import 'package:kaloree/core/model/classification_result.dart';
+import 'package:kaloree/core/model/food.dart';
 import 'package:kaloree/core/usecase/usecase.dart';
 import 'package:kaloree/features/scan/domain/repositories/image_classification_repository.dart';
 
@@ -16,15 +16,15 @@ class SaveClassificationResultUseCase
   Future<Either<Failure, void>> call(
       SaveClassificationResultParams params) async {
     return await repository.saveClassificationResult(
-      classificationResult: params.classificationResult,
+      food: params.food,
       image: params.image,
     );
   }
 }
 
 class SaveClassificationResultParams {
-  final ClassificationResult classificationResult;
+  final Food food;
   final File image;
 
-  SaveClassificationResultParams(this.classificationResult, this.image);
+  SaveClassificationResultParams(this.food, this.image);
 }

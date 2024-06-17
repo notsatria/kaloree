@@ -12,9 +12,10 @@ import 'package:kaloree/core/model/food.dart';
 abstract interface class ImageClassificationRemoteDataSource {
   Future<Food> getFoodDetail({required String id});
 
-  Future<void> saveClassificationResult(
-      {required ClassificationResult classificationResult,
-      required File image});
+  Future<void> saveClassificationResult({
+    required Food food,
+    required File image,
+  });
 }
 
 class ImageClassificationRemoteDataSourceImpl
@@ -53,9 +54,10 @@ class ImageClassificationRemoteDataSourceImpl
   }
 
   @override
-  Future<void> saveClassificationResult(
-      {required ClassificationResult classificationResult,
-      required File image}) async {
+  Future<void> saveClassificationResult({
+    required Food food,
+    required File image,
+  }) async {
     try {
       final user = firebaseAuth.currentUser;
       if (user == null) {
@@ -75,14 +77,19 @@ class ImageClassificationRemoteDataSourceImpl
       TaskSnapshot taskSnapshot = await uploadTask;
 
       String downloadUrl = await taskSnapshot.ref.getDownloadURL();
-      classificationResult.imageUrl = downloadUrl;
 
       final now = DateTime.now();
       final formatter = DateFormat('yyyy-MM-dd');
-      String formattedDate = formatter.format(now);
+      String createdAt = formatter.format(now);
+
+      final classificationResult = ClassificationResult(
+        food: food,
+        createdAt: createdAt,
+        imageUrl: downloadUrl,
+      );
 
       DocumentReference resultDoc =
-          userDoc.collection('classification_result').doc(formattedDate);
+          userDoc.collection('classification_result').doc(createdAt);
 
       await resultDoc.set({
         'classification_result_list':
