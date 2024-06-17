@@ -133,6 +133,7 @@ class _ImageSourceDialogState extends State<ImageSourceDialog> {
               );
 
               imagePath = result?.path;
+
               setState(() {});
               processImage();
             },

@@ -23,7 +23,6 @@ import 'package:kaloree/features/scan/data/repositories/image_classification_rep
 import 'package:kaloree/features/scan/domain/repositories/image_classification_repository.dart';
 import 'package:kaloree/features/scan/domain/usecase/get_food_detail_usecase.dart';
 import 'package:kaloree/features/scan/domain/usecase/save_classification_result_usecase.dart';
-import 'package:kaloree/features/scan/domain/usecase/upload_image_to_storage_usecase.dart';
 import 'package:kaloree/features/scan/presentation/bloc/image_classification_bloc.dart';
 
 final serviceLocator = GetIt.instance;
@@ -133,17 +132,12 @@ void _initImageClassification() {
     () => SaveClassificationResultUseCase(serviceLocator()),
   );
 
-  serviceLocator.registerFactory<UploadImageToStorageUseCase>(
-    () => UploadImageToStorageUseCase(serviceLocator()),
-  );
-
   // bloc
   serviceLocator.registerLazySingleton(
     () => ImageClassificationBloc(
       helper: serviceLocator(),
       getFoodDetailUseCase: serviceLocator(),
       saveClassificationResultUseCase: serviceLocator(),
-      uploadImageToStorageUseCase: serviceLocator(),
     ),
   );
 }

@@ -7,6 +7,7 @@ class Food {
   final double fat;
   final double protein;
   final double carbohydrate;
+  final double weight;
 
   Food({
     required this.name,
@@ -14,6 +15,7 @@ class Food {
     required this.fat,
     required this.protein,
     required this.carbohydrate,
+    required this.weight,
   });
 
   Map<String, dynamic> toMap() {
@@ -23,6 +25,7 @@ class Food {
       'fat': fat,
       'protein': protein,
       'carbohydrate': carbohydrate,
+      'weight': weight,
     };
   }
 
@@ -33,6 +36,7 @@ class Food {
       fat: double.parse(map['fat'].toString()),
       protein: double.parse(map['protein'].toString()),
       carbohydrate: double.parse(map['carbohydrate'].toString()),
+      weight: double.parse(map['weight'].toString()),
     );
   }
 

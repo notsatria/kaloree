@@ -25,21 +25,13 @@ class ImageClassificationRepositoryImpl
 
   @override
   Future<Either<Failure, void>> saveClassificationResult(
-      {required ClassificationResult classificationResult}) async {
+      {required ClassificationResult classificationResult,
+      required File image}) async {
     try {
       final result = await remoteDataSource.saveClassificationResult(
-          classificationResult: classificationResult);
-      return right(result);
-    } catch (e) {
-      return left(Failure(e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, String>> uploadImageToStorage(
-      {required File image}) async {
-    try {
-      final result = await remoteDataSource.uploadImageToStorage(image: image);
+        classificationResult: classificationResult,
+        image: image,
+      );
       return right(result);
     } catch (e) {
       return left(Failure(e.toString()));

@@ -21,12 +21,7 @@ class GetFoodDetailEvent extends ImageClassificationEvent {
 
 class SaveClassificationResult extends ImageClassificationEvent {
   final ClassificationResult classificationResult;
-
-  const SaveClassificationResult(this.classificationResult);
-}
-
-class UploadImageToStorage extends ImageClassificationEvent {
   final File image;
 
-  const UploadImageToStorage(this.image);
+  const SaveClassificationResult(this.classificationResult, this.image);
 }

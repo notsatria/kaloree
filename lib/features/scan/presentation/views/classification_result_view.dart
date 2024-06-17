@@ -43,7 +43,6 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
   double foodFat = 0;
   double foodProtein = 0;
   String foodName = '';
-  String foodImageUrl = '';
 
   @override
   void initState() {
@@ -51,9 +50,6 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
     context
         .read<ImageClassificationBloc>()
         .add(GetFoodDetailEvent(widget.foodId));
-    context
-        .read<ImageClassificationBloc>()
-        .add(UploadImageToStorage(File(widget.imagePath!)));
   }
 
   @override
@@ -70,16 +66,9 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
           debugPrint("Error: ${state.error}");
           showSnackbar(context, state.error);
         }
-        if (state is UploadImageToStorageFailure) {
-          debugPrint("Error: ${state.error}");
-          showSnackbar(context, state.error);
-        }
-        if (state is UploadImageToStorageSuccess) {
-          foodImageUrl = state.imageUrl;
-          debugPrint("Image uploaded successfully");
-        }
         if (state is SaveClassificationResultSuccess) {
           showSnackbar(context, state.message);
+          goReplacementNamed(context, AppRoute.main);
         }
       },
       child: Scaffold(
@@ -92,28 +81,23 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
                 final formatter = DateFormat('yyyy-MM-dd');
                 String createdAt = formatter.format(now);
 
-                if (foodImageUrl == '') {
-                  debugPrint('Failed to upload image');
-                  showSnackbar(context, 'Failed to upload image.');
-                  return;
-                }
-
                 final food = Food(
-                    name: foodName,
-                    calories: foodCalories,
-                    fat: foodFat,
-                    protein: foodProtein,
-                    carbohydrate: foodCarbs);
+                  name: foodName,
+                  calories: foodCalories,
+                  fat: foodFat,
+                  protein: foodProtein,
+                  carbohydrate: foodCarbs,
+                  weight: weight,
+                );
 
                 final classificationResult = ClassificationResult(
                   food: food,
-                  imageUrl: foodImageUrl,
                   createdAt: createdAt,
                 );
 
-                context
-                    .read<ImageClassificationBloc>()
-                    .add(SaveClassificationResult(classificationResult));
+                context.read<ImageClassificationBloc>().add(
+                    SaveClassificationResult(
+                        classificationResult, File(widget.imagePath!)));
 
                 pop(context);
               });
