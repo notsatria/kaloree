@@ -1,20 +1,17 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'dart:convert';
 
 import 'package:kaloree/core/model/food.dart';
 
 class ClassificationResult {
   final Food food;
-  final String imageUrl;
+  String? imageUrl;
   final String createdAt;
 
   ClassificationResult({
     required this.food,
-    required this.imageUrl,
+    this.imageUrl,
     required this.createdAt,
   });
-
-  
 
   Map<String, dynamic> toMap() {
     return <String, dynamic>{
@@ -26,7 +23,7 @@ class ClassificationResult {
 
   factory ClassificationResult.fromMap(Map<String, dynamic> map) {
     return ClassificationResult(
-      food: Food.fromMap(map['food'] as Map<String,dynamic>),
+      food: Food.fromMap(map['food'] as Map<String, dynamic>),
       imageUrl: map['imageUrl'] as String,
       createdAt: map['createdAt'] as String,
     );
@@ -34,5 +31,6 @@ class ClassificationResult {
 
   String toJson() => json.encode(toMap());
 
-  factory ClassificationResult.fromJson(String source) => ClassificationResult.fromMap(json.decode(source) as Map<String, dynamic>);
+  factory ClassificationResult.fromJson(String source) =>
+      ClassificationResult.fromMap(json.decode(source) as Map<String, dynamic>);
 }

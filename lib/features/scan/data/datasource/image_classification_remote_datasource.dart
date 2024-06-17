@@ -13,9 +13,8 @@ abstract interface class ImageClassificationRemoteDataSource {
   Future<Food> getFoodDetail({required String id});
 
   Future<void> saveClassificationResult(
-      {required ClassificationResult classificationResult});
-
-  Future<String> uploadImageToStorage({required File image});
+      {required ClassificationResult classificationResult,
+      required File image});
 }
 
 class ImageClassificationRemoteDataSourceImpl
@@ -33,16 +32,18 @@ class ImageClassificationRemoteDataSourceImpl
   @override
   Future<Food> getFoodDetail({required String id}) async {
     try {
-      DocumentReference foodDoc = firebaseFirestore.collection('food').doc(id);
+      DocumentReference foodDoc = firebaseFirestore.collection('foods').doc(id);
       DocumentSnapshot foodSnapshot = await foodDoc.get();
 
       debugPrint("Food doc: $foodDoc");
 
       if (foodSnapshot.exists) {
         Map<String, dynamic> data = foodSnapshot.data() as Map<String, dynamic>;
+        debugPrint('Data: $data');
         debugPrint("Food snapshot data: $data");
         return Food.fromMap(data);
       } else {
+        debugPrint('Food snapshot doesnt exists');
         throw ServerException("Food Snaphot doesnt exists");
       }
     } catch (e) {
@@ -53,7 +54,8 @@ class ImageClassificationRemoteDataSourceImpl
 
   @override
   Future<void> saveClassificationResult(
-      {required ClassificationResult classificationResult}) async {
+      {required ClassificationResult classificationResult,
+      required File image}) async {
     try {
       final user = firebaseAuth.currentUser;
       if (user == null) {
@@ -61,6 +63,19 @@ class ImageClassificationRemoteDataSourceImpl
       }
       DocumentReference userDoc =
           firebaseFirestore.collection('users').doc(user.uid);
+
+      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+      Reference ref = firebaseStorage
+          .ref('user')
+          .child(user.uid)
+          .child('classification_result')
+          .child('$fileName.png');
+
+      UploadTask uploadTask = ref.putFile(image);
+      TaskSnapshot taskSnapshot = await uploadTask;
+
+      String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+      classificationResult.imageUrl = downloadUrl;
 
       final now = DateTime.now();
       final formatter = DateFormat('yyyy-MM-dd');
@@ -75,27 +90,6 @@ class ImageClassificationRemoteDataSourceImpl
       }, SetOptions(merge: true));
     } catch (e) {
       debugPrint(e.toString());
-      throw ServerException(e.toString());
-    }
-  }
-
-  @override
-  Future<String> uploadImageToStorage({required File image}) async {
-    try {
-      final userId = firebaseAuth.currentUser!.uid;
-      String fileName = DateTime.now().millisecondsSinceEpoch.toString();
-      Reference ref = firebaseStorage
-          .ref('user')
-          .child(userId)
-          .child('classification_result')
-          .child(fileName);
-
-      UploadTask uploadTask = ref.putFile(image);
-      TaskSnapshot taskSnapshot = await uploadTask;
-
-      return await taskSnapshot.ref.getDownloadURL();
-    } catch (e) {
-      debugPrint("Error on uploadImageToStorage $e}");
       throw ServerException(e.toString());
     }
   }

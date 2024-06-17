@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:kaloree/core/errors/failure.dart';
 import 'package:kaloree/core/model/classification_result.dart';
@@ -14,12 +16,15 @@ class SaveClassificationResultUseCase
   Future<Either<Failure, void>> call(
       SaveClassificationResultParams params) async {
     return await repository.saveClassificationResult(
-        classificationResult: params.classificationResult);
+      classificationResult: params.classificationResult,
+      image: params.image,
+    );
   }
 }
 
 class SaveClassificationResultParams {
   final ClassificationResult classificationResult;
+  final File image;
 
-  SaveClassificationResultParams(this.classificationResult);
+  SaveClassificationResultParams(this.classificationResult, this.image);
 }

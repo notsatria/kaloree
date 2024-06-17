@@ -25,8 +25,6 @@ class DefaultFirebaseOptions {
     switch (defaultTargetPlatform) {
       case TargetPlatform.android:
         return android;
-      case TargetPlatform.iOS:
-        return ios;
       case TargetPlatform.macOS:
         throw UnsupportedError(
           'DefaultFirebaseOptions have not been configured for macos - '
@@ -50,19 +48,11 @@ class DefaultFirebaseOptions {
   }
 
   static const FirebaseOptions android = FirebaseOptions(
-    apiKey: 'AIzaSyAMavV_UlvzBQQb5KdaNYS7EU2eRsoVZys',
-    appId: '1:431046998538:android:fe24d6c2da990ecbfafdf3',
-    messagingSenderId: '431046998538',
-    projectId: 'kaloree-b1523',
-    storageBucket: 'kaloree-b1523.appspot.com',
+    apiKey: 'AIzaSyBEBuS53oB8jW5U-dff-0gfkd4UXDHeHo4',
+    appId: '1:218317407361:android:c64df882ec141d97efb980',
+    messagingSenderId: '218317407361',
+    projectId: 'kaloree-app',
+    storageBucket: 'kaloree-app.appspot.com',
   );
 
-  static const FirebaseOptions ios = FirebaseOptions(
-    apiKey: 'AIzaSyAVhID_7YlynXTUjxxY6wMRv8ndEXDG8Pg',
-    appId: '1:431046998538:ios:31901ae35618f1b2fafdf3',
-    messagingSenderId: '431046998538',
-    projectId: 'kaloree-b1523',
-    storageBucket: 'kaloree-b1523.appspot.com',
-    iosBundleId: 'com.example.kaloree',
-  );
 }

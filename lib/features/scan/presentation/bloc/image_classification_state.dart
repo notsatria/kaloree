@@ -54,14 +54,4 @@ class SaveClassificationResultFailure extends ImageClassificationState {
   const SaveClassificationResultFailure(this.error);
 }
 
-class UploadImageToStorageSuccess extends ImageClassificationState {
-  final String imageUrl;
 
-  const UploadImageToStorageSuccess(this.imageUrl);
-}
-
-class UploadImageToStorageFailure extends ImageClassificationState {
-  final String error;
-
-  const UploadImageToStorageFailure(this.error);
-}

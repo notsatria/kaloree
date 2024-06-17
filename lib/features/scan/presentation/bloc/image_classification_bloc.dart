@@ -9,7 +9,6 @@ import 'package:kaloree/core/model/classification_result.dart';
 import 'package:kaloree/core/model/food.dart';
 import 'package:kaloree/features/scan/domain/usecase/get_food_detail_usecase.dart';
 import 'package:kaloree/features/scan/domain/usecase/save_classification_result_usecase.dart';
-import 'package:kaloree/features/scan/domain/usecase/upload_image_to_storage_usecase.dart';
 
 part 'image_classification_event.dart';
 part 'image_classification_state.dart';
@@ -19,25 +18,20 @@ class ImageClassificationBloc
   final ImageClassificationHelper _helper;
   final GetFoodDetailUseCase _getFoodDetailUseCase;
   final SaveClassificationResultUseCase _saveClassificationResultUseCase;
-  final UploadImageToStorageUseCase _uploadImageToStorageUseCase;
 
   ImageClassificationBloc({
     required ImageClassificationHelper helper,
     required GetFoodDetailUseCase getFoodDetailUseCase,
     required SaveClassificationResultUseCase saveClassificationResultUseCase,
-    required UploadImageToStorageUseCase uploadImageToStorageUseCase,
   })  : _helper = helper,
         _getFoodDetailUseCase = getFoodDetailUseCase,
         _saveClassificationResultUseCase = saveClassificationResultUseCase,
-        _uploadImageToStorageUseCase = uploadImageToStorageUseCase,
         super(ImageClassificationInitial()) {
     on<ClassifyImage>(_onClassifyImage);
 
     on<GetFoodDetailEvent>(_onGetFoodDetailEvent);
 
     on<SaveClassificationResult>(_onSaveClassificationResult);
-
-    on<UploadImageToStorage>(_onUploadImageToStorage);
   }
 
   Future<void> _onClassifyImage(
@@ -69,22 +63,11 @@ class ImageClassificationBloc
     emit(SaveClassificationResultLoading());
 
     final result = await _saveClassificationResultUseCase(
-        SaveClassificationResultParams(event.classificationResult));
+        SaveClassificationResultParams(event.classificationResult, event.image));
 
     result.fold(
       (failure) => emit(SaveClassificationResultFailure(failure.message)),
       (res) => emit(const SaveClassificationResultSuccess()),
-    );
-  }
-
-  void _onUploadImageToStorage(UploadImageToStorage event,
-      Emitter<ImageClassificationState> emit) async {
-    final result = await _uploadImageToStorageUseCase(
-        UploadImageToStorageParams(event.image));
-
-    result.fold(
-      (failure) => emit(UploadImageToStorageFailure(failure.message)),
-      (res) => UploadImageToStorageSuccess(res),
     );
   }
 }
