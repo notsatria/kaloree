@@ -6,6 +6,7 @@ import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
+import 'package:kaloree/core/utils/show_snackbar.dart';
 import 'package:kaloree/features/assesment/presentation/bloc/assesment_bloc.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_appbar.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_form_field.dart';
@@ -23,18 +24,32 @@ class _PersonalInformationViewState extends State<PersonalInformationView> {
   final nameController = TextEditingController();
   final dateOfBirthController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
   DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AssesmentBloc, AssesmentState>(
-      builder: (context, state) {
-        return Scaffold(
+    return BlocListener<AssesmentBloc, AssesmentState>(
+        listener: (context, state) {
+          if (state is AssesmentLoading) {
+            setState(() {
+              _isLoading = true;
+            });
+          }
+          if (state is AssesmentSuccess) {
+            goToNamed(context, AppRoute.genderInformation);
+          }
+          if (state is AssesmentFailure) {
+            showSnackbar(context, state.message);
+          }
+        },
+        child: Scaffold(
           backgroundColor: const Color(0xffEAEAEA),
           appBar: buildCustomAppBar(
               title: 'Data Diri', context: context, canPop: false),
           bottomNavigationBar: buildCustomBottomAppBar(
             text: 'Berikutnya',
+            isLoading: _isLoading,
             onTap: () {
               if (formKey.currentState!.validate()) {
                 context.read<AssesmentBloc>().add(
@@ -43,7 +58,6 @@ class _PersonalInformationViewState extends State<PersonalInformationView> {
                         dateOfBirth: selectedDate.toString(),
                       ),
                     );
-                goToNamed(context, AppRoute.genderInformation);
               }
             },
           ),
@@ -69,9 +83,7 @@ class _PersonalInformationViewState extends State<PersonalInformationView> {
               ],
             ),
           ),
-        );
-      },
-    );
+        ));
   }
 
   Container _buildFormCard() {

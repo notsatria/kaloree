@@ -1,7 +1,6 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:kaloree/core/errors/exceptions.dart';
 import 'package:kaloree/core/errors/failure.dart';
-import 'package:kaloree/core/model/health_profile.dart';
 import 'package:kaloree/core/model/user_model.dart';
 import 'package:kaloree/features/assesment/data/datasource/assesment_remote_datasource.dart';
 import 'package:kaloree/features/assesment/domain/repositories/assesment_repository.dart';
@@ -65,17 +64,6 @@ class AssesmentRepositoryImpl implements AssesmentRepository {
       );
 
       return right(null);
-    } on ServerException catch (e) {
-      return left(Failure(e.toString()));
-    }
-  }
-
-  @override
-  Future<Either<Failure, HealthProfile>> getUserHealthProfile() async {
-    try {
-      final result = await assesmentRemoteDataSource.getUserHealthProfile();
-
-      return right(result);
     } on ServerException catch (e) {
       return left(Failure(e.toString()));
     }
