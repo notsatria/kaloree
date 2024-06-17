@@ -1,6 +1,6 @@
 import 'package:flutter/material.dart';
-import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/routes/app_route.dart';
+import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/widgets/custom_button.dart';
 
 AppBar buildCustomAppBar({
@@ -25,7 +25,10 @@ AppBar buildCustomAppBar({
 }
 
 BottomAppBar buildCustomBottomAppBar(
-    {required String text, required void Function() onTap, Color? color}) {
+    {required String text,
+    required void Function() onTap,
+    Color? color,
+    bool? isLoading}) {
   return BottomAppBar(
     color: (color == null) ? const Color(0xffEAEAEA) : color,
     elevation: 0,
@@ -34,6 +37,7 @@ BottomAppBar buildCustomBottomAppBar(
       onTap: onTap,
       backgroundColor: onBoardingBackgroundColor,
       textColor: Colors.white,
+      isLoading: isLoading ?? false,
     ),
   );
 }

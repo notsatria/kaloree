@@ -23,18 +23,29 @@ class _PersonalInformationViewState extends State<PersonalInformationView> {
   final nameController = TextEditingController();
   final dateOfBirthController = TextEditingController();
   final formKey = GlobalKey<FormState>();
+  bool _isLoading = false;
   DateTime selectedDate = DateTime.now();
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<AssesmentBloc, AssesmentState>(
-      builder: (context, state) {
-        return Scaffold(
+    return BlocListener<AssesmentBloc, AssesmentState>(
+        listener: (context, state) {
+          if (state is AssesmentLoading) {
+            setState(() {
+              _isLoading = true;
+            });
+          }
+          if (state is AssesmentSuccess) {
+            goToNamed(context, AppRoute.genderInformation);
+          }
+        },
+        child: Scaffold(
           backgroundColor: const Color(0xffEAEAEA),
           appBar: buildCustomAppBar(
               title: 'Data Diri', context: context, canPop: false),
           bottomNavigationBar: buildCustomBottomAppBar(
             text: 'Berikutnya',
+            isLoading: _isLoading,
             onTap: () {
               if (formKey.currentState!.validate()) {
                 context.read<AssesmentBloc>().add(
@@ -43,7 +54,6 @@ class _PersonalInformationViewState extends State<PersonalInformationView> {
                         dateOfBirth: selectedDate.toString(),
                       ),
                     );
-                goToNamed(context, AppRoute.genderInformation);
               }
             },
           ),
@@ -69,9 +79,7 @@ class _PersonalInformationViewState extends State<PersonalInformationView> {
               ],
             ),
           ),
-        );
-      },
-    );
+        ));
   }
 
   Container _buildFormCard() {
