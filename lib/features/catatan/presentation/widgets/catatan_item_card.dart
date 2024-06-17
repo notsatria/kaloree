@@ -1,11 +1,13 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
-import 'package:kaloree/core/platform/assets.dart';
+import 'package:kaloree/core/model/classification_result.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 
 class CatatanItemCard extends StatelessWidget {
+  final ClassificationResult classificationResult;
   const CatatanItemCard({
     super.key,
+    required this.classificationResult,
   });
 
   @override
@@ -19,9 +21,11 @@ class CatatanItemCard extends StatelessWidget {
             Container(
               width: 100,
               height: 100,
-              decoration: const BoxDecoration(
+              decoration: BoxDecoration(
+                borderRadius: BorderRadius.circular(20),
                 image: DecorationImage(
-                  image: AssetImage(soto),
+                  image: NetworkImage(classificationResult.imageUrl),
+                  fit: BoxFit.cover,
                 ),
               ),
             ),
@@ -30,7 +34,7 @@ class CatatanItemCard extends StatelessWidget {
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
                 Text(
-                  'Soto Kudus',
+                  classificationResult.food.name,
                   style: interSemiBold.copyWith(
                     color: const Color(0xff5D5F5C),
                     fontSize: 16,
@@ -47,7 +51,7 @@ class CatatanItemCard extends StatelessWidget {
                       side: BorderSide.none,
                       color: const MaterialStatePropertyAll(Colors.white),
                       label: Text(
-                        '100 gram',
+                        '${classificationResult.food.weight} gram',
                         style: interRegular.copyWith(fontSize: 12),
                       ),
                     ),
@@ -60,7 +64,7 @@ class CatatanItemCard extends StatelessWidget {
                       side: BorderSide.none,
                       color: const MaterialStatePropertyAll(Colors.white),
                       label: Text(
-                        '110Kkal',
+                        '${classificationResult.food.calories}kal',
                         style: interRegular.copyWith(fontSize: 12),
                       ),
                     ),

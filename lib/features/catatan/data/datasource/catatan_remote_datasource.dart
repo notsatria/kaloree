@@ -1,7 +1,6 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
-import 'package:intl/intl.dart';
 import 'package:kaloree/core/errors/exceptions.dart';
 import 'package:kaloree/core/model/classification_result.dart';
 import 'package:kaloree/features/catatan/data/model/catatan_list_by_month.dart';
@@ -14,7 +13,7 @@ class CatatanRemoteDataSourceImpl implements CatatanRemoteDataSource {
   final FirebaseFirestore firestore;
   final FirebaseAuth auth;
 
-  CatatanRemoteDataSourceImpl({required this.firestore, required this.auth});
+  CatatanRemoteDataSourceImpl(this.firestore, this.auth);
   @override
   Future<CatatanListByMonth> getCatatanListByMonth() async {
     Map<String, List<ClassificationResult>> resultsByMonth = {};
@@ -32,8 +31,7 @@ class CatatanRemoteDataSourceImpl implements CatatanRemoteDataSource {
         List<dynamic> classificationList = doc['classification_result_list'];
         for (var item in classificationList) {
           ClassificationResult result = ClassificationResult.fromMap(item);
-          String month =
-              DateFormat('yyyy-MM').format(DateTime.parse(result.createdAt));
+          String month = result.createdAt;
 
           if (!resultsByMonth.containsKey(month)) {
             resultsByMonth[month] = [];
@@ -41,6 +39,7 @@ class CatatanRemoteDataSourceImpl implements CatatanRemoteDataSource {
           resultsByMonth[month]!.add(result);
         }
       }
+      debugPrint(resultsByMonth.toString());
       final catatanListByMonth = CatatanListByMonth.fromMap(resultsByMonth);
       debugPrint(catatanListByMonth.toString());
       return catatanListByMonth;

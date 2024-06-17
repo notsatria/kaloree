@@ -1,33 +1,24 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
-import 'dart:convert';
-
 import 'package:kaloree/core/model/classification_result.dart';
 
 class CatatanListByMonth {
-  final Map<String, List<ClassificationResult>> classificationResultList;
+  final Map<String, List<ClassificationResult>> catatanByMonth;
 
-  CatatanListByMonth({required this.classificationResultList});
+  CatatanListByMonth({required this.catatanByMonth});
+
+  factory CatatanListByMonth.fromMap(
+      Map<String, List<ClassificationResult>> map) {
+    return CatatanListByMonth(catatanByMonth: map);
+  }
 
   Map<String, dynamic> toMap() {
-    return <String, dynamic>{
-      'classificationResultList': classificationResultList,
+    return {
+      'catatanByMonth': catatanByMonth.map(
+          (key, value) => MapEntry(key, value.map((e) => e.toMap()).toList())),
     };
   }
 
-  factory CatatanListByMonth.fromMap(Map<String, dynamic> map) {
-    return CatatanListByMonth(
-        classificationResultList: Map<String, List<ClassificationResult>>.from(
-      (map['classificationResultList']
-          as Map<String, List<ClassificationResult>>),
-    ));
-  }
-
-  String toJson() => json.encode(toMap());
-
-  factory CatatanListByMonth.fromJson(String source) =>
-      CatatanListByMonth.fromMap(json.decode(source) as Map<String, dynamic>);
-
   @override
-  String toString() =>
-      'CatatanListByMonth(classificationResultList: $classificationResultList)';
+  String toString() {
+    return 'CatatanListByMonth{catatanByMonth: $catatanByMonth}';
+  }
 }
