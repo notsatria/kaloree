@@ -6,6 +6,7 @@ import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
+import 'package:kaloree/core/utils/show_snackbar.dart';
 import 'package:kaloree/features/assesment/presentation/bloc/assesment_bloc.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_appbar.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_form_field.dart';
@@ -37,6 +38,9 @@ class _PersonalInformationViewState extends State<PersonalInformationView> {
           }
           if (state is AssesmentSuccess) {
             goToNamed(context, AppRoute.genderInformation);
+          }
+          if (state is AssesmentFailure) {
+            showSnackbar(context, state.message);
           }
         },
         child: Scaffold(
