@@ -27,8 +27,6 @@ abstract interface class AssesmentRemoteDataSource {
     required int healthPurpose,
   });
 
-  Future<HealthProfile> getUserHealthProfile();
-
   Future<UserModel> getUser();
 }
 
@@ -171,34 +169,6 @@ class AssesmentRemoteDataSourceImpl implements AssesmentRemoteDataSource {
       });
     } catch (e) {
       ServerException(e.toString());
-    }
-  }
-
-  @override
-  Future<HealthProfile> getUserHealthProfile() async {
-    try {
-      final user = firebaseAuth.currentUser;
-      if (user == null) {
-        throw ServerException("User not authenticated");
-      }
-
-      DocumentReference healthProfileDoc = firebaseFirestore
-          .collection("users")
-          .doc(user.uid)
-          .collection("health_profile")
-          .doc(user.uid);
-
-      DocumentSnapshot healthProfileSnapshot = await healthProfileDoc.get();
-
-      if (healthProfileSnapshot.exists) {
-        Map<String, dynamic> data =
-            healthProfileSnapshot.data() as Map<String, dynamic>;
-        return HealthProfile.fromMap(data);
-      } else {
-        throw ServerException("Health profile not found");
-      }
-    } catch (e) {
-      throw ServerException(e.toString());
     }
   }
 

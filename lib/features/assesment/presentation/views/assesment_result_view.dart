@@ -9,9 +9,11 @@ import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
 import 'package:kaloree/core/utils/show_snackbar.dart';
 import 'package:kaloree/core/widgets/dialog.dart';
+import 'package:kaloree/core/widgets/loading.dart';
 import 'package:kaloree/features/assesment/presentation/bloc/assesment_bloc.dart';
 import 'package:kaloree/features/assesment/presentation/views/personal_assesment_view.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_appbar.dart';
+import 'package:kaloree/features/assesment/presentation/widgets/custom_error_view.dart';
 
 class AssesmentResultView extends StatefulWidget {
   const AssesmentResultView({super.key});
@@ -24,7 +26,7 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
   @override
   void initState() {
     super.initState();
-    debugPrint("Initstate: running GetUserHealthProfile");
+    debugPrint("Initstate: running GetUserData");
     context.read<AssesmentBloc>().add(GetUserData());
   }
 
@@ -40,10 +42,8 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
       },
       child: BlocConsumer<AssesmentBloc, AssesmentState>(
         listener: (context, state) {
-          if (state is AssesmentFailure) {
+          if (state is GetUserDataFailed) {
             showSnackbar(context, state.message);
-          } else if (state is GetUserDataFailed) {
-            debugPrint('Error on GetUserDataFailed: ${state.message}');
           }
         },
         builder: (context, state) {
@@ -67,7 +67,7 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
                     alignment: Alignment.bottomCenter,
                     child: Container(
                       width: double.infinity,
-                      height: getMaxHeight(context) * 0.45,
+                      height: getMaxHeight(context) * 0.47,
                       padding:
                           const EdgeInsets.symmetric(horizontal: margin_20),
                       decoration: const BoxDecoration(
@@ -96,7 +96,7 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
                     ),
                   ),
                   Positioned(
-                    bottom: getMaxHeight(context) * 0.43,
+                    bottom: getMaxHeight(context) * 0.46,
                     left: 20,
                     right: 20,
                     child: Container(
@@ -162,8 +162,14 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
                 ],
               ),
             );
+          } else if (state is GetUserDataFailed) {
+            return Scaffold(
+              body: ErrorView(message: state.message),
+            );
           } else {
-            return const SizedBox();
+            return const Scaffold(
+              body: Loading(),
+            );
           }
         },
       ),

@@ -30,11 +30,6 @@ final class GetUserDataSuccess extends AssesmentState {
   const GetUserDataSuccess(this.userModel);
 }
 
-final class GetUserHealthProfileSuccess extends AssesmentState {
-  final HealthProfile healthProfile;
-
-  const GetUserHealthProfileSuccess(this.healthProfile);
-}
 
 final class AssesmentFailure extends AssesmentState {
   final String message;
