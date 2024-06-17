@@ -17,6 +17,11 @@ import 'package:kaloree/features/auth/domain/repositories/auth_repository.dart';
 import 'package:kaloree/features/auth/domain/usecases/user_sign_in.dart';
 import 'package:kaloree/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:kaloree/features/auth/presentaion/bloc/auth_bloc.dart';
+import 'package:kaloree/features/catatan/data/datasource/catatan_remote_datasource.dart';
+import 'package:kaloree/features/catatan/data/repositories/catatan_repository_impl.dart';
+import 'package:kaloree/features/catatan/domain/repositories/catatan_repository.dart';
+import 'package:kaloree/features/catatan/domain/usecases/get_catatan_list_by_month_usecase.dart';
+import 'package:kaloree/features/catatan/presentation/bloc/catatan_bloc.dart';
 import 'package:kaloree/features/scan/data/datasource/image_classification_remote_datasource.dart';
 import 'package:kaloree/features/scan/data/repositories/image_classification_repository_impl.dart';
 import 'package:kaloree/features/scan/domain/repositories/image_classification_repository.dart';
@@ -37,6 +42,7 @@ Future<void> initDependencies() async {
   _initAuth();
   _initAssesment();
   _initImageClassification();
+  _initCatatan();
 }
 
 void _initAuth() {
@@ -133,5 +139,27 @@ void _initImageClassification() {
       getFoodDetailUseCase: serviceLocator(),
       saveClassificationResultUseCase: serviceLocator(),
     ),
+  );
+}
+
+void _initCatatan() {
+  // datasource
+  serviceLocator.registerFactory<CatatanRemoteDataSource>(
+    () => CatatanRemoteDataSourceImpl(serviceLocator(), serviceLocator()),
+  );
+
+  // repository
+  serviceLocator.registerFactory<CatatanRepository>(
+    () => CatatanRepositoryImpl(serviceLocator()),
+  );
+
+  // usecases
+  serviceLocator.registerFactory<GetCatatanListByMonthUseCase>(
+    () => GetCatatanListByMonthUseCase(serviceLocator()),
+  );
+
+  // bloc
+  serviceLocator.registerLazySingleton<CatatanBloc>(
+    () => CatatanBloc(getCatatanListByMonthUseCase: serviceLocator()),
   );
 }

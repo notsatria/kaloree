@@ -8,6 +8,7 @@ import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/custom_color.g.dart';
 import 'package:kaloree/features/assesment/presentation/bloc/assesment_bloc.dart';
 import 'package:kaloree/features/auth/presentaion/bloc/auth_bloc.dart';
+import 'package:kaloree/features/catatan/presentation/bloc/catatan_bloc.dart';
 import 'package:kaloree/features/main_menu/presentation/cubit/bottom_navigation_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';
@@ -58,6 +59,8 @@ class MainApp extends StatelessWidget {
               create: (context) => serviceLocator<AssesmentBloc>()),
           BlocProvider<ImageClassificationBloc>(
               create: (context) => serviceLocator<ImageClassificationBloc>()),
+          BlocProvider<CatatanBloc>(
+              create: (context) => serviceLocator<CatatanBloc>()),
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme(lightScheme),
