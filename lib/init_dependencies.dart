@@ -25,6 +25,7 @@ import 'package:kaloree/features/catatan/presentation/bloc/catatan_bloc.dart';
 import 'package:kaloree/features/home/data/datasource/home_remote_datasource.dart';
 import 'package:kaloree/features/home/data/repositories/home_repository_impl.dart';
 import 'package:kaloree/features/home/domain/repositories/home_repository.dart';
+import 'package:kaloree/features/home/domain/usecases/get_user_data_on_home_usecase.dart';
 import 'package:kaloree/features/home/presentation/bloc/user_home_bloc.dart';
 import 'package:kaloree/features/scan/data/datasource/image_classification_remote_datasource.dart';
 import 'package:kaloree/features/scan/data/repositories/image_classification_repository_impl.dart';
@@ -181,8 +182,8 @@ void _initHome() {
   );
 
   // Usecases
-  serviceLocator.registerFactory<GetUserDataUseCase>(
-    () => GetUserDataUseCase(serviceLocator()),
+  serviceLocator.registerFactory<GetUserDataOnHomeUseCase>(
+    () => GetUserDataOnHomeUseCase(serviceLocator()),
   );
 
   // Blocs
