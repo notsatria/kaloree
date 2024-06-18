@@ -22,6 +22,10 @@ import 'package:kaloree/features/catatan/data/repositories/catatan_repository_im
 import 'package:kaloree/features/catatan/domain/repositories/catatan_repository.dart';
 import 'package:kaloree/features/catatan/domain/usecases/get_catatan_list_by_month_usecase.dart';
 import 'package:kaloree/features/catatan/presentation/bloc/catatan_bloc.dart';
+import 'package:kaloree/features/home/data/datasource/home_remote_datasource.dart';
+import 'package:kaloree/features/home/data/repositories/home_repository_impl.dart';
+import 'package:kaloree/features/home/domain/repositories/home_repository.dart';
+import 'package:kaloree/features/home/presentation/bloc/user_home_bloc.dart';
 import 'package:kaloree/features/scan/data/datasource/image_classification_remote_datasource.dart';
 import 'package:kaloree/features/scan/data/repositories/image_classification_repository_impl.dart';
 import 'package:kaloree/features/scan/domain/repositories/image_classification_repository.dart';
@@ -43,6 +47,7 @@ Future<void> initDependencies() async {
   _initAssesment();
   _initImageClassification();
   _initCatatan();
+  _initHome();
 }
 
 void _initAuth() {
@@ -164,4 +169,24 @@ void _initCatatan() {
   );
 }
 
-void _initHome() {}
+void _initHome() {
+  // Datasources
+  serviceLocator.registerFactory<HomeRemoteDataSource>(
+    () => HomeRemoteDataSourceImpl(serviceLocator(), serviceLocator()),
+  );
+
+  // Repositories
+  serviceLocator.registerFactory<HomeRepository>(
+    () => HomeRepositoryImpl(serviceLocator()),
+  );
+
+  // Usecases
+  serviceLocator.registerFactory<GetUserDataUseCase>(
+    () => GetUserDataUseCase(serviceLocator()),
+  );
+
+  // Blocs
+  serviceLocator.registerLazySingleton<UserHomeBloc>(
+    () => UserHomeBloc(getUserDataUseCase: serviceLocator()),
+  );
+}
