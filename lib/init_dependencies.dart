@@ -163,3 +163,7 @@ void _initCatatan() {
     () => CatatanBloc(getCatatanListByMonthUseCase: serviceLocator()),
   );
 }
+
+void _initHome() {
+  
+}
