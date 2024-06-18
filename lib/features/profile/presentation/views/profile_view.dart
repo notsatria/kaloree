@@ -73,25 +73,25 @@ class ProfileView extends StatelessWidget {
               color: const Color(0xffF0F1ED),
               borderRadius: BorderRadius.circular(20),
             ),
-            child: const Column(
+            child: Column(
               children: [
-                ProfileListTile(
+                const ProfileListTile(
                   icon: Icons.person_outline,
                   text: 'Edit Profile',
                 ),
-                ProfileListTile(
+                const ProfileListTile(
                   icon: Icons.settings,
                   text: 'Pengaturan',
                 ),
-                ProfileListTile(
+                const ProfileListTile(
                   icon: Icons.history,
                   text: 'Riwayat',
                 ),
-                ProfileListTile(
+                const ProfileListTile(
                   icon: Icons.privacy_tip,
                   text: 'Kebijakan Privasi',
                 ),
-                ProfileListTile(
+                const ProfileListTile(
                   icon: Icons.help,
                   text: 'Bantuan',
                 ),
@@ -99,6 +99,7 @@ class ProfileView extends StatelessWidget {
                   icon: Icons.logout,
                   text: 'Keluar',
                   type: Type.logout,
+                  onTap: () {},
                 )
               ],
             ),

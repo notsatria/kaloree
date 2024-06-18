@@ -8,11 +8,13 @@ class ProfileListTile extends StatelessWidget {
   final IconData icon;
   final String text;
   final Type type;
+  final void Function()? onTap;
   const ProfileListTile({
     Key? key,
     required this.icon,
     required this.text,
     this.type = Type.regular,
+    this.onTap,
   }) : super(key: key);
 
   @override
@@ -25,45 +27,51 @@ class ProfileListTile extends StatelessWidget {
     }
   }
 
-  Widget _buildRegularTile() => Container(
-        margin: const EdgeInsets.symmetric(vertical: 16),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              size: 26,
-              color: lightColorScheme.outline,
-            ),
-            const Gap(20),
-            Text(
-              text,
-              style: interSemiBold,
-            ),
-            const Spacer(),
-            const Icon(
-              Icons.arrow_forward_ios_rounded,
-              size: 20,
-              color: Color(0xff767874),
-            ),
-          ],
+  Widget _buildRegularTile() => GestureDetector(
+        onTap: onTap,
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 16),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                size: 26,
+                color: lightColorScheme.outline,
+              ),
+              const Gap(20),
+              Text(
+                text,
+                style: interSemiBold,
+              ),
+              const Spacer(),
+              const Icon(
+                Icons.arrow_forward_ios_rounded,
+                size: 20,
+                color: Color(0xff767874),
+              ),
+            ],
+          ),
         ),
       );
 
-  Widget _buildLogoutTile() => Container(
-        margin: const EdgeInsets.symmetric(vertical: 16),
-        child: Row(
-          children: [
-            Icon(
-              icon,
-              size: 26,
-              color: lightColorScheme.error,
-            ),
-            const Gap(20),
-            Text(
-              text,
-              style: interSemiBold.copyWith(color: lightColorScheme.error),
-            ),
-          ],
+  Widget _buildLogoutTile() => GestureDetector(
+        onTap: onTap,
+        child: Container(
+          margin: const EdgeInsets.symmetric(vertical: 16),
+          child: Row(
+            children: [
+              Icon(
+                icon,
+                size: 26,
+                color: lightColorScheme.error,
+              ),
+              const Gap(20),
+              Text(
+                text,
+                style: interSemiBold.copyWith(color: lightColorScheme.error),
+              ),
+            ],
+          ),
         ),
       );
 }
