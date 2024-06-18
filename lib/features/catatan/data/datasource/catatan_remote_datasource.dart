@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
+import 'package:intl/intl.dart';
 import 'package:kaloree/core/errors/exceptions.dart';
 import 'package:kaloree/core/model/classification_result.dart';
 import 'package:kaloree/features/catatan/data/model/catatan_list_by_month.dart';
@@ -16,7 +17,8 @@ class CatatanRemoteDataSourceImpl implements CatatanRemoteDataSource {
   CatatanRemoteDataSourceImpl(this.firestore, this.auth);
   @override
   Future<CatatanListByMonth> getCatatanListByMonth() async {
-    Map<String, List<ClassificationResult>> resultsByMonth = {};
+    Map<String, Map<String, List<ClassificationResult>>> resultsByMonthAndDay =
+        {};
     try {
       final uid = auth.currentUser!.uid;
 
@@ -31,18 +33,29 @@ class CatatanRemoteDataSourceImpl implements CatatanRemoteDataSource {
         List<dynamic> classificationList = doc['classification_result_list'];
         for (var item in classificationList) {
           ClassificationResult result = ClassificationResult.fromMap(item);
-          String month = result.createdAt;
+          String month =
+              DateFormat('yyyy-MM').format(DateTime.parse(result.createdAt));
+          String day =
+              DateFormat('yyyy-MM-dd').format(DateTime.parse(result.createdAt));
 
-          if (!resultsByMonth.containsKey(month)) {
-            resultsByMonth[month] = [];
+          if (!resultsByMonthAndDay.containsKey(month)) {
+            resultsByMonthAndDay[month] = {};
           }
-          resultsByMonth[month]!.add(result);
+          if (!resultsByMonthAndDay[month]!.containsKey(day)) {
+            resultsByMonthAndDay[month]![day] = [];
+          }
+          resultsByMonthAndDay[month]![day]!.add(result);
         }
       }
-      debugPrint(resultsByMonth.toString());
-      final catatanListByMonth = CatatanListByMonth.fromMap(resultsByMonth);
-      debugPrint(catatanListByMonth.toString());
-      return catatanListByMonth;
+      // Mengurutkan hasil
+      resultsByMonthAndDay.forEach((month, dayMap) {
+        var sortedDays = dayMap.keys.toList()
+          ..sort((a, b) => DateTime.parse(b).compareTo(DateTime.parse(a)));
+        resultsByMonthAndDay[month] = {
+          for (var day in sortedDays) day: dayMap[day]!
+        };
+      });
+      return CatatanListByMonth.fromMap(resultsByMonthAndDay);
     } catch (e) {
       debugPrint("Error fetching data: $e");
       throw ServerException(e.toString());
