@@ -164,6 +164,4 @@ void _initCatatan() {
   );
 }
 
-void _initHome() {
-  
-}
+void _initHome() {}
