@@ -1,70 +1,112 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:intl/intl.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
+import 'package:kaloree/core/widgets/loading.dart';
+import 'package:kaloree/features/assesment/presentation/widgets/custom_error_view.dart';
+import 'package:kaloree/features/home/presentation/bloc/user_home_bloc.dart';
 import 'package:kaloree/features/home/presentation/widgets/food_card.dart';
 import 'package:kaloree/features/home/presentation/widgets/sport_card.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
 
-class HomeView extends StatelessWidget {
+class HomeView extends StatefulWidget {
   const HomeView({super.key});
 
   @override
+  State<HomeView> createState() => _HomeViewState();
+}
+
+class _HomeViewState extends State<HomeView> {
+  final today = DateFormat('EEEE, d MMMM yyyy').format(DateTime.now());
+
+  @override
+  void initState() {
+    super.initState();
+    context.read<UserHomeBloc>().add(GetUserData());
+  }
+
+  @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      resizeToAvoidBottomInset: false,
-      backgroundColor: lightColorScheme.primaryContainer,
-      body: Stack(
-        children: [
-          Align(
-            alignment: Alignment.bottomCenter,
-            child: Container(
-              width: double.infinity,
-              height: getMaxHeight(context) * 0.6,
-              decoration: const BoxDecoration(
-                color: Colors.white,
-                borderRadius: BorderRadius.only(
-                  topLeft: Radius.circular(15),
-                  topRight: Radius.circular(15),
-                ),
-              ),
-            ),
-          ),
-          SingleChildScrollView(
-            padding: const EdgeInsets.symmetric(horizontal: margin_20),
-            child: Column(
-              crossAxisAlignment: CrossAxisAlignment.start,
+    return BlocBuilder<UserHomeBloc, UserHomeState>(
+      builder: (context, state) {
+        if (state is GetUserDataSuccess) {
+          final user = state.user;
+          return Scaffold(
+            resizeToAvoidBottomInset: false,
+            backgroundColor: lightColorScheme.primaryContainer,
+            body: Stack(
               children: [
-                Padding(
-                  padding: EdgeInsets.only(
-                      top: MediaQuery.of(context).padding.top + margin_12),
-                  child: _buildUserAvatarName(),
-                ),
-                const Gap(24),
-                Text(
-                  'Ringkasan Harian',
-                  style: interBold.copyWith(
-                    fontSize: 15,
-                    color: lightColorScheme.onPrimaryContainer,
+                Align(
+                  alignment: Alignment.bottomCenter,
+                  child: Container(
+                    width: double.infinity,
+                    height: getMaxHeight(context) * 0.6,
+                    decoration: const BoxDecoration(
+                      color: Colors.white,
+                      borderRadius: BorderRadius.only(
+                        topLeft: Radius.circular(15),
+                        topRight: Radius.circular(15),
+                      ),
+                    ),
                   ),
                 ),
-                const Gap(10),
-                _buildDailySummary(),
-                const Gap(12),
-                _buildSubtitleText(text: 'Rekomendasi Olahraga'),
-                const Gap(12),
-                const SportCard(),
-                const Gap(24),
-                _buildSubtitleText(text: 'Rekomendasi Makanan'),
-                const Gap(12),
-                const FoodCard(),
-                const Gap(50)
+                SingleChildScrollView(
+                  padding: const EdgeInsets.symmetric(horizontal: margin_20),
+                  child: Column(
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Padding(
+                        padding: EdgeInsets.only(
+                            top:
+                                MediaQuery.of(context).padding.top + margin_12),
+                        child: _buildUserAvatarName(
+                          name: user.fullName.toString(),
+                          photoUrl: user.profilePicture.toString(),
+                        ),
+                      ),
+                      const Gap(24),
+                      Text(
+                        'Ringkasan Harian',
+                        style: interBold.copyWith(
+                          fontSize: 15,
+                          color: lightColorScheme.onPrimaryContainer,
+                        ),
+                      ),
+                      const Gap(10),
+                      _buildDailySummary(
+                        dailyCaloriesNeeded: user.healthProfile?.bmr ?? 0,
+                        dailyCaloriesSupplied: 1000,
+                      ),
+                      const Gap(12),
+                      _buildSubtitleText(text: 'Rekomendasi Olahraga'),
+                      const Gap(12),
+                      const SportCard(),
+                      const Gap(24),
+                      _buildSubtitleText(text: 'Rekomendasi Makanan'),
+                      const Gap(12),
+                      const FoodCard(),
+                      const Gap(50)
+                    ],
+                  ),
+                ),
               ],
             ),
-          ),
-        ],
-      ),
+          );
+        } else if (state is GetUserDataFailure) {
+          return Scaffold(
+            body: ErrorView(message: state.message),
+          );
+        } else if (state is GetUserDataLoading) {
+          return const Scaffold(
+            body: Loading(),
+          );
+        } else {
+          return const ErrorView(message: 'Terjadi Kesalahan');
+        }
+      },
     );
   }
 
@@ -85,24 +127,24 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  Row _buildUserAvatarName() {
+  Row _buildUserAvatarName({required String name, required String photoUrl}) {
     return Row(
       children: [
-        const CircleAvatar(
+        CircleAvatar(
           radius: 24,
-          child: FlutterLogo(),
+          child: Image.network(photoUrl, fit: BoxFit.cover),
         ),
         const Gap(12),
         Column(
           crossAxisAlignment: CrossAxisAlignment.start,
           children: [
             Text(
-              'Halo, Satria!',
+              'Halo, $name!',
               style: interBold.copyWith(
                   fontSize: 16, color: lightColorScheme.primary),
             ),
             Text(
-              'Hari ini, 4 April 2024',
+              today,
               style: interMedium.copyWith(
                 fontSize: 12,
                 color: lightColorScheme.surfaceTint,
@@ -114,7 +156,10 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  _buildDailySummary() {
+  _buildDailySummary({
+    required double dailyCaloriesNeeded,
+    required double dailyCaloriesSupplied,
+  }) {
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.symmetric(horizontal: 24, vertical: 18),
@@ -143,7 +188,7 @@ class HomeView extends StatelessWidget {
                 ),
                 const Gap(2),
                 Text(
-                  '2280 kkal',
+                  '${dailyCaloriesNeeded.toStringAsFixed(0)} kkal',
                   style: interBold.copyWith(fontSize: 14, color: Colors.white),
                 ),
                 const Gap(18),
@@ -156,7 +201,7 @@ class HomeView extends StatelessWidget {
                 ),
                 const Gap(2),
                 Text(
-                  '1800 kkal',
+                  '${dailyCaloriesSupplied.toStringAsFixed(0)} kkal',
                   style: interBold.copyWith(fontSize: 14, color: Colors.white),
                 )
               ],
@@ -165,7 +210,10 @@ class HomeView extends StatelessWidget {
           Expanded(
             child: SizedBox(
               height: 180,
-              child: _buildGauge(),
+              child: _buildGauge(
+                dailyCaloriesNeeded: dailyCaloriesNeeded,
+                dailyCaloriesSupplied: dailyCaloriesSupplied,
+              ),
             ),
           )
         ],
@@ -173,13 +221,17 @@ class HomeView extends StatelessWidget {
     );
   }
 
-  SfRadialGauge _buildGauge() {
+  SfRadialGauge _buildGauge(
+      {required double dailyCaloriesNeeded,
+      required double dailyCaloriesSupplied}) {
+    String caloriesSuppliedPercent =
+        (dailyCaloriesSupplied / dailyCaloriesNeeded * 100).toStringAsFixed(0);
     return SfRadialGauge(
       enableLoadingAnimation: true,
       axes: <RadialAxis>[
         RadialAxis(
           minimum: 0,
-          maximum: 1800,
+          maximum: dailyCaloriesNeeded,
           showTicks: false,
           showLabels: false,
           axisLineStyle: const AxisLineStyle(
@@ -191,7 +243,7 @@ class HomeView extends StatelessWidget {
           ranges: <GaugeRange>[
             GaugeRange(
               startValue: 0,
-              endValue: 600,
+              endValue: dailyCaloriesSupplied,
               color: const Color(0xffFFAE12),
               label: 'Halo',
               labelStyle: const GaugeTextStyle(
@@ -199,12 +251,12 @@ class HomeView extends StatelessWidget {
               ),
             ),
           ],
-          pointers: const <GaugePointer>[
+          pointers: <GaugePointer>[
             MarkerPointer(
-              value: 600,
+              value: dailyCaloriesSupplied,
               markerHeight: 25,
               markerWidth: 25,
-              color: Color(0xffFFAE12),
+              color: const Color(0xffFFAE12),
               markerType: MarkerType.circle,
             )
           ],
@@ -215,7 +267,7 @@ class HomeView extends StatelessWidget {
                 crossAxisAlignment: CrossAxisAlignment.center,
                 children: [
                   Text(
-                    '60%',
+                    '$caloriesSuppliedPercent%',
                     style:
                         interBold.copyWith(fontSize: 24, color: Colors.white),
                   ),
