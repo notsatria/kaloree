@@ -1,24 +1,26 @@
 import 'package:kaloree/core/model/classification_result.dart';
 
 class CatatanListByMonth {
-  final Map<String, List<ClassificationResult>> catatanByMonth;
+  final Map<String, Map<String, List<ClassificationResult>>> catatanByMonthAndDay;
 
-  CatatanListByMonth({required this.catatanByMonth});
+  CatatanListByMonth({required this.catatanByMonthAndDay});
 
   factory CatatanListByMonth.fromMap(
-      Map<String, List<ClassificationResult>> map) {
-    return CatatanListByMonth(catatanByMonth: map);
+      Map<String, Map<String, List<ClassificationResult>>> map) {
+    return CatatanListByMonth(catatanByMonthAndDay: map);
   }
 
   Map<String, dynamic> toMap() {
     return {
-      'catatanByMonth': catatanByMonth.map(
-          (key, value) => MapEntry(key, value.map((e) => e.toMap()).toList())),
+      'catatanByMonthAndDay': catatanByMonthAndDay.map((month, dayMap) => MapEntry(
+            month,
+            dayMap.map((day, list) => MapEntry(day, list.map((e) => e.toMap()).toList())),
+          )),
     };
   }
 
   @override
   String toString() {
-    return 'CatatanListByMonth{catatanByMonth: $catatanByMonth}';
+    return 'CatatanListByMonth{catatanByMonthAndDay: $catatanByMonthAndDay}';
   }
 }

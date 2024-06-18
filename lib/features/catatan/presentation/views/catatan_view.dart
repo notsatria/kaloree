@@ -33,70 +33,79 @@ class _CatatanViewState extends State<CatatanView> {
         return SafeArea(
           child: Scaffold(
             resizeToAvoidBottomInset: false,
-            appBar: AppBar(
-              backgroundColor: lightColorScheme.background,
-              title: Row(
-                mainAxisAlignment: MainAxisAlignment.center,
-                children: [
-                  const Icon(Icons.calendar_month),
-                  const Gap(4),
-                  Text('Catatan Bulan $thisMonth'),
-                ],
-              ),
-            ),
+            appBar: _buildCatatanAppBar(),
             body: SingleChildScrollView(
               child: Column(
-                children: [
-                  ...catatanListByMonth.catatanByMonth.entries.map((entry) {
-                    final month = entry.key;
-                    final items = entry.value;
-                    final monthName =
-                        DateFormat('MMMM').format(DateTime.parse(month));
-
-                    return Container(
-                      margin: const EdgeInsets.symmetric(
-                          horizontal: 12, vertical: 6),
-                      padding: const EdgeInsets.symmetric(vertical: 12),
-                      decoration: BoxDecoration(
-                        borderRadius: BorderRadius.circular(12),
-                        color: const Color(0xffF0F1ED),
-                      ),
-                      child: Theme(
-                        data: Theme.of(context)
-                            .copyWith(dividerColor: Colors.transparent),
-                        child: ExpansionTile(
-                          initiallyExpanded: true,
-                          title: _buildHeaderText(title: monthName),
-                          children: items
-                              .map((item) =>
-                                  CatatanItemCard(classificationResult: item))
-                              .toList(),
+                children: catatanListByMonth.catatanByMonthAndDay.entries
+                    .map((monthEntry) {
+                  return Column(
+                    children: monthEntry.value.entries.map((dayEntry) {
+                      return Container(
+                        margin: const EdgeInsets.symmetric(
+                            horizontal: 12, vertical: 6),
+                        padding: const EdgeInsets.symmetric(vertical: 12),
+                        decoration: BoxDecoration(
+                          borderRadius: BorderRadius.circular(12),
+                          color: const Color(0xffF0F1ED),
                         ),
-                      ),
-                    );
-                  }).toList(),
-                ],
+                        child: Theme(
+                            data: Theme.of(context)
+                                .copyWith(dividerColor: Colors.transparent),
+                            child: ExpansionTile(
+                              initiallyExpanded: true,
+                              title: _buildHeaderText(
+                                  title: DateFormat('EEEE, d MMMM yyyy')
+                                      .format(DateTime.parse(dayEntry.key))),
+                              children:
+                                  dayEntry.value.map((classificationResult) {
+                                return CatatanItemCard(
+                                    classificationResult: classificationResult);
+                              }).toList(),
+                            )),
+                      );
+                    }).toList(),
+                  );
+                }).toList(),
               ),
             ),
           ),
         );
       } else if (state is CatatanLoading) {
-        return const SafeArea(
+        return SafeArea(
             child: Scaffold(
-          body: Loading(),
+          appBar: _buildCatatanAppBar(),
+          body: const Loading(),
         ));
       } else if (state is CatatanFailure) {
         return SafeArea(
             child: Scaffold(
+          appBar: _buildCatatanAppBar(),
           body: ErrorView(message: state.message),
         ));
       } else {
-        return const SafeArea(
+        return SafeArea(
             child: Scaffold(
-          body: ErrorView(message: 'Catatan masih kosong!'),
+          appBar: _buildCatatanAppBar(),
+          body: const ErrorView(message: 'Catatan masih kosong!'),
         ));
       }
     });
+  }
+
+  AppBar _buildCatatanAppBar() {
+    return AppBar(
+      backgroundColor: lightColorScheme.background,
+      centerTitle: true,
+      automaticallyImplyLeading: false,
+      title: Row(
+        mainAxisAlignment: MainAxisAlignment.center,
+        children: [
+          const Icon(Icons.calendar_month),
+          const Gap(4),
+          Text('Catatan Bulan $thisMonth'),
+        ],
+      ),
+    );
   }
 
   Text _buildHeaderText({required String title}) {
