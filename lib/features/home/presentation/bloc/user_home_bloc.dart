@@ -9,8 +9,9 @@ part 'user_home_state.dart';
 
 class UserHomeBloc extends Bloc<UserHomeEvent, UserHomeState> {
   final GetUserDataUseCase _getUserDataUseCase;
-  UserHomeBloc({required GetUserDataUseCase getUserDataUseCase})
-      : _getUserDataUseCase = getUserDataUseCase,
+  UserHomeBloc({
+    required GetUserDataUseCase getUserDataUseCase,
+  })  : _getUserDataUseCase = getUserDataUseCase,
         super(UserHomeInitial()) {
     on<GetUserData>(_onGetUserData);
   }

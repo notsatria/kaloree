@@ -1,3 +1,5 @@
+import 'dart:developer';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
@@ -7,6 +9,7 @@ import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
 import 'package:kaloree/core/widgets/loading.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_error_view.dart';
+import 'package:kaloree/features/home/presentation/bloc/daily_calories_bloc.dart';
 import 'package:kaloree/features/home/presentation/bloc/user_home_bloc.dart';
 import 'package:kaloree/features/home/presentation/widgets/food_card.dart';
 import 'package:kaloree/features/home/presentation/widgets/sport_card.dart';
@@ -26,6 +29,7 @@ class _HomeViewState extends State<HomeView> {
   void initState() {
     super.initState();
     context.read<UserHomeBloc>().add(GetUserData());
+    context.read<DailyCaloriesBloc>().add(GetDailyCaloriesSupplied());
   }
 
   @override
@@ -76,9 +80,22 @@ class _HomeViewState extends State<HomeView> {
                         ),
                       ),
                       const Gap(10),
-                      _buildDailySummary(
-                        dailyCaloriesNeeded: user.healthProfile?.bmr ?? 0,
-                        dailyCaloriesSupplied: 1000,
+                      BlocBuilder<DailyCaloriesBloc, DailyCaloriesState>(
+                        builder: (context, state) {
+                          log('State: $state');
+                          if (state is GetDailyCaloriesSuppliedSuccess) {
+                            return _buildDailySummary(
+                              dailyCaloriesNeeded: user.healthProfile?.bmr ?? 0,
+                              dailyCaloriesSupplied:
+                                  state.dailyCaloriesSupplied,
+                            );
+                          } else {
+                            return _buildDailySummary(
+                              dailyCaloriesNeeded: user.healthProfile?.bmr ?? 0,
+                              dailyCaloriesSupplied: 0,
+                            );
+                          }
+                        },
                       ),
                       const Gap(12),
                       _buildSubtitleText(text: 'Rekomendasi Olahraga'),
@@ -188,7 +205,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 const Gap(2),
                 Text(
-                  '${dailyCaloriesNeeded.toStringAsFixed(0)} kkal',
+                  '${dailyCaloriesNeeded.toStringAsFixed(0)} kal',
                   style: interBold.copyWith(fontSize: 14, color: Colors.white),
                 ),
                 const Gap(18),
@@ -201,7 +218,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 const Gap(2),
                 Text(
-                  '${dailyCaloriesSupplied.toStringAsFixed(0)} kkal',
+                  '${dailyCaloriesSupplied.toStringAsFixed(0)} kal',
                   style: interBold.copyWith(fontSize: 14, color: Colors.white),
                 )
               ],
