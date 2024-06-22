@@ -25,7 +25,9 @@ import 'package:kaloree/features/catatan/presentation/bloc/catatan_bloc.dart';
 import 'package:kaloree/features/home/data/datasource/home_remote_datasource.dart';
 import 'package:kaloree/features/home/data/repositories/home_repository_impl.dart';
 import 'package:kaloree/features/home/domain/repositories/home_repository.dart';
+import 'package:kaloree/features/home/domain/usecases/get_daily_calories_supplied_usecase.dart';
 import 'package:kaloree/features/home/domain/usecases/get_user_data_on_home_usecase.dart';
+import 'package:kaloree/features/home/presentation/bloc/daily_calories_bloc.dart';
 import 'package:kaloree/features/home/presentation/bloc/user_home_bloc.dart';
 import 'package:kaloree/features/scan/data/datasource/image_classification_remote_datasource.dart';
 import 'package:kaloree/features/scan/data/repositories/image_classification_repository_impl.dart';
@@ -186,8 +188,19 @@ void _initHome() {
     () => GetUserDataOnHomeUseCase(serviceLocator()),
   );
 
+  serviceLocator.registerFactory<GetDailyCaloriesSuppliedUseCase>(
+    () => GetDailyCaloriesSuppliedUseCase(serviceLocator()),
+  );
+
   // Blocs
   serviceLocator.registerLazySingleton<UserHomeBloc>(
-    () => UserHomeBloc(getUserDataUseCase: serviceLocator()),
+    () => UserHomeBloc(
+      getUserDataUseCase: serviceLocator(),
+    ),
+  );
+  serviceLocator.registerLazySingleton<DailyCaloriesBloc>(
+    () => DailyCaloriesBloc(
+      getDailyCaloriesSuppliedUseCase: serviceLocator(),
+    ),
   );
 }

@@ -17,4 +17,14 @@ class HomeRepositoryImpl implements HomeRepository {
       return left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, double>> getDailyCaloriesSupplied() async {
+    try {
+      final res = await datasource.getDailyCaloriesSupplied();
+      return right(res);
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 }
