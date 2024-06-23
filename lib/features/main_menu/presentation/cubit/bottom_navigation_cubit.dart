@@ -2,6 +2,7 @@ import 'package:equatable/equatable.dart';
 import 'package:flutter/widgets.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaloree/features/catatan/presentation/views/catatan_view.dart';
+import 'package:kaloree/features/history/presentation/views/history_view.dart';
 import 'package:kaloree/features/home/presentation/views/home_view.dart';
 import 'package:kaloree/features/profile/presentation/views/profile_view.dart';
 
@@ -20,7 +21,7 @@ class BottomNavigationCubit extends Cubit<BottomNavigationState> {
   final pageList = [
     const HomeView(),
     const CatatanView(),
-    const Placeholder(),
+    const HistoryView(),
     const ProfileView()
   ];
 
