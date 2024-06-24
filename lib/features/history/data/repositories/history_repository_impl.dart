@@ -1,12 +1,12 @@
 import 'package:fpdart/fpdart.dart';
 import 'package:kaloree/core/errors/failure.dart';
-import 'package:kaloree/features/history/data/datasource/history_remote_datasource.dart';
+import 'package:kaloree/features/history/data/datasource/analysis_remote_datasource.dart';
 import 'package:kaloree/features/history/domain/repositories/history_repository.dart';
 
-class HistoryRepositoryImpl implements HistoryRepository {
-  final HistoryRemoteDataSource remoteDataSource;
+class AnalysisRepositoryImpl implements AnalysisRepository {
+  final AnalysisRemoteDataSource remoteDataSource;
 
-  HistoryRepositoryImpl(this.remoteDataSource);
+  AnalysisRepositoryImpl(this.remoteDataSource);
   @override
   Future<Either<Failure, Map<String, double>>> getTotalCaloriesInWeek() async {
     try {

@@ -6,15 +6,15 @@ import 'package:kaloree/core/errors/exceptions.dart';
 import 'package:kaloree/core/model/classification_result.dart';
 import 'package:kaloree/core/utils/date_format.dart';
 
-abstract interface class HistoryRemoteDataSource {
+abstract interface class AnalysisRemoteDataSource {
   Future<Map<String, double>> getTotalCaloriesInWeek();
 }
 
-class HistoryRemoteDataSourceImpl implements HistoryRemoteDataSource {
+class AnalysisRemoteDataSourceImpl implements AnalysisRemoteDataSource {
   final FirebaseFirestore firebaseFirestore;
   final FirebaseAuth firebaseAuth;
 
-  HistoryRemoteDataSourceImpl(this.firebaseFirestore, this.firebaseAuth);
+  AnalysisRemoteDataSourceImpl(this.firebaseFirestore, this.firebaseAuth);
 
   @override
   Future<Map<String, double>> getTotalCaloriesInWeek() async {

@@ -5,7 +5,7 @@ import 'package:kaloree/features/history/domain/repositories/history_repository.
 
 class GetTotalCaloriesInWeekUseCase
     implements UseCase<Map<String, double>, NoParams> {
-  final HistoryRepository repository;
+  final AnalysisRepository repository;
 
   GetTotalCaloriesInWeekUseCase(this.repository);
   @override
