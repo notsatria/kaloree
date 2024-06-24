@@ -22,6 +22,11 @@ import 'package:kaloree/features/catatan/data/repositories/catatan_repository_im
 import 'package:kaloree/features/catatan/domain/repositories/catatan_repository.dart';
 import 'package:kaloree/features/catatan/domain/usecases/get_catatan_list_by_month_usecase.dart';
 import 'package:kaloree/features/catatan/presentation/bloc/catatan_bloc.dart';
+import 'package:kaloree/features/history/data/datasource/analysis_remote_datasource.dart';
+import 'package:kaloree/features/history/data/repositories/history_repository_impl.dart';
+import 'package:kaloree/features/history/domain/repositories/history_repository.dart';
+import 'package:kaloree/features/history/domain/usecases/get_total_calories_in_week.dart';
+import 'package:kaloree/features/history/presentation/bloc/get_total_calories_in_week_bloc.dart';
 import 'package:kaloree/features/home/data/datasource/home_remote_datasource.dart';
 import 'package:kaloree/features/home/data/repositories/home_repository_impl.dart';
 import 'package:kaloree/features/home/domain/repositories/home_repository.dart';
@@ -51,6 +56,7 @@ Future<void> initDependencies() async {
   _initImageClassification();
   _initCatatan();
   _initHome();
+  _initAnalysis();
 }
 
 void _initAuth() {
@@ -201,6 +207,30 @@ void _initHome() {
   serviceLocator.registerLazySingleton<DailyCaloriesBloc>(
     () => DailyCaloriesBloc(
       getDailyCaloriesSuppliedUseCase: serviceLocator(),
+    ),
+  );
+}
+
+void _initAnalysis() {
+  //  Datasources
+  serviceLocator.registerFactory<AnalysisRemoteDataSource>(
+    () => AnalysisRemoteDataSourceImpl(serviceLocator(), serviceLocator()),
+  );
+
+  // repositories
+  serviceLocator.registerFactory<AnalysisRepository>(
+    () => AnalysisRepositoryImpl(serviceLocator()),
+  );
+
+  // usecases
+  serviceLocator.registerFactory(
+    () => GetTotalCaloriesInWeekUseCase(serviceLocator()),
+  );
+
+  // blocs
+  serviceLocator.registerLazySingleton(
+    () => GetTotalCaloriesInWeekBloc(
+      getTotalCaloriesInWeekUseCase: serviceLocator(),
     ),
   );
 }
