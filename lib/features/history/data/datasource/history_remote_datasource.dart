@@ -7,8 +7,7 @@ import 'package:kaloree/core/model/classification_result.dart';
 import 'package:kaloree/core/utils/date_format.dart';
 
 abstract interface class HistoryRemoteDataSource {
-  Future<Map<String, List<ClassificationResult>>>
-      getClassificationResultsInWeek();
+  Future<Map<String, double>> getTotalCaloriesInWeek();
 }
 
 class HistoryRemoteDataSourceImpl implements HistoryRemoteDataSource {
@@ -18,21 +17,20 @@ class HistoryRemoteDataSourceImpl implements HistoryRemoteDataSource {
   HistoryRemoteDataSourceImpl(this.firebaseFirestore, this.firebaseAuth);
 
   @override
-  Future<Map<String, List<ClassificationResult>>>
-      getClassificationResultsInWeek() async {
+  Future<Map<String, double>> getTotalCaloriesInWeek() async {
     DateTime now = DateTime.now();
     DateTime startOfWeek = _getStartOfWeek(now);
 
     final uid = firebaseAuth.currentUser!.uid;
 
-    Map<String, List<ClassificationResult>> weeklyResults = {
-      'monday': [],
-      'tuesday': [],
-      'wednesday': [],
-      'thursday': [],
-      'friday': [],
-      'saturday': [],
-      'sunday': []
+    Map<String, double> weeklyCalories = {
+      'monday': 0,
+      'tuesday': 0,
+      'wednesday': 0,
+      'thursday': 0,
+      'friday': 0,
+      'saturday': 0,
+      'sunday': 0
     };
 
     // Loop through each day from Monday to Sunday
@@ -61,10 +59,14 @@ class HistoryRemoteDataSourceImpl implements HistoryRemoteDataSource {
                   ClassificationResult.fromMap(classificationResult))
               .toList();
 
-          // Lakukan sesuatu dengan classificationResultList
-          if (result.isNotEmpty) {
-            weeklyResults[dayName]!.addAll(result);
-          }
+          // Calculate the total calories for the day
+          double totalCalories = result.fold(
+              0,
+              (sum, classificationResult) =>
+                  sum + classificationResult.food.calories);
+
+          // Add the total calories to the respective day in the map
+          weeklyCalories[dayName] = totalCalories;
         }
       } catch (e) {
         log('Error fetching data for $dayFormatted: $e');
@@ -72,9 +74,9 @@ class HistoryRemoteDataSourceImpl implements HistoryRemoteDataSource {
       }
     }
 
-    log('Weekly result $weeklyResults');
+    log('Weekly calories $weeklyCalories');
 
-    return weeklyResults;
+    return weeklyCalories;
   }
 
   DateTime _getStartOfWeek(DateTime date) {
