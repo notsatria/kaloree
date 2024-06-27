@@ -3,7 +3,6 @@ import 'package:gap/gap.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
-import 'package:kaloree/features/profile/presentation/widgets/circle_text_icon.dart';
 import 'package:kaloree/features/profile/presentation/widgets/profile_list_tile.dart';
 
 class ProfileView extends StatelessWidget {
@@ -18,6 +17,7 @@ class ProfileView extends StatelessWidget {
       ),
       body: Column(
         children: [
+          const Gap(12),
           Stack(
             children: [
               CircleAvatar(
@@ -56,14 +56,6 @@ class ProfileView extends StatelessWidget {
           Text(
             'halo@email.com',
             style: interMedium.copyWith(color: lightColorScheme.outline),
-          ),
-          const Gap(20),
-          const Row(
-            mainAxisAlignment: MainAxisAlignment.spaceEvenly,
-            children: [
-              CircleTextIcon(title: '4', description: 'Total Porsi'),
-              CircleTextIcon(title: '2340 kkal', description: 'Kalori Masuk'),
-            ],
           ),
           const Gap(24),
           Container(

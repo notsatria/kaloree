@@ -2,7 +2,6 @@
 import 'package:flutter/material.dart';
 import 'package:font_awesome_flutter/font_awesome_flutter.dart';
 import 'package:gap/gap.dart';
-
 import 'package:kaloree/core/theme/fonts.dart';
 
 class CircleTextIcon extends StatelessWidget {
@@ -32,7 +31,7 @@ class CircleTextIcon extends StatelessWidget {
           style: interBold,
         ),
         Text(
-description,
+          description,
           style: interMedium.copyWith(fontSize: 12),
         )
       ],
