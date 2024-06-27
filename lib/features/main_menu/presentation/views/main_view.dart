@@ -64,9 +64,9 @@ class MainView extends StatelessWidget {
                 ),
                 const Expanded(child: SizedBox()),
                 CustomNavigationItem(
-                  icon: Icons.history_outlined,
-                  activeIcon: Icons.history,
-                  label: 'Riwayat',
+                  icon: Icons.bar_chart_rounded,
+                  activeIcon: Icons.bar_chart_rounded,
+                  label: 'Analisis',
                   currentIndex:
                       context.read<BottomNavigationCubit>().selectedIndex,
                   index: 2,

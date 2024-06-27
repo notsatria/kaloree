@@ -34,96 +34,106 @@ class _HomeViewState extends State<HomeView> {
 
   @override
   Widget build(BuildContext context) {
-    return BlocBuilder<UserHomeBloc, UserHomeState>(
-      builder: (context, state) {
-        if (state is GetUserDataSuccess) {
-          final user = state.user;
-          return Scaffold(
-            resizeToAvoidBottomInset: false,
-            backgroundColor: lightColorScheme.primaryContainer,
-            body: Stack(
-              children: [
-                Align(
-                  alignment: Alignment.bottomCenter,
-                  child: Container(
-                    width: double.infinity,
-                    height: getMaxHeight(context) * 0.6,
-                    decoration: const BoxDecoration(
-                      color: Colors.white,
-                      borderRadius: BorderRadius.only(
-                        topLeft: Radius.circular(15),
-                        topRight: Radius.circular(15),
+    return MultiBlocListener(
+      listeners: [
+        BlocListener<UserHomeBloc, UserHomeState>(
+          listener: (context, state) {
+            if (state is GetUserDataSuccess) {
+              context.read<DailyCaloriesBloc>().add(GetDailyCaloriesSupplied());
+            }
+          },
+        ),
+      ],
+      child: BlocBuilder<UserHomeBloc, UserHomeState>(
+        builder: (context, userState) {
+          if (userState is GetUserDataSuccess) {
+            final user = userState.user;
+            return Scaffold(
+              resizeToAvoidBottomInset: false,
+              backgroundColor: lightColorScheme.primaryContainer,
+              body: Stack(
+                children: [
+                  Align(
+                    alignment: Alignment.bottomCenter,
+                    child: Container(
+                      width: double.infinity,
+                      height: getMaxHeight(context) * 0.6,
+                      decoration: const BoxDecoration(
+                        color: Colors.white,
+                        borderRadius: BorderRadius.only(
+                          topLeft: Radius.circular(15),
+                          topRight: Radius.circular(15),
+                        ),
                       ),
                     ),
                   ),
-                ),
-                SingleChildScrollView(
-                  padding: const EdgeInsets.symmetric(horizontal: margin_20),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.start,
-                    children: [
-                      Padding(
-                        padding: EdgeInsets.only(
-                            top:
-                                MediaQuery.of(context).padding.top + margin_12),
-                        child: _buildUserAvatarName(
-                          name: user.fullName.toString(),
-                          photoUrl: user.profilePicture.toString(),
+                  SingleChildScrollView(
+                    padding: const EdgeInsets.symmetric(horizontal: margin_20),
+                    child: Column(
+                      crossAxisAlignment: CrossAxisAlignment.start,
+                      children: [
+                        Padding(
+                          padding: EdgeInsets.only(
+                              top: MediaQuery.of(context).padding.top + margin_12),
+                          child: _buildUserAvatarName(
+                            name: user.fullName.toString(),
+                            photoUrl: user.profilePicture.toString(),
+                          ),
                         ),
-                      ),
-                      const Gap(24),
-                      Text(
-                        'Ringkasan Harian',
-                        style: interBold.copyWith(
-                          fontSize: 15,
-                          color: lightColorScheme.onPrimaryContainer,
+                        const Gap(24),
+                        Text(
+                          'Ringkasan Harian',
+                          style: interBold.copyWith(
+                            fontSize: 15,
+                            color: lightColorScheme.onPrimaryContainer,
+                          ),
                         ),
-                      ),
-                      const Gap(10),
-                      BlocBuilder<DailyCaloriesBloc, DailyCaloriesState>(
-                        builder: (context, state) {
-                          log('State: $state');
-                          if (state is GetDailyCaloriesSuppliedSuccess) {
-                            return _buildDailySummary(
-                              dailyCaloriesNeeded: user.healthProfile?.bmr ?? 0,
-                              dailyCaloriesSupplied:
-                                  state.dailyCaloriesSupplied,
-                            );
-                          } else {
-                            return _buildDailySummary(
-                              dailyCaloriesNeeded: user.healthProfile?.bmr ?? 0,
-                              dailyCaloriesSupplied: 0,
-                            );
-                          }
-                        },
-                      ),
-                      const Gap(12),
-                      _buildSubtitleText(text: 'Rekomendasi Olahraga'),
-                      const Gap(12),
-                      const SportCard(),
-                      const Gap(24),
-                      _buildSubtitleText(text: 'Rekomendasi Makanan'),
-                      const Gap(12),
-                      const FoodCard(),
-                      const Gap(50)
-                    ],
+                        const Gap(10),
+                        BlocBuilder<DailyCaloriesBloc, DailyCaloriesState>(
+                          builder: (context, dailyCaloriesState) {
+                            log('State: $dailyCaloriesState');
+                            if (dailyCaloriesState is GetDailyCaloriesSuppliedSuccess) {
+                              log('Daily Calories Supplied on Home: ${dailyCaloriesState.dailyCaloriesSupplied}');
+                              return _buildDailySummary(
+                                dailyCaloriesNeeded: user.healthProfile?.bmr ?? 0,
+                                dailyCaloriesSupplied: dailyCaloriesState.dailyCaloriesSupplied,
+                              );
+                            } else {
+                              return _buildDailySummary(
+                                dailyCaloriesNeeded: user.healthProfile?.bmr ?? 0,
+                                dailyCaloriesSupplied: 0,
+                              );
+                            }
+                          },
+                        ),
+                        const Gap(12),
+                        _buildSubtitleText(text: 'Rekomendasi Olahraga'),
+                        const Gap(12),
+                        const SportCard(),
+                        const Gap(24),
+                        _buildSubtitleText(text: 'Rekomendasi Makanan'),
+                        const Gap(12),
+                        const FoodCard(),
+                        const Gap(50)
+                      ],
+                    ),
                   ),
-                ),
-              ],
-            ),
-          );
-        } else if (state is GetUserDataFailure) {
-          return Scaffold(
-            body: ErrorView(message: state.message),
-          );
-        } else if (state is GetUserDataLoading) {
-          return const Scaffold(
-            body: Loading(),
-          );
-        } else {
-          return const ErrorView(message: 'Terjadi Kesalahan');
-        }
-      },
+                ],
+              ),
+            );
+          } else if (userState is GetUserDataFailure) {
+            return Scaffold(
+              body: ErrorView(message: userState.message),
+            );
+          } else if (userState is GetUserDataLoading) {
+            return const Scaffold(
+              body: Loading(),
+            );
+          } else {
+            return const ErrorView(message: 'Terjadi Kesalahan');
+          }
+        },
+      ),
     );
   }
 

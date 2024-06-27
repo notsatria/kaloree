@@ -1,0 +1,25 @@
+import 'package:equatable/equatable.dart';
+import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaloree/core/model/user_model.dart';
+import 'package:kaloree/core/usecase/usecase.dart';
+import 'package:kaloree/features/history/domain/usecases/get_user_data.dart';
+
+part 'get_user_data_event.dart';
+part 'get_user_data_state.dart';
+
+class GetUserDataBloc extends Bloc<GetUserDataEvent, GetUserDataState> {
+  final GetUserDataOnAnalysisUseCase _getUserDataUseCase;
+  GetUserDataBloc({required GetUserDataOnAnalysisUseCase getUserDataUseCase})
+      : _getUserDataUseCase = getUserDataUseCase,
+        super(GetUserDataInitial()) {
+    on<GetUserData>(_onGetUserData);
+  }
+
+  void _onGetUserData(GetUserData event, Emitter<GetUserDataState> emit) async {
+    final result = await _getUserDataUseCase(NoParams());
+    result.fold(
+      (failure) => emit(GetUserDataFailure(failure.message)),
+      (r) => emit(GetUserDataSuccess(r)),
+    );
+  }
+}

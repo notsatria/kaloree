@@ -3,7 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 
 class WeeklyCaloriesChart extends StatefulWidget {
-  WeeklyCaloriesChart({super.key});
+  final Map<String, double> data;
+  final double dailyCaloriesNeeded;
+
+  WeeklyCaloriesChart(
+      {super.key, required this.data, required this.dailyCaloriesNeeded});
 
   final Color barBackgroundColor =
       lightColorScheme.onSurfaceVariant.withOpacity(0.5);
@@ -24,7 +28,7 @@ class WeeklyCaloriesChartState extends State<WeeklyCaloriesChart> {
       aspectRatio: 1,
       child: Container(
         decoration: BoxDecoration(
-          color: lightColorScheme.primary,
+          color: Color(0xff6DBB8A),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Stack(
@@ -60,7 +64,7 @@ class WeeklyCaloriesChartState extends State<WeeklyCaloriesChart> {
                     child: Padding(
                       padding: const EdgeInsets.symmetric(horizontal: 8),
                       child: BarChart(
-                        mainBarData(),
+                        mainBarData(data: widget.data),
                         swapAnimationDuration: animDuration,
                       ),
                     ),
@@ -98,7 +102,7 @@ class WeeklyCaloriesChartState extends State<WeeklyCaloriesChart> {
               : const BorderSide(color: Colors.white, width: 0),
           backDrawRodData: BackgroundBarChartRodData(
             show: true,
-            toY: 20,
+            toY: widget.dailyCaloriesNeeded,
             color: widget.barBackgroundColor,
           ),
         ),
@@ -107,28 +111,36 @@ class WeeklyCaloriesChartState extends State<WeeklyCaloriesChart> {
     );
   }
 
-  List<BarChartGroupData> showingGroups() => List.generate(7, (i) {
+  List<BarChartGroupData> showingGroups({required Map<String, double> data}) =>
+      List.generate(7, (i) {
         switch (i) {
           case 0:
-            return makeGroupData(0, 20, isTouched: i == touchedIndex);
+            return makeGroupData(i, data['monday'] ?? 0,
+                isTouched: i == touchedIndex);
           case 1:
-            return makeGroupData(1, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(i, data['tuesday'] ?? 0,
+                isTouched: i == touchedIndex);
           case 2:
-            return makeGroupData(2, 5, isTouched: i == touchedIndex);
+            return makeGroupData(i, data['wednesday'] ?? 0,
+                isTouched: i == touchedIndex);
           case 3:
-            return makeGroupData(3, 7.5, isTouched: i == touchedIndex);
+            return makeGroupData(i, data['thursday'] ?? 0,
+                isTouched: i == touchedIndex);
           case 4:
-            return makeGroupData(4, 9, isTouched: i == touchedIndex);
+            return makeGroupData(i, data['friday'] ?? 0,
+                isTouched: i == touchedIndex);
           case 5:
-            return makeGroupData(5, 11.5, isTouched: i == touchedIndex);
+            return makeGroupData(i, data['saturday'] ?? 0,
+                isTouched: i == touchedIndex);
           case 6:
-            return makeGroupData(6, 6.5, isTouched: i == touchedIndex);
+            return makeGroupData(i, data['sunday'] ?? 0,
+                isTouched: i == touchedIndex);
           default:
             return throw Error();
         }
       });
 
-  BarChartData mainBarData() {
+  BarChartData mainBarData({required Map<String, double> data}) {
     return BarChartData(
       barTouchData: BarTouchData(
         touchTooltipData: BarTouchTooltipData(
@@ -218,7 +230,7 @@ class WeeklyCaloriesChartState extends State<WeeklyCaloriesChart> {
       borderData: FlBorderData(
         show: false,
       ),
-      barGroups: showingGroups(),
+      barGroups: showingGroups(data: data),
       gridData: const FlGridData(show: false),
     );
   }

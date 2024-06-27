@@ -45,6 +45,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       if (userDocSnapshot.exists) {
         Map<String, dynamic> data =
             userDocSnapshot.data() as Map<String, dynamic>;
+
         return UserModel(
           email: data['email'],
           uid: data['uid'],

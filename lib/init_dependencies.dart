@@ -23,10 +23,12 @@ import 'package:kaloree/features/catatan/domain/repositories/catatan_repository.
 import 'package:kaloree/features/catatan/domain/usecases/get_catatan_list_by_month_usecase.dart';
 import 'package:kaloree/features/catatan/presentation/bloc/catatan_bloc.dart';
 import 'package:kaloree/features/history/data/datasource/analysis_remote_datasource.dart';
-import 'package:kaloree/features/history/data/repositories/history_repository_impl.dart';
-import 'package:kaloree/features/history/domain/repositories/history_repository.dart';
+import 'package:kaloree/features/history/data/repositories/analysis_repository_impl.dart';
+import 'package:kaloree/features/history/domain/repositories/analysis_repository.dart';
 import 'package:kaloree/features/history/domain/usecases/get_total_calories_in_week.dart';
+import 'package:kaloree/features/history/domain/usecases/get_user_data.dart';
 import 'package:kaloree/features/history/presentation/bloc/get_total_calories_in_week_bloc.dart';
+import 'package:kaloree/features/history/presentation/bloc/get_user_data_bloc.dart';
 import 'package:kaloree/features/home/data/datasource/home_remote_datasource.dart';
 import 'package:kaloree/features/home/data/repositories/home_repository_impl.dart';
 import 'package:kaloree/features/home/domain/repositories/home_repository.dart';
@@ -112,7 +114,7 @@ void _initAssesment() {
   );
 
   serviceLocator.registerFactory(
-    () => GetUserDataUseCase(serviceLocator()),
+    () => GetUserDataOnAssesmentUseCase(serviceLocator()),
   );
 
   // blocs
@@ -227,10 +229,18 @@ void _initAnalysis() {
     () => GetTotalCaloriesInWeekUseCase(serviceLocator()),
   );
 
+  serviceLocator.registerFactory(
+    () => GetUserDataOnAnalysisUseCase(serviceLocator()),
+  );
+
   // blocs
   serviceLocator.registerLazySingleton(
     () => GetTotalCaloriesInWeekBloc(
       getTotalCaloriesInWeekUseCase: serviceLocator(),
     ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => GetUserDataBloc(getUserDataUseCase: serviceLocator()),
   );
 }
