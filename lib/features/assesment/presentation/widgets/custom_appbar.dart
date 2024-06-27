@@ -8,6 +8,7 @@ AppBar buildCustomAppBar({
   required BuildContext context,
   bool canPop = true,
   Color? backgroundColor,
+  List<Widget>? actions,
 }) {
   return AppBar(
     automaticallyImplyLeading: false,
@@ -21,6 +22,7 @@ AppBar buildCustomAppBar({
           )
         : null,
     title: Text(title),
+    actions: actions,
   );
 }
 

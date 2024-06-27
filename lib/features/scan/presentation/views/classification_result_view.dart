@@ -20,12 +20,14 @@ import 'package:kaloree/features/scan/presentation/widgets/custom_food_name_resu
 import 'package:kaloree/features/scan/presentation/widgets/custom_food_weight_form.dart';
 
 class ClassificationResultView extends StatefulWidget {
+  final List<MapEntry<String, double>> sortedClassifications;
   final String foodId;
   final String? imagePath;
   const ClassificationResultView({
     super.key,
     required this.imagePath,
     required this.foodId,
+    required this.sortedClassifications,
   });
 
   @override
@@ -70,7 +72,17 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
         }
       },
       child: Scaffold(
-        appBar: buildCustomAppBar(title: 'Tambah Log Kalori', context: context),
+        appBar: buildCustomAppBar(
+            title: 'Tambah Log Kalori',
+            context: context,
+            actions: [
+              IconButton(
+                onPressed: () {
+                  showClassificationResult(context);
+                },
+                icon: const Icon(Icons.info_outline),
+              ),
+            ]),
         bottomNavigationBar: buildCustomBottomAppBar(
             text: 'Simpan',
             onTap: () {
@@ -320,6 +332,35 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
               child: const Text('Yakin'),
             ),
           ],
+        );
+      },
+    );
+  }
+
+  void showClassificationResult(BuildContext context) {
+    showDialog<void>(
+      context: context,
+      builder: (BuildContext context) {
+        return AlertDialog(
+          title: const Center(child: Text('Hasil Klasifikasi')),
+          content: SingleChildScrollView(
+            child: Column(
+              children: widget.sortedClassifications
+                  .map(
+                    (e) => Container(
+                      padding: const EdgeInsets.all(8),
+                      child: Row(
+                        children: [
+                          Text(e.key),
+                          const Spacer(),
+                          Text(e.value.toStringAsFixed(2)),
+                        ],
+                      ),
+                    ),
+                  )
+                  .toList(),
+            ),
+          ),
         );
       },
     );
