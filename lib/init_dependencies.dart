@@ -36,6 +36,11 @@ import 'package:kaloree/features/home/domain/usecases/get_daily_calories_supplie
 import 'package:kaloree/features/home/domain/usecases/get_user_data_on_home_usecase.dart';
 import 'package:kaloree/features/home/presentation/bloc/daily_calories_bloc.dart';
 import 'package:kaloree/features/home/presentation/bloc/user_home_bloc.dart';
+import 'package:kaloree/features/profile/data/datasource/profile_remote_datasource.dart';
+import 'package:kaloree/features/profile/data/repositories/profile_repository_impl.dart';
+import 'package:kaloree/features/profile/domain/repositories/profile_repository.dart';
+import 'package:kaloree/features/profile/domain/usecases/get_user_data_on_profile.dart';
+import 'package:kaloree/features/profile/presentation/bloc/get_user_data_on_profile_bloc.dart';
 import 'package:kaloree/features/scan/data/datasource/image_classification_remote_datasource.dart';
 import 'package:kaloree/features/scan/data/repositories/image_classification_repository_impl.dart';
 import 'package:kaloree/features/scan/domain/repositories/image_classification_repository.dart';
@@ -59,6 +64,7 @@ Future<void> initDependencies() async {
   _initCatatan();
   _initHome();
   _initAnalysis();
+  _initProfile();
 }
 
 void _initAuth() {
@@ -242,5 +248,29 @@ void _initAnalysis() {
 
   serviceLocator.registerLazySingleton(
     () => GetUserDataBloc(getUserDataUseCase: serviceLocator()),
+  );
+}
+
+void _initProfile() {
+  //  Datasources
+  serviceLocator.registerFactory<ProfileRemoteDataSource>(
+    () => ProfileRemoteDataSourceImpl(serviceLocator(), serviceLocator()),
+  );
+
+  // repositories
+  serviceLocator.registerFactory<ProfileRepository>(
+    () => ProfileRepositoryImpl(serviceLocator()),
+  );
+
+  // usecases
+  serviceLocator.registerFactory(
+    () => GetUserDataOnProfileUseCase(serviceLocator()),
+  );
+
+  // blocs
+  serviceLocator.registerLazySingleton(
+    () => GetUserDataOnProfileBloc(
+      getUserDataOnProfileUseCase: serviceLocator(),
+    ),
   );
 }

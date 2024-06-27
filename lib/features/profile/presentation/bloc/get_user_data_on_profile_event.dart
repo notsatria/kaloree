@@ -7,4 +7,4 @@ sealed class GetUserDataOnProfileEvent extends Equatable {
   List<Object> get props => [];
 }
 
-final class ClassGetUserDataOnProfile extends GetUserDataOnProfileEvent {}
+final class GetUserDataOnProfile extends GetUserDataOnProfileEvent {}

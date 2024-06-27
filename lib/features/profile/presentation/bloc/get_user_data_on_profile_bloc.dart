@@ -24,7 +24,7 @@ class GetUserDataOnProfileBloc
 
     result.fold(
       (l) => emit(GetUserDataOnProfileFailure(l.message)),
-      (r) => GetUserDataOnProfileSuccess(r),
+      (r) => emit(GetUserDataOnProfileSuccess(r)),
     );
   }
 }
