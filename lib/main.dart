@@ -22,6 +22,7 @@ import 'package:kaloree/features/main_menu/presentation/cubit/bottom_navigation_
 import 'package:kaloree/features/main_menu/presentation/views/main_view.dart';
 import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';
+import 'package:kaloree/features/profile/presentation/bloc/get_user_data_on_profile_bloc.dart';
 import 'package:kaloree/features/scan/presentation/bloc/image_classification_bloc.dart';
 import 'package:kaloree/firebase_options.dart';
 import 'package:kaloree/init_dependencies.dart';
@@ -80,6 +81,8 @@ class MainApp extends StatelessWidget {
                   serviceLocator<GetTotalCaloriesInWeekBloc>()),
           BlocProvider<GetUserDataBloc>(
               create: (context) => serviceLocator<GetUserDataBloc>()),
+          BlocProvider<GetUserDataOnProfileBloc>(
+              create: (context) => serviceLocator<GetUserDataOnProfileBloc>()),
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme(lightScheme),
