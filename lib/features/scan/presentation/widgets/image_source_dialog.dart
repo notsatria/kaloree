@@ -80,6 +80,7 @@ class _ImageSourceDialogState extends State<ImageSourceDialog> {
           goTo(
             context,
             ClassificationResultView(
+              sortedClassifications: sortedClassifications,
               imagePath: imagePath!,
               foodId: originalIndex.toString(),
             ),
