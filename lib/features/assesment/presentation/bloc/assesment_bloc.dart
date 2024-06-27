@@ -15,13 +15,13 @@ class AssesmentBloc extends Bloc<AssesmentEvent, AssesmentState> {
   final UserSaveAssesment _userSaveAssesment;
   final UserUpdateGender _userUpdateGender;
   final UserUpdateLastAssesment _userUpdateLastAssesment;
-  final GetUserDataUseCase _getUserDataUseCase;
+  final GetUserDataOnAssesmentUseCase _getUserDataUseCase;
 
   AssesmentBloc({
     required UserSaveAssesment userSaveAssesment,
     required UserUpdateGender userUpdateGender,
     required UserUpdateLastAssesment userUpdateLastAssesment,
-    required GetUserDataUseCase getUserDataUseCase,
+    required GetUserDataOnAssesmentUseCase getUserDataUseCase,
   })  : _userSaveAssesment = userSaveAssesment,
         _userUpdateGender = userUpdateGender,
         _userUpdateLastAssesment = userUpdateLastAssesment,

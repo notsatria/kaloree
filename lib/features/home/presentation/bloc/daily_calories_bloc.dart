@@ -19,6 +19,7 @@ class DailyCaloriesBloc extends Bloc<DailyCaloriesEvent, DailyCaloriesState> {
 
   void _onGetDailyCaloriesSupplied(
       GetDailyCaloriesSupplied event, Emitter<DailyCaloriesState> emit) async {
+    emit(DailyCaloriesInitial());
     final result = await _getDailyCaloriesSuppliedUseCase(NoParams());
     result.fold(
       (failure) => emit(GetDailyCaloriesSuppliedFailure(failure.message)),
