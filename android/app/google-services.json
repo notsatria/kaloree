@@ -12,7 +12,20 @@
           "package_name": "com.notsatria.kaloree"
         }
       },
-      "oauth_client": [],
+      "oauth_client": [
+        {
+          "client_id": "218317407361-5un31kt2letam7c1ibnb600f4nir48r9.apps.googleusercontent.com",
+          "client_type": 1,
+          "android_info": {
+            "package_name": "com.notsatria.kaloree",
+            "certificate_hash": "2fff5a25341b107e6a588df386dd19cdd85d8cc1"
+          }
+        },
+        {
+          "client_id": "218317407361-9e3vn2b22is7jnfb533jiv7i778pj43m.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
       "api_key": [
         {
           "current_key": "AIzaSyBEBuS53oB8jW5U-dff-0gfkd4UXDHeHo4"
@@ -20,7 +33,12 @@
       ],
       "services": {
         "appinvite_service": {
-          "other_platform_oauth_client": []
+          "other_platform_oauth_client": [
+            {
+              "client_id": "218317407361-9e3vn2b22is7jnfb533jiv7i778pj43m.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
         }
       }
     }

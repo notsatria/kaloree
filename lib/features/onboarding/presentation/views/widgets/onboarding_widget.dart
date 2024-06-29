@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 import 'package:gap/gap.dart';
 import 'package:kaloree/core/theme/fonts.dart';
+import 'package:kaloree/core/theme/sizes.dart';
 
 class OnBoardingWidget extends StatelessWidget {
   final String title;
@@ -33,7 +34,7 @@ class OnBoardingWidget extends StatelessWidget {
               style: interMedium.copyWith(fontSize: 12, color: Colors.white),
             ),
             const Gap(8),
-            Image.asset(image, alignment: Alignment.center),
+            Image.asset(image, alignment: Alignment.center, width: getMaxWidth(context) / 1.6,),
           ],
         ),
       ),

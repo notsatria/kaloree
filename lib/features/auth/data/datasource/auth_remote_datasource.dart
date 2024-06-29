@@ -1,6 +1,7 @@
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/foundation.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kaloree/core/errors/exceptions.dart';
 import 'package:kaloree/core/model/user_model.dart' as user_model;
 
@@ -14,15 +15,21 @@ abstract interface class AuthRemoteDataSource {
     required String email,
     required String password,
   });
+
+  Future<user_model.UserModel> signInWithGoogle();
+
+  Future<void> registerWithGoogle();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
   final FirebaseAuth firebaseAuth;
   final FirebaseFirestore firebaseFirestore;
+  final GoogleSignIn googleSignIn;
 
   AuthRemoteDataSourceImpl(
     this.firebaseAuth,
     this.firebaseFirestore,
+    this.googleSignIn,
   );
 
   @override
@@ -92,4 +99,88 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw ServerException(e.toString());
     }
   }
+  
+ @override
+  Future<user_model.UserModel> signInWithGoogle() async {
+    try {
+      final googleSignInAccount = await googleSignIn.signIn();
+      final googleSignInAuthentication = await googleSignInAccount?.authentication;
+
+      if (googleSignInAuthentication == null) {
+        throw ServerException("Google sign-in authentication failed.");
+      }
+
+      final authCredential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      final authResult = await firebaseAuth.signInWithCredential(authCredential);
+      final firebaseUser = authResult.user;
+
+      if (firebaseUser == null) {
+        throw ServerException("Failed to sign in with Google.");
+      }
+
+      final userDoc = await firebaseFirestore.collection('users').doc(firebaseUser.uid).get();
+      if (userDoc.exists) {
+        return user_model.UserModel.fromMap(userDoc.data() as Map<String, dynamic>);
+      } else {
+        final newUser = user_model.UserModel(
+          uid: firebaseUser.uid,
+          email: firebaseUser.email ?? '',
+          fullName: firebaseUser.displayName ?? '',
+          isAssesmentComplete: false,
+          profilePicture: firebaseUser.photoURL ?? '',
+          updatedAt: DateTime.now().toString(),
+        );
+
+        await firebaseFirestore.collection('users').doc(firebaseUser.uid).set(newUser.toMap());
+        return newUser;
+      }
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> registerWithGoogle() async {
+    try {
+      final googleSignInAccount = await googleSignIn.signIn();
+      final googleSignInAuthentication = await googleSignInAccount?.authentication;
+
+      if (googleSignInAuthentication == null) {
+        throw ServerException("Google sign-in authentication failed.");
+      }
+
+      final authCredential = GoogleAuthProvider.credential(
+        accessToken: googleSignInAuthentication.accessToken,
+        idToken: googleSignInAuthentication.idToken,
+      );
+
+      final authResult = await firebaseAuth.signInWithCredential(authCredential);
+      final firebaseUser = authResult.user;
+
+      if (firebaseUser == null) {
+        throw ServerException("Failed to register with Google.");
+      }
+
+      final userDoc = await firebaseFirestore.collection('users').doc(firebaseUser.uid).get();
+      if (!userDoc.exists) {
+        final newUser = user_model.UserModel(
+          uid: firebaseUser.uid,
+          email: firebaseUser.email ?? '',
+          fullName: firebaseUser.displayName ?? '',
+          isAssesmentComplete: false,
+          profilePicture: firebaseUser.photoURL ?? '',
+          updatedAt: DateTime.now().toString(),
+        );
+
+        await firebaseFirestore.collection('users').doc(firebaseUser.uid).set(newUser.toMap());
+      }
+    } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+  
 }

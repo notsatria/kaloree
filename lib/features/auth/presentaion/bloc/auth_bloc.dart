@@ -1,6 +1,8 @@
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaloree/core/model/user_model.dart';
+import 'package:kaloree/core/usecase/usecase.dart';
+import 'package:kaloree/features/auth/domain/usecases/user_register_google.dart';
 import 'package:kaloree/features/auth/domain/usecases/user_sign_in.dart';
 import 'package:kaloree/features/auth/domain/usecases/user_sign_up.dart';
 
@@ -10,21 +12,28 @@ part 'auth_state.dart';
 class AuthBloc extends Bloc<AuthEvent, AuthState> {
   final UserSignUp _userSignUp;
   final UserSignIn _userSignIn;
+  final UserRegisterGoogleUseCase _userRegisterGoogleUseCase;
 
   AuthBloc({
     required UserSignUp userSignUp,
     required UserSignIn userSignIn,
+    required UserRegisterGoogleUseCase userRegisterGoogleUseCase,
   })  : _userSignUp = userSignUp,
         _userSignIn = userSignIn,
+        _userRegisterGoogleUseCase = userRegisterGoogleUseCase,
         super(AuthInitial()) {
-    on<AuthEvent>((_, emit) => emit(AuthLoading()));
+    on<AuthEvent>((_, emit) => emit(AuthInitial()));
 
     on<AuthSignUp>(_onAuthSignUp);
 
     on<AuthSignIn>(_onAuthSignIn);
+
+    on<AuthRegisterWithGoogle>(_onAuthRegisterWithGoogle);
   }
 
   void _onAuthSignUp(AuthSignUp event, Emitter<AuthState> emit) async {
+    emit(AuthLoadingOnLoadingWithEmailAndPassword());
+    
     final result = await _userSignUp(UserSignUpParams(
       email: event.email,
       password: event.password,
@@ -37,6 +46,8 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
   }
 
   void _onAuthSignIn(AuthSignIn event, Emitter<AuthState> emit) async {
+    emit(AuthLoadingOnLoadingWithGoogle());
+
     final result = await _userSignIn(UserSignInParams(
       email: event.email,
       password: event.password,
@@ -45,6 +56,16 @@ class AuthBloc extends Bloc<AuthEvent, AuthState> {
     result.fold(
       (failure) => emit(AuthFailure(failure.message)),
       (res) => emit(AuthLoginSuccess(res)),
+    );
+  }
+
+  void _onAuthRegisterWithGoogle(
+      AuthRegisterWithGoogle event, Emitter<AuthState> emit) async {
+    final result = await _userRegisterGoogleUseCase(NoParams());
+
+    result.fold(
+      (failure) => emit(AuthFailure(failure.message)),
+      (_) => emit(AuthRegisterSuccess()),
     );
   }
 }

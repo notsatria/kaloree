@@ -9,7 +9,9 @@ sealed class AuthState extends Equatable {
 
 final class AuthInitial extends AuthState {}
 
-final class AuthLoading extends AuthState {}
+final class AuthLoadingOnLoadingWithEmailAndPassword extends AuthState {}
+
+final class AuthLoadingOnLoadingWithGoogle extends AuthState {}
 
 final class AuthRegisterSuccess extends AuthState {}
 

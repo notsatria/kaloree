@@ -28,7 +28,8 @@ class _RegisterViewState extends State<RegisterView> {
   final TextEditingController passwordController = TextEditingController();
   final TextEditingController passwordConfController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
+  bool _isLoadingOnSignInWithEmailAndPassword = false;
+  bool _isLoadingOnSignInWithGoogle = false;
   bool _isObscurePass = true;
   bool _isObscureConfPass = true;
 
@@ -37,7 +38,8 @@ class _RegisterViewState extends State<RegisterView> {
     emailController.dispose();
     passwordController.dispose();
     passwordConfController.dispose();
-    _isLoading = false;
+    _isLoadingOnSignInWithEmailAndPassword = false;
+    _isLoadingOnSignInWithGoogle = false;
     super.dispose();
   }
 
@@ -93,11 +95,26 @@ class _RegisterViewState extends State<RegisterView> {
                   backgroundColor: lightColorScheme.error,
                 );
               }
-              if (state is AuthLoading) {
-                _isLoading = true;
+              if (state is AuthLoadingOnLoadingWithEmailAndPassword) {
+                setState(() {
+                  _isLoadingOnSignInWithEmailAndPassword = true;
+                });
               } else {
-                _isLoading = false;
+                setState(() {
+                  _isLoadingOnSignInWithEmailAndPassword = false;
+                });
               }
+
+              if (state is AuthLoadingOnLoadingWithGoogle) {
+                setState(() {
+                  _isLoadingOnSignInWithGoogle = true;
+                });
+              } else {
+                setState(() {
+                  _isLoadingOnSignInWithGoogle = false;
+                });
+              }
+
               if (state is AuthRegisterSuccess) {
                 goReplacementNamed(context, AppRoute.login);
                 showSnackbar(context, "Registrasi akun berhasil!");
@@ -220,7 +237,7 @@ class _RegisterViewState extends State<RegisterView> {
                       text: 'Daftar',
                       backgroundColor: onBoardingBackgroundColor,
                       textColor: Colors.white,
-                      isLoading: _isLoading,
+                      isLoading: _isLoadingOnSignInWithEmailAndPassword,
                       onTap: () {
                         if (_formKey.currentState!.validate() &&
                             passwordController.text ==
@@ -255,7 +272,10 @@ class _RegisterViewState extends State<RegisterView> {
                     const Gap(24),
                     CustomOutlinedButton(
                       text: 'Masuk dengan Google',
-                      onTap: () {},
+                      isLoading: _isLoadingOnSignInWithGoogle,
+                      onTap: () {
+                        context.read<AuthBloc>().add(AuthRegisterWithGoogle());
+                      },
                       outlineColor: lightColorScheme.outline,
                       textColor: lightColorScheme.outline,
                       outlineWidth: 2,

@@ -1,7 +1,5 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
-import 'package:font_awesome_flutter/font_awesome_flutter.dart';
-import 'package:gap/gap.dart';
 import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/views/widgets/onboarding_widget.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
@@ -38,6 +36,18 @@ class _OnBoardingViewState extends State<OnBoardingView> {
     return Scaffold(
       backgroundColor: onBoardingBackgroundColor,
       resizeToAvoidBottomInset: false,
+      bottomNavigationBar: Padding(
+        padding: const EdgeInsets.symmetric(
+            horizontal: margin_20, vertical: margin_20),
+        child: CustomFilledButton(
+          text: 'Daftar Sekarang',
+          backgroundColor: Colors.white,
+          textColor: lightColorScheme.primary,
+          onTap: () {
+            goReplacementNamed(context, AppRoute.login);
+          },
+        ),
+      ),
       body: BlocBuilder<OnBoardingCubit, int>(
         builder: (context, state) {
           final pages = context.read<OnBoardingCubit>().pages;
@@ -79,35 +89,6 @@ class _OnBoardingViewState extends State<OnBoardingView> {
                   },
                 ),
               ),
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: margin_20),
-                  child: Column(
-                    children: [
-                      CustomFilledButton(
-                        text: 'Daftar Sekarang',
-                        backgroundColor: Colors.white,
-                        textColor: lightColorScheme.primary,
-                        onTap: () {
-                          goReplacementNamed(context, AppRoute.login);
-                        },
-                      ),
-                      const Gap(13),
-                      CustomOutlinedButton(
-                        text: 'Masuk dengan Google',
-                        onTap: () {},
-                        outlineColor: Colors.white,
-                        textColor: Colors.white,
-                        outlineWidth: 3,
-                        leadingIcon: const FaIcon(
-                          FontAwesomeIcons.google,
-                          color: Colors.white,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
-              )
             ],
           );
         },

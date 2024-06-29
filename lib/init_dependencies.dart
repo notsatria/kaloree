@@ -2,6 +2,7 @@ import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_storage/firebase_storage.dart';
 import 'package:get_it/get_it.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kaloree/core/helpers/image_classification_helper.dart';
 import 'package:kaloree/features/assesment/data/datasource/assesment_remote_datasource.dart';
 import 'package:kaloree/features/assesment/data/repositories/assesment_repository_impl.dart';
@@ -14,6 +15,7 @@ import 'package:kaloree/features/assesment/presentation/bloc/assesment_bloc.dart
 import 'package:kaloree/features/auth/data/datasource/auth_remote_datasource.dart';
 import 'package:kaloree/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:kaloree/features/auth/domain/repositories/auth_repository.dart';
+import 'package:kaloree/features/auth/domain/usecases/user_register_google.dart';
 import 'package:kaloree/features/auth/domain/usecases/user_sign_in.dart';
 import 'package:kaloree/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:kaloree/features/auth/presentaion/bloc/auth_bloc.dart';
@@ -57,6 +59,7 @@ Future<void> initDependencies() async {
   serviceLocator.registerLazySingleton(() => FirebaseAuth.instance);
   serviceLocator.registerLazySingleton(() => FirebaseFirestore.instance);
   serviceLocator.registerLazySingleton(() => FirebaseStorage.instance);
+  serviceLocator.registerLazySingleton(() => GoogleSignIn());
   serviceLocator.registerLazySingleton(() => imageClassificationHelper);
   _initAuth();
   _initAssesment();
@@ -70,7 +73,7 @@ Future<void> initDependencies() async {
 void _initAuth() {
   //  Datasources
   serviceLocator.registerFactory<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(serviceLocator(), serviceLocator()),
+    () => AuthRemoteDataSourceImpl(serviceLocator(), serviceLocator(), serviceLocator()),
   );
 
   // repositories
@@ -85,12 +88,16 @@ void _initAuth() {
   serviceLocator.registerFactory(
     () => UserSignIn(serviceLocator()),
   );
+  serviceLocator.registerFactory(
+    () => UserRegisterGoogleUseCase(serviceLocator()),
+  );
 
   // blocs
   serviceLocator.registerLazySingleton(
     () => AuthBloc(
       userSignUp: serviceLocator(),
       userSignIn: serviceLocator(),
+      userRegisterGoogleUseCase: serviceLocator(),
     ),
   );
 }
