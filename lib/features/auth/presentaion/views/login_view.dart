@@ -85,7 +85,7 @@ class _LoginViewState extends State<LoginView> {
             if (state is AuthFailure) {
               showSnackbar(context, state.message);
             }
-            if (state is AuthLoading) {
+            if (state is AuthLoadingOnLoadingWithEmailAndPassword) {
               setState(() {
                 _isLoading = true;
               });

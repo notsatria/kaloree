@@ -32,3 +32,7 @@ final class AuthSignIn extends AuthEvent {
   @override
   List<Object> get props => [email, password];
 }
+
+final class AuthRegisterWithGoogle extends AuthEvent {}
+
+final class AuthSignInWithGoogle extends AuthEvent {}
