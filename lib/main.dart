@@ -20,6 +20,7 @@ import 'package:kaloree/features/home/presentation/bloc/daily_calories_bloc.dart
 import 'package:kaloree/features/home/presentation/bloc/user_home_bloc.dart';
 import 'package:kaloree/features/main_menu/presentation/cubit/bottom_navigation_cubit.dart';
 import 'package:kaloree/features/main_menu/presentation/views/main_view.dart';
+import 'package:kaloree/features/onboarding/presentation/bloc/login_with_google_bloc.dart';
 import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';
 import 'package:kaloree/features/profile/presentation/bloc/get_user_data_on_profile_bloc.dart';
@@ -83,6 +84,8 @@ class MainApp extends StatelessWidget {
               create: (context) => serviceLocator<GetUserDataBloc>()),
           BlocProvider<GetUserDataOnProfileBloc>(
               create: (context) => serviceLocator<GetUserDataOnProfileBloc>()),
+          BlocProvider<LoginWithGoogleBloc>(
+              create: (context) => serviceLocator<LoginWithGoogleBloc>()),
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme(lightScheme),

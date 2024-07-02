@@ -14,7 +14,5 @@ abstract interface class AuthRepository {
     required String password,
   });
 
-  Future<Either<Failure, void>> registerWithGoogle();
-
   Future<Either<Failure, UserModel>> signInWithGoogle();
 }

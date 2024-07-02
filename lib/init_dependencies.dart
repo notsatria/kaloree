@@ -15,7 +15,7 @@ import 'package:kaloree/features/assesment/presentation/bloc/assesment_bloc.dart
 import 'package:kaloree/features/auth/data/datasource/auth_remote_datasource.dart';
 import 'package:kaloree/features/auth/data/repositories/auth_repository_impl.dart';
 import 'package:kaloree/features/auth/domain/repositories/auth_repository.dart';
-import 'package:kaloree/features/auth/domain/usecases/user_register_google.dart';
+import 'package:kaloree/features/auth/domain/usecases/user_login_google.dart';
 import 'package:kaloree/features/auth/domain/usecases/user_sign_in.dart';
 import 'package:kaloree/features/auth/domain/usecases/user_sign_up.dart';
 import 'package:kaloree/features/auth/presentaion/bloc/auth_bloc.dart';
@@ -38,6 +38,7 @@ import 'package:kaloree/features/home/domain/usecases/get_daily_calories_supplie
 import 'package:kaloree/features/home/domain/usecases/get_user_data_on_home_usecase.dart';
 import 'package:kaloree/features/home/presentation/bloc/daily_calories_bloc.dart';
 import 'package:kaloree/features/home/presentation/bloc/user_home_bloc.dart';
+import 'package:kaloree/features/onboarding/presentation/bloc/login_with_google_bloc.dart';
 import 'package:kaloree/features/profile/data/datasource/profile_remote_datasource.dart';
 import 'package:kaloree/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:kaloree/features/profile/domain/repositories/profile_repository.dart';
@@ -73,7 +74,8 @@ Future<void> initDependencies() async {
 void _initAuth() {
   //  Datasources
   serviceLocator.registerFactory<AuthRemoteDataSource>(
-    () => AuthRemoteDataSourceImpl(serviceLocator(), serviceLocator(), serviceLocator()),
+    () => AuthRemoteDataSourceImpl(
+        serviceLocator(), serviceLocator(), serviceLocator()),
   );
 
   // repositories
@@ -89,7 +91,7 @@ void _initAuth() {
     () => UserSignIn(serviceLocator()),
   );
   serviceLocator.registerFactory(
-    () => UserRegisterGoogleUseCase(serviceLocator()),
+    () => UserLoginGoogleUseCase(serviceLocator()),
   );
 
   // blocs
@@ -97,9 +99,13 @@ void _initAuth() {
     () => AuthBloc(
       userSignUp: serviceLocator(),
       userSignIn: serviceLocator(),
-      userRegisterGoogleUseCase: serviceLocator(),
+      userLoginGoogleUseCase: serviceLocator(),
     ),
   );
+
+  serviceLocator.registerLazySingleton(() => LoginWithGoogleBloc(
+        userLoginGoogleUseCase: serviceLocator(),
+      ));
 }
 
 void _initAssesment() {
