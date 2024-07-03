@@ -74,7 +74,8 @@ class _HomeViewState extends State<HomeView> {
                       children: [
                         Padding(
                           padding: EdgeInsets.only(
-                              top: MediaQuery.of(context).padding.top + margin_12),
+                              top: MediaQuery.of(context).padding.top +
+                                  margin_12),
                           child: _buildUserAvatarName(
                             name: user.fullName.toString(),
                             photoUrl: user.profilePicture.toString(),
@@ -92,15 +93,19 @@ class _HomeViewState extends State<HomeView> {
                         BlocBuilder<DailyCaloriesBloc, DailyCaloriesState>(
                           builder: (context, dailyCaloriesState) {
                             log('State: $dailyCaloriesState');
-                            if (dailyCaloriesState is GetDailyCaloriesSuppliedSuccess) {
+                            if (dailyCaloriesState
+                                is GetDailyCaloriesSuppliedSuccess) {
                               log('Daily Calories Supplied on Home: ${dailyCaloriesState.dailyCaloriesSupplied}');
                               return _buildDailySummary(
-                                dailyCaloriesNeeded: user.healthProfile?.bmr ?? 0,
-                                dailyCaloriesSupplied: dailyCaloriesState.dailyCaloriesSupplied,
+                                dailyCaloriesNeeded:
+                                    user.healthProfile?.bmr ?? 0,
+                                dailyCaloriesSupplied:
+                                    dailyCaloriesState.dailyCaloriesSupplied,
                               );
                             } else {
                               return _buildDailySummary(
-                                dailyCaloriesNeeded: user.healthProfile?.bmr ?? 0,
+                                dailyCaloriesNeeded:
+                                    user.healthProfile?.bmr ?? 0,
                                 dailyCaloriesSupplied: 0,
                               );
                             }
@@ -157,9 +162,9 @@ class _HomeViewState extends State<HomeView> {
   Row _buildUserAvatarName({required String name, required String photoUrl}) {
     return Row(
       children: [
-        CircleAvatar(
-          radius: 24,
-          child: Image.network(photoUrl, fit: BoxFit.cover),
+        ClipRRect(
+          borderRadius: BorderRadius.circular(100),
+          child: Image.network(photoUrl, fit: BoxFit.cover, width: 50),
         ),
         const Gap(12),
         Column(

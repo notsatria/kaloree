@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:google_sign_in/google_sign_in.dart';
 import 'package:kaloree/core/model/user_model.dart';
 import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
@@ -66,11 +67,13 @@ class _ProfileViewState extends State<ProfileView> {
           const Gap(12),
           Stack(
             children: [
-              CircleAvatar(
-                backgroundColor: lightColorScheme.outlineVariant,
-                radius: 60,
-                child:
-                    Image.network('${user.profilePicture}', fit: BoxFit.cover),
+              ClipRRect(
+                borderRadius: BorderRadius.circular(100),
+                child: Image.network(
+                  '${user.profilePicture}',
+                  fit: BoxFit.cover,
+                  width: 120,
+                ),
               ),
               Positioned(
                 bottom: 0,
@@ -179,8 +182,17 @@ class _ProfileViewState extends State<ProfileView> {
   }
 
   Future<void> _logout(BuildContext context) async {
-    await FirebaseAuth.instance.signOut().then((value) {
-      goReplacementNamed(context, AppRoute.login);
-    });
+    final googleSignIn = GoogleSignIn();
+    bool isUserSignedInWithGoogle = await googleSignIn.isSignedIn();
+    try {
+      if (isUserSignedInWithGoogle) {
+        await googleSignIn.signOut();
+      }
+      await FirebaseAuth.instance.signOut().then((value) {
+        goReplacementNamed(context, AppRoute.login);
+      });
+    } catch (e) {
+      log('Error: $e');
+    }
   }
 }

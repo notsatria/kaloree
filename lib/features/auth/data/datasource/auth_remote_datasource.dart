@@ -17,8 +17,6 @@ abstract interface class AuthRemoteDataSource {
   });
 
   Future<user_model.UserModel> signInWithGoogle();
-
-  Future<void> registerWithGoogle();
 }
 
 class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
@@ -142,45 +140,4 @@ class AuthRemoteDataSourceImpl implements AuthRemoteDataSource {
       throw ServerException(e.toString());
     }
   }
-
-  @override
-  Future<void> registerWithGoogle() async {
-    try {
-      final googleSignInAccount = await googleSignIn.signIn();
-      final googleSignInAuthentication = await googleSignInAccount?.authentication;
-
-      if (googleSignInAuthentication == null) {
-        throw ServerException("Google sign-in authentication failed.");
-      }
-
-      final authCredential = GoogleAuthProvider.credential(
-        accessToken: googleSignInAuthentication.accessToken,
-        idToken: googleSignInAuthentication.idToken,
-      );
-
-      final authResult = await firebaseAuth.signInWithCredential(authCredential);
-      final firebaseUser = authResult.user;
-
-      if (firebaseUser == null) {
-        throw ServerException("Failed to register with Google.");
-      }
-
-      final userDoc = await firebaseFirestore.collection('users').doc(firebaseUser.uid).get();
-      if (!userDoc.exists) {
-        final newUser = user_model.UserModel(
-          uid: firebaseUser.uid,
-          email: firebaseUser.email ?? '',
-          fullName: firebaseUser.displayName ?? '',
-          isAssesmentComplete: false,
-          profilePicture: firebaseUser.photoURL ?? '',
-          updatedAt: DateTime.now().toString(),
-        );
-
-        await firebaseFirestore.collection('users').doc(firebaseUser.uid).set(newUser.toMap());
-      }
-    } catch (e) {
-      throw ServerException(e.toString());
-    }
-  }
-  
 }

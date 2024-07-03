@@ -6,9 +6,11 @@ import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/theme/sizes.dart';
+import 'package:kaloree/core/utils/show_snackbar.dart';
 import 'package:kaloree/core/widgets/custom_button.dart';
+import 'package:kaloree/features/onboarding/presentation/bloc/login_with_google_bloc.dart';
 import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.dart';
-import 'package:kaloree/features/onboarding/presentation/views/widgets/onboarding_widget.dart';
+import 'package:kaloree/features/onboarding/presentation/widgets/onboarding_widget.dart';
 import 'package:smooth_page_indicator/smooth_page_indicator.dart';
 
 class OnBoardingView extends StatefulWidget {
@@ -20,6 +22,7 @@ class OnBoardingView extends StatefulWidget {
 
 class _OnBoardingViewState extends State<OnBoardingView> {
   late PageController _pageController;
+  bool _isLoading = false;
 
   @override
   void initState() {
@@ -31,86 +34,118 @@ class _OnBoardingViewState extends State<OnBoardingView> {
   void dispose() {
     super.dispose();
     _pageController.dispose();
+    _isLoading = false;
   }
 
   @override
   Widget build(BuildContext context) {
-    return Scaffold(
-      backgroundColor: onBoardingBackgroundColor,
-      resizeToAvoidBottomInset: false,
-      bottomNavigationBar: Padding(
-        padding: const EdgeInsets.symmetric(
-            horizontal: margin_20, vertical: margin_20),
-        child: Column(
-          mainAxisSize: MainAxisSize.min,
-          children: [
-            CustomFilledButton(
-              text: 'Daftar Sekarang',
-              backgroundColor: Colors.white,
-              textColor: lightColorScheme.primary,
-              onTap: () {
-                goReplacementNamed(context, AppRoute.login);
-              },
-            ),
-            const Gap(15),
-            CustomOutlinedButton(
-              text: 'Masuk dengan Google',
-              onTap: () {},
-              outlineColor: lightColorScheme.outline,
-              textColor: lightColorScheme.outline,
-              outlineWidth: 2,
-              leadingIcon: FaIcon(
-                FontAwesomeIcons.google,
-                color: lightColorScheme.outline,
-              ),
-            ),
-          ],
-        ),
-      ),
-      body: BlocBuilder<OnBoardingCubit, int>(
-        builder: (context, state) {
-          final pages = context.read<OnBoardingCubit>().pages;
-          return Column(
+    return BlocListener<LoginWithGoogleBloc, LoginWithGoogleState>(
+      listener: (context, state) {
+        if (state is LoginWithGoogleLoading) {
+          setState(() {
+            _isLoading = true;
+          });
+        }
+
+        if (state is LoginWithGoogleFailure) {
+          showSnackbar(context, state.message);
+        }
+
+        if (state is LoginWithGoogleSuccess) {
+          final user = state.user;
+          if (user.isAssesmentComplete == true) {
+            goReplacementNamed(context, AppRoute.main);
+            return;
+          }
+          goReplacementNamed(context, AppRoute.personalInformation);
+          showSnackbar(
+            context,
+            'Selamat datang!',
+            backgroundColor: lightColorScheme.primary,
+          );
+        }
+      },
+      child: Scaffold(
+        backgroundColor: onBoardingBackgroundColor,
+        resizeToAvoidBottomInset: false,
+        bottomNavigationBar: Padding(
+          padding: const EdgeInsets.symmetric(
+              horizontal: margin_20, vertical: margin_20),
+          child: Column(
+            mainAxisSize: MainAxisSize.min,
             children: [
-              Expanded(
-                child: Padding(
-                  padding: const EdgeInsets.symmetric(horizontal: margin_20),
-                  child: Row(
-                    children: [
-                      SmoothPageIndicator(
-                        controller: _pageController,
-                        count: pages.length,
-                        effect: ExpandingDotsEffect(
-                            activeDotColor: Colors.white,
-                            dotColor: lightColorScheme.outline,
-                            dotHeight: 8),
-                      ),
-                      const Spacer(),
-                      _buildSkipButton(),
-                    ],
-                  ),
-                ),
+              CustomFilledButton(
+                text: 'Daftar Sekarang',
+                backgroundColor: Colors.white,
+                textColor: lightColorScheme.primary,
+                onTap: () {
+                  goReplacementNamed(context, AppRoute.login);
+                },
               ),
-              Expanded(
-                flex: 4,
-                child: PageView.builder(
-                  controller: _pageController,
-                  itemCount: pages.length,
-                  itemBuilder: (context, index) => Padding(
-                    padding: const EdgeInsets.symmetric(horizontal: margin_20),
-                    child: OnBoardingWidget(
-                        title: pages[state]['title'],
-                        description: pages[state]['description'],
-                        image: pages[state]['image']),
-                  ),
-                  onPageChanged: (value) {
-                    context.read<OnBoardingCubit>().nextPage(value);
-                  },
+              const Gap(15),
+              CustomOutlinedButton(
+                text: 'Masuk dengan Google',
+                onTap: () {
+                  context.read<LoginWithGoogleBloc>().add(LoginWithGoogle());
+                },
+                isLoading: _isLoading,
+                outlineColor: lightColorScheme.outline,
+                textColor: lightColorScheme.outline,
+                outlineWidth: 2,
+                leadingIcon: FaIcon(
+                  FontAwesomeIcons.google,
+                  color: lightColorScheme.outline,
                 ),
               ),
             ],
-          );
-        },
+          ),
+        ),
+        body: BlocBuilder<OnBoardingCubit, int>(
+          builder: (context, state) {
+            final pages = context.read<OnBoardingCubit>().pages;
+            return Column(
+              children: [
+                Expanded(
+                  child: Padding(
+                    padding: const EdgeInsets.symmetric(horizontal: margin_20),
+                    child: Row(
+                      children: [
+                        SmoothPageIndicator(
+                          controller: _pageController,
+                          count: pages.length,
+                          effect: ExpandingDotsEffect(
+                              activeDotColor: Colors.white,
+                              dotColor: lightColorScheme.outline,
+                              dotHeight: 8),
+                        ),
+                        const Spacer(),
+                        _buildSkipButton(),
+                      ],
+                    ),
+                  ),
+                ),
+                Expanded(
+                  flex: 4,
+                  child: PageView.builder(
+                    controller: _pageController,
+                    itemCount: pages.length,
+                    itemBuilder: (context, index) => Padding(
+                      padding:
+                          const EdgeInsets.symmetric(horizontal: margin_20),
+                      child: OnBoardingWidget(
+                          title: pages[state]['title'],
+                          description: pages[state]['description'],
+                          image: pages[state]['image']),
+                    ),
+                    onPageChanged: (value) {
+                      context.read<OnBoardingCubit>().nextPage(value);
+                    },
+                  ),
+                ),
+              ],
+            );
+          },
+        ),
       ),
     );
   }

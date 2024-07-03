@@ -274,7 +274,7 @@ class _RegisterViewState extends State<RegisterView> {
                       text: 'Masuk dengan Google',
                       isLoading: _isLoadingOnSignInWithGoogle,
                       onTap: () {
-                        context.read<AuthBloc>().add(AuthRegisterWithGoogle());
+                        context.read<AuthBloc>().add(AuthLoginWithGoogle());
                       },
                       outlineColor: lightColorScheme.outline,
                       textColor: lightColorScheme.outline,

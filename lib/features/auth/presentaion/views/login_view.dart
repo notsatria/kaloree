@@ -27,14 +27,16 @@ class _LoginViewState extends State<LoginView> {
   TextEditingController emailController = TextEditingController();
   TextEditingController passwordController = TextEditingController();
   final _formKey = GlobalKey<FormState>();
-  bool _isLoading = false;
+  bool _isLoadingSignInWithEmail = false;
+  bool _isLoadingOnSignInWithGoogle = false;
   bool _isObscure = true;
 
   @override
   void dispose() {
     emailController.dispose();
     passwordController.dispose();
-    _isLoading = false;
+    _isLoadingSignInWithEmail = false;
+    _isLoadingOnSignInWithGoogle = false;
     super.dispose();
   }
 
@@ -87,13 +89,24 @@ class _LoginViewState extends State<LoginView> {
             }
             if (state is AuthLoadingOnLoadingWithEmailAndPassword) {
               setState(() {
-                _isLoading = true;
+                _isLoadingSignInWithEmail = true;
               });
             } else {
               setState(() {
-                _isLoading = false;
+                _isLoadingSignInWithEmail = false;
               });
             }
+
+            if (state is AuthLoadingOnLoadingWithGoogle) {
+              setState(() {
+                _isLoadingOnSignInWithGoogle = true;
+              });
+            } else {
+              setState(() {
+                _isLoadingOnSignInWithGoogle = false;
+              });
+            }
+
             if (state is AuthLoginSuccess) {
               final user = state.user;
               if (user.isAssesmentComplete == true) {
@@ -195,7 +208,7 @@ class _LoginViewState extends State<LoginView> {
                   ),
                   const Gap(20),
                   CustomFilledButton(
-                    isLoading: _isLoading,
+                    isLoading: _isLoadingSignInWithEmail,
                     text: 'Masuk',
                     backgroundColor: onBoardingBackgroundColor,
                     textColor: Colors.white,
@@ -231,7 +244,10 @@ class _LoginViewState extends State<LoginView> {
                   const Gap(24),
                   CustomOutlinedButton(
                     text: 'Masuk dengan Google',
-                    onTap: () {},
+                    onTap: () {
+                      context.read<AuthBloc>().add(AuthLoginWithGoogle());
+                    },
+                    isLoading: _isLoadingOnSignInWithGoogle,
                     outlineColor: lightColorScheme.outline,
                     textColor: lightColorScheme.outline,
                     outlineWidth: 2,
