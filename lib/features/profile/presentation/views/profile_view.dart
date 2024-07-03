@@ -118,9 +118,12 @@ class _ProfileViewState extends State<ProfileView> {
                   icon: Icons.person_outline,
                   text: 'Edit Profile',
                 ),
-                const ProfileListTile(
-                  icon: Icons.settings,
-                  text: 'Pengaturan',
+                ProfileListTile(
+                  icon: Icons.book,
+                  text: 'Hasil Asesmen',
+                  onTap: () {
+                    goToNamed(context, AppRoute.assesmentResult);
+                  },
                 ),
                 const ProfileListTile(
                   icon: Icons.privacy_tip,
