@@ -36,7 +36,7 @@ void main() async {
   );
   await initDependencies();
 
-  initializeDateFormatting('id_ID', null);
+  await initializeDateFormatting('id_ID');
 
   runApp(const MainApp());
 }

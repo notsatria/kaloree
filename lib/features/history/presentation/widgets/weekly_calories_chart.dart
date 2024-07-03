@@ -27,14 +27,12 @@ class WeeklyCaloriesChartState extends State<WeeklyCaloriesChart> {
 
   @override
   Widget build(BuildContext context) {
-    List<String> formattedStartWeekDate = [
-      formatDateTo(date: startWeekDate, format: 'd'),
-      formatDateTo(date: startWeekDate, format: 'MMM')
-    ];
-    List<String> formattedEndWeekDate = [
-      formatDateTo(date: endWeekDate, format: 'd'),
-      formatDateTo(date: endWeekDate, format: 'MMM')
-    ];
+    String formattedStartWeekDate =
+        formatDateTo(date: startWeekDate, format: 'MMMMd');
+
+    String formattedEndWeekDate =
+        formatDateTo(date: endWeekDate, format: 'MMMMd');
+
     return AspectRatio(
       aspectRatio: 1,
       child: Container(
@@ -61,7 +59,7 @@ class WeeklyCaloriesChartState extends State<WeeklyCaloriesChart> {
                       ),
                       const Spacer(),
                       Text(
-                        '${formattedStartWeekDate[0]} ${formattedStartWeekDate[1]} - ${formattedEndWeekDate[0]} ${formattedEndWeekDate[1]}',
+                        '$formattedStartWeekDate - $formattedEndWeekDate ',
                         style: const TextStyle(
                           color: Colors.white,
                           fontSize: 20,

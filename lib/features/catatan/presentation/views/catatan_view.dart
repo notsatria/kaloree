@@ -1,9 +1,9 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/fonts.dart';
+import 'package:kaloree/core/utils/date_format.dart';
 import 'package:kaloree/core/widgets/loading.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_error_view.dart';
 import 'package:kaloree/features/catatan/presentation/bloc/catatan_bloc.dart';
@@ -17,7 +17,7 @@ class CatatanView extends StatefulWidget {
 }
 
 class _CatatanViewState extends State<CatatanView> {
-  final thisMonth = DateFormat('MMMM').format(DateTime.now());
+  final thisMonth = formatDateTo(date: DateTime.now(), format: 'MMMM');
   @override
   void initState() {
     super.initState();
@@ -54,8 +54,9 @@ class _CatatanViewState extends State<CatatanView> {
                             child: ExpansionTile(
                               initiallyExpanded: true,
                               title: _buildHeaderText(
-                                  title: DateFormat('EEEE, d MMMM yyyy')
-                                      .format(DateTime.parse(dayEntry.key))),
+                                  title: formatDateTo(
+                                      date: DateTime.parse(dayEntry.key),
+                                      format: 'EEEE, d MMMM yyyy')),
                               children:
                                   dayEntry.value.map((classificationResult) {
                                 return CatatanItemCard(
