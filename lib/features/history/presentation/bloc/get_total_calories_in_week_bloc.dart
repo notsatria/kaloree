@@ -18,6 +18,7 @@ class GetTotalCaloriesInWeekBloc
 
   void _onGetTotalCaloriesInWeek(GetTotalCaloriesInWeek event,
       Emitter<GetTotalCaloriesInWeekState> emit) async {
+    emit(GetTotalCaloriesInWeekInitial());
     final result = await _getTotalCaloriesInWeekUseCase(NoParams());
 
     result.fold(
