@@ -80,7 +80,7 @@ class _CatatanViewState extends State<CatatanView> {
         return SafeArea(
             child: Scaffold(
           appBar: _buildCatatanAppBar(),
-          body: ErrorView(message: state.message),
+          body: const ErrorView(message: 'Catatan masih kosong!'),
         ));
       } else {
         return SafeArea(

@@ -7,14 +7,14 @@ import 'package:kaloree/features/history/presentation/bloc/get_total_calories_in
 import 'package:kaloree/features/history/presentation/bloc/get_user_data_bloc.dart';
 import 'package:kaloree/features/history/presentation/widgets/weekly_calories_chart.dart';
 
-class HistoryView extends StatefulWidget {
-  const HistoryView({super.key});
+class AnalysisView extends StatefulWidget {
+  const AnalysisView({super.key});
 
   @override
-  State<HistoryView> createState() => _HistoryViewState();
+  State<AnalysisView> createState() => _AnalysisViewState();
 }
 
-class _HistoryViewState extends State<HistoryView> {
+class _AnalysisViewState extends State<AnalysisView> {
   @override
   void initState() {
     super.initState();
@@ -37,7 +37,7 @@ class _HistoryViewState extends State<HistoryView> {
       child:
           BlocBuilder<GetTotalCaloriesInWeekBloc, GetTotalCaloriesInWeekState>(
         builder: (context, state) {
-          log("State in HistoryView: $state");
+          log("State in AnalysisView: $state");
           if (state is GetTotalCaloriesInWeekSuccess) {
             return _buildWeeklyCaloriesChartSuccess(state.weeklyCalories);
           } else {
