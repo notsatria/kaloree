@@ -220,7 +220,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 const Gap(2),
                 Text(
-                  '${dailyCaloriesNeeded.toStringAsFixed(0)} kal',
+                  '${dailyCaloriesNeeded.toStringAsFixed(0)} kkal',
                   style: interBold.copyWith(fontSize: 14, color: Colors.white),
                 ),
                 const Gap(18),
@@ -233,7 +233,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 const Gap(2),
                 Text(
-                  '${dailyCaloriesSupplied.toStringAsFixed(0)} kal',
+                  '${dailyCaloriesSupplied.toStringAsFixed(0)} kkal',
                   style: interBold.copyWith(fontSize: 14, color: Colors.white),
                 )
               ],

@@ -1,6 +1,7 @@
 import 'package:fl_chart/fl_chart.dart';
 import 'package:flutter/material.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
+import 'package:kaloree/core/utils/date_format.dart';
 
 class WeeklyCaloriesChart extends StatefulWidget {
   final Map<String, double> data;
@@ -21,14 +22,24 @@ class WeeklyCaloriesChart extends StatefulWidget {
 class WeeklyCaloriesChartState extends State<WeeklyCaloriesChart> {
   final Duration animDuration = const Duration(milliseconds: 250);
   int touchedIndex = -1;
+  DateTime startWeekDate = getStartOfWeek(DateTime.now());
+  DateTime endWeekDate = getEndOfWeek(DateTime.now());
 
   @override
   Widget build(BuildContext context) {
+    List<String> formattedStartWeekDate = [
+      formatDateTo(date: startWeekDate, format: 'd'),
+      formatDateTo(date: startWeekDate, format: 'MMM')
+    ];
+    List<String> formattedEndWeekDate = [
+      formatDateTo(date: endWeekDate, format: 'd'),
+      formatDateTo(date: endWeekDate, format: 'MMM')
+    ];
     return AspectRatio(
       aspectRatio: 1,
       child: Container(
         decoration: BoxDecoration(
-          color: Color(0xff6DBB8A),
+          color: const Color(0xff6DBB8A),
           borderRadius: BorderRadius.circular(16),
         ),
         child: Stack(
@@ -38,13 +49,26 @@ class WeeklyCaloriesChartState extends State<WeeklyCaloriesChart> {
               child: Column(
                 crossAxisAlignment: CrossAxisAlignment.stretch,
                 children: <Widget>[
-                  const Text(
-                    'Mingguan',
-                    style: TextStyle(
-                      color: Colors.white,
-                      fontSize: 20,
-                      fontWeight: FontWeight.bold,
-                    ),
+                  Row(
+                    children: [
+                      const Text(
+                        'Mingguan',
+                        style: TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                      const Spacer(),
+                      Text(
+                        '${formattedStartWeekDate[0]} ${formattedStartWeekDate[1]} - ${formattedEndWeekDate[0]} ${formattedEndWeekDate[1]}',
+                        style: const TextStyle(
+                          color: Colors.white,
+                          fontSize: 20,
+                          fontWeight: FontWeight.bold,
+                        ),
+                      ),
+                    ],
                   ),
                   const SizedBox(
                     height: 4,
