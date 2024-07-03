@@ -233,13 +233,13 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
               Expanded(
                 child: _buildCustomCard(
                     iconPath: iconCalorie,
-                    text: '${foodCalories.toStringAsFixed(2)}kal'),
+                    text: '${foodCalories.toStringAsFixed(1)}kkal'),
               ),
               const Gap(8),
               Expanded(
                 child: _buildCustomCard(
                     iconPath: iconCarbs,
-                    text: '${foodCarbs.toStringAsFixed(2)}gr'),
+                    text: '${foodCarbs.toStringAsFixed(1)}gr'),
               ),
             ],
           ),
@@ -266,12 +266,12 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
               Expanded(
                 child: _buildCustomCard(
                     iconPath: iconProtein,
-                    text: '${foodProtein.toStringAsFixed(2)}gr'),
+                    text: '${foodProtein.toStringAsFixed(1)}gr'),
               ),
               const Gap(8),
               Expanded(
                 child: _buildCustomCard(
-                    iconPath: iconFat, text: '${foodFat.toStringAsFixed(2)}gr'),
+                    iconPath: iconFat, text: '${foodFat.toStringAsFixed(1)}gr'),
               ),
             ],
           ),

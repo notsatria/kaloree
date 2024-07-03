@@ -139,11 +139,6 @@ class CatatanItemCard extends StatelessWidget {
   }
 
   String convertCalories(double calories) {
-    if (calories >= 1000) {
-      calories = calories / 1000;
-      return '${calories.toStringAsFixed(1)} kkal';
-    } else {
-      return '${calories.toStringAsFixed(1)} kal';
-    }
+    return '${calories.toStringAsFixed(1)} kkal';
   }
 }
