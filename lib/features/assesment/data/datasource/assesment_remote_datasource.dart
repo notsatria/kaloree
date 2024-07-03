@@ -270,13 +270,15 @@ class AssesmentRemoteDataSourceImpl implements AssesmentRemoteDataSource {
   }
 
   String _classifyNutritionByBMI(double bmi) {
-    if (bmi < 18.5) {
+    if (bmi < 16.9) {
+      return 'Sangat Kurus';
+    } else if (bmi >= 17 && bmi < 18.4) {
       return 'Kurus';
     } else if (bmi >= 18.5 && bmi < 24.9) {
       return 'Normal';
-    } else if (bmi >= 25 && bmi < 29.9) {
+    } else if (bmi >= 25 && bmi < 26.9) {
       return 'Gemuk';
-    } else if (bmi >= 30) {
+    } else if (bmi >= 27) {
       return 'Obesitas';
     } else {
       return 'Invalid BMI';
