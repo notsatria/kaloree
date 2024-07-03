@@ -17,4 +17,14 @@ class ProfileRepositoryImpl implements ProfileRepository {
       return left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> editProfile({required String fullName}) async {
+    try {
+      final result = await remoteDataSource.editProfile(fullName: fullName);
+      return right(result);
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 }

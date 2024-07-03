@@ -8,6 +8,7 @@ import 'package:kaloree/core/model/user_model.dart';
 
 abstract interface class ProfileRemoteDataSource {
   Future<UserModel> getUserData();
+  Future<void> editProfile({required String fullName});
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -56,6 +57,23 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       }
     } catch (e) {
       log("Error on getUser: $e");
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> editProfile({required String fullName}) async {
+    try {
+      final user = firebaseAuth.currentUser;
+      if (user == null) {
+        throw ServerException("User not authenticated");
+      }
+      DocumentReference userDoc =
+          firebaseFirestore.collection("users").doc(user.uid);
+
+      userDoc.update({"fullName": fullName});
+    } catch (e) {
+      log("Error on editProfile: $e");
       throw ServerException(e.toString());
     }
   }
