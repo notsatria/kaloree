@@ -13,6 +13,7 @@ import 'package:kaloree/core/theme/sizes.dart';
 import 'package:kaloree/core/widgets/loading.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_error_view.dart';
 import 'package:kaloree/features/profile/presentation/bloc/get_user_data_on_profile_bloc.dart';
+import 'package:kaloree/features/profile/presentation/views/edit_profile_view.dart';
 import 'package:kaloree/features/profile/presentation/widgets/profile_list_tile.dart';
 
 class ProfileView extends StatefulWidget {
@@ -22,10 +23,29 @@ class ProfileView extends StatefulWidget {
   State<ProfileView> createState() => _ProfileViewState();
 }
 
-class _ProfileViewState extends State<ProfileView> {
+class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
   @override
   void initState() {
     super.initState();
+    WidgetsBinding.instance.addObserver(this);
+    context.read<GetUserDataOnProfileBloc>().add(GetUserDataOnProfile());
+  }
+
+  @override
+  void dispose() {
+    WidgetsBinding.instance.removeObserver(this);
+    super.dispose();
+  }
+
+  @override
+  void didChangeAppLifecycleState(AppLifecycleState state) {
+    if (state == AppLifecycleState.resumed) {
+      onResumed();
+    }
+  }
+
+  void onResumed() {
+    log('On resume');
     context.read<GetUserDataOnProfileBloc>().add(GetUserDataOnProfile());
   }
 
@@ -65,35 +85,13 @@ class _ProfileViewState extends State<ProfileView> {
       body: Column(
         children: [
           const Gap(12),
-          Stack(
-            children: [
-              ClipRRect(
-                borderRadius: BorderRadius.circular(100),
-                child: Image.network(
-                  '${user.profilePicture}',
-                  fit: BoxFit.cover,
-                  width: 120,
-                ),
-              ),
-              Positioned(
-                bottom: 0,
-                right: 0,
-                child: Container(
-                  width: 40,
-                  height: 40,
-                  decoration: BoxDecoration(
-                    color: lightColorScheme.primary,
-                    border: Border.all(width: 4, color: Colors.white),
-                    shape: BoxShape.circle,
-                  ),
-                  child: const Icon(
-                    Icons.edit,
-                    size: 20,
-                    color: Colors.white,
-                  ),
-                ),
-              ),
-            ],
+          ClipRRect(
+            borderRadius: BorderRadius.circular(100),
+            child: Image.network(
+              '${user.profilePicture}',
+              fit: BoxFit.cover,
+              width: 120,
+            ),
           ),
           const Gap(20),
           Text(
@@ -114,9 +112,23 @@ class _ProfileViewState extends State<ProfileView> {
             ),
             child: Column(
               children: [
-                const ProfileListTile(
+                ProfileListTile(
                   icon: Icons.person_outline,
                   text: 'Edit Profile',
+                  onTap: () async {
+                    final result = await Navigator.push(
+                      context,
+                      MaterialPageRoute(
+                        builder: (context) => EditProfileView(user: user),
+                      ),
+                    );
+
+                    if (result == true) {
+                      context
+                          .read<GetUserDataOnProfileBloc>()
+                          .add(GetUserDataOnProfile());
+                    }
+                  },
                 ),
                 ProfileListTile(
                   icon: Icons.book,
