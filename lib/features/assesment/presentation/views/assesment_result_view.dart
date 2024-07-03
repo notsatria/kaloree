@@ -82,6 +82,7 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
                         healthPurpose: healthProfile.healthPurpose,
                         nutritionClassification:
                             healthProfile.nutritionClassification!,
+                        gender: healthProfile.gender,
                       ),
                     ),
                   ),
@@ -176,10 +177,12 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
     );
   }
 
-  Column _buildClassificationActivitiesResult(
-      {required int activityStatus,
-      required int healthPurpose,
-      required String nutritionClassification}) {
+  Column _buildClassificationActivitiesResult({
+    required int activityStatus,
+    required int healthPurpose,
+    required String nutritionClassification,
+    required int gender,
+  }) {
     ActivityStatus? activityStatusResult;
     HealthPurpose? healthPurposeResult;
     switch (activityStatus) {
@@ -256,8 +259,11 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
                     value: healthPurposeResult.label,
                   ),
                   const Gap(15),
-                  InkWell(
-                    onTap: () {},
+                  GestureDetector(
+                    onTap: () {
+                      _showFormulaDialog(context,
+                          gender: gender, activityStatus: activityStatus);
+                    },
                     child: _buildClassificationResult(
                       image: iconMathFormula,
                       title: 'Tekan untuk pelajari',
@@ -385,5 +391,104 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
         ),
       ],
     );
+  }
+
+  void _showFormulaDialog(BuildContext context,
+      {required int gender, required int activityStatus}) {
+    String genderName = 'Laki-laki';
+    String bmrByGender = 'BMR = 66 + (13.7 x BB) + (5 x TB) - (6.78 x U)';
+    String activityStatusFactor = '1.2';
+    ActivityStatus? activityStatusResult;
+    if (gender == 0) {
+      genderName = 'Laki-laki';
+      bmrByGender = 'BMR = 66 + (13.7 x BB) + (5 x TB) - (6.78 x U)';
+    } else {
+      genderName = 'Perempuan';
+      bmrByGender = 'BMR = 655 + (9.6 x BB) + (1.8 x TB) - (4.7 x U)';
+    }
+
+    switch (activityStatus) {
+      case 0:
+        activityStatusResult = ActivityStatus.sangatJarang;
+        activityStatusFactor = '1.2';
+        break;
+      case 1:
+        activityStatusResult = ActivityStatus.jarang;
+        activityStatusFactor = '1.375';
+        break;
+      case 2:
+        activityStatusResult = ActivityStatus.normal;
+        activityStatusFactor = '1.55';
+        break;
+      case 3:
+        activityStatusResult = ActivityStatus.sering;
+        activityStatusFactor = '1.725';
+        break;
+      case 4:
+        activityStatusResult = ActivityStatus.sangatSering;
+        activityStatusFactor = '1.9';
+        break;
+      default:
+        activityStatusResult = ActivityStatus.normal;
+        break;
+    }
+    showDialog(
+        context: context,
+        builder: (context) {
+          return AlertDialog(
+            title: Center(
+              child: Text(
+                'Rumus Kebutuhan Kalori Harian',
+                style: interBold.copyWith(fontSize: 16),
+              ),
+            ),
+            content: Container(
+              padding: const EdgeInsets.all(8),
+              child: Column(
+                mainAxisSize: MainAxisSize.min,
+                crossAxisAlignment: CrossAxisAlignment.start,
+                children: [
+                  Text(
+                    'Teori Harris Benedict',
+                    style: interSemiBold,
+                  ),
+                  const Gap(4),
+                  Text(
+                    'Basal Metabolic Rate (BMR) merupakan kebutuhan energi minimal yang diperlukan tubuh untuk mempertahankan fungsinya.',
+                    style: interRegular,
+                  ),
+                  const Gap(8),
+                  Text('Rumus (Gender $genderName):'),
+                  Text(
+                    bmrByGender,
+                    style: interBold,
+                  ),
+                  const Gap(8),
+                  Text(
+                    'Total Kalori = Faktor aktivitas fisik x BMR',
+                    style: interBold,
+                  ),
+                  Text(
+                      'Faktor aktivitas fisik Anda = $activityStatusFactor (${activityStatusResult!.label})'),
+                  Text(
+                    'Total Kalori = $activityStatusFactor x BMR',
+                    style: interBold,
+                  ),
+                  const Gap(4),
+                  const Divider(),
+                  const Gap(4),
+                  Text(
+                    'Keterangan',
+                    style: interSemiBold,
+                  ),
+                  const Text('BMR = Basal Metabolic Rate'),
+                  const Text('BB = Berat Badan (kg)'),
+                  const Text('TB = Tinggi Badan (cm)'),
+                  const Text('U = Umur (tahun)'),
+                ],
+              ),
+            ),
+          );
+        });
   }
 }
