@@ -2,10 +2,17 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:gap/gap.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
+import 'package:kaloree/core/theme/fonts.dart';
+import 'package:kaloree/core/utils/date_format.dart';
+import 'package:kaloree/core/widgets/loading.dart';
+import 'package:kaloree/features/history/data/model/nutrition_history.dart';
+import 'package:kaloree/features/history/presentation/bloc/get_nutrition_in_month_bloc.dart';
 import 'package:kaloree/features/history/presentation/bloc/get_total_calories_in_week_bloc.dart';
 import 'package:kaloree/features/history/presentation/bloc/get_user_data_bloc.dart';
-import 'package:kaloree/features/history/presentation/widgets/weekly_calories_chart.dart';
+import 'package:kaloree/features/history/presentation/widgets/nutritions_pie_chart.dart';
+import 'package:kaloree/features/history/presentation/widgets/weekly_calories_bar_chart.dart';
 
 class AnalysisView extends StatefulWidget {
   const AnalysisView({super.key});
@@ -20,6 +27,7 @@ class _AnalysisViewState extends State<AnalysisView> {
     super.initState();
     context.read<GetTotalCaloriesInWeekBloc>().add(GetTotalCaloriesInWeek());
     context.read<GetUserDataBloc>().add(GetUserData());
+    context.read<GetNutritionInMonthBloc>().add(GetNutritionInMonth());
   }
 
   @override
@@ -58,6 +66,7 @@ class _AnalysisViewState extends State<AnalysisView> {
   }
 
   SafeArea _buildWeeklyCaloriesChartSuccess(Map<String, double> data) {
+    final thisMonth = formatDateTo(date: DateTime.now(), format: 'MMMM');
     double dailyCaloriesNeeded = 0;
     final userDataBlocState = context.watch<GetUserDataBloc>().state;
     if (userDataBlocState is GetUserDataSuccess) {
@@ -65,17 +74,48 @@ class _AnalysisViewState extends State<AnalysisView> {
     }
     return SafeArea(
       child: Scaffold(
+        resizeToAvoidBottomInset: false,
         appBar: _buildHistoryAppBar(),
-        body: Padding(
-          padding: const EdgeInsets.all(12.0),
-          child: Column(
-            children: [
-              WeeklyCaloriesChart(
-                data: data,
-                dailyCaloriesNeeded: dailyCaloriesNeeded,
+        body: ListView(
+          padding: const EdgeInsets.all(12),
+          children: [
+            WeeklyCaloriesBarChart(
+              data: data,
+              dailyCaloriesNeeded: dailyCaloriesNeeded,
+            ),
+            const Gap(40),
+            Center(
+              child: Text(
+                'Grafik Sebaran Nutrisi',
+                style: interBold.copyWith(fontSize: 20, color: Colors.black54),
               ),
-            ],
-          ),
+            ),
+            Center(
+              child: Text(
+                'Bulan $thisMonth',
+                style: interBold.copyWith(fontSize: 16, color: Colors.black54),
+              ),
+            ),
+            BlocBuilder<GetNutritionInMonthBloc, GetNutritionInMonthState>(
+              builder: (context, state) {
+                log('State GetNutritionInMonth: $state');
+                if (state is GetNutritionInMonthSuccess) {
+                  return NutritionHistoryPieChart(
+                    nutritionHistory: state.nutritionHistory,
+                  );
+                } else if (state is GetNutritionInMonthLoading) {
+                  return const Loading();
+                } else {
+                  final nutritionHistory = NutritionHistory(
+                      calories: 0, protein: 0, fat: 0, carbs: 0);
+                  return NutritionHistoryPieChart(
+                    nutritionHistory: nutritionHistory,
+                  );
+                }
+              },
+            ),
+            Gap(MediaQuery.of(context).padding.top),
+          ],
         ),
       ),
     );
