@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:fpdart/fpdart.dart';
 import 'package:kaloree/core/errors/failure.dart';
 import 'package:kaloree/core/model/user_model.dart';
@@ -12,6 +14,18 @@ class ProfileRepositoryImpl implements ProfileRepository {
   Future<Either<Failure, UserModel>> getUserData() async {
     try {
       final result = await remoteDataSource.getUserData();
+      return right(result);
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
+
+  @override
+  Future<Either<Failure, void>> editProfile(
+      {required String fullName, File? image}) async {
+    try {
+      final result =
+          await remoteDataSource.editProfile(fullName: fullName, image: image);
       return right(result);
     } catch (e) {
       return left(Failure(e.toString()));

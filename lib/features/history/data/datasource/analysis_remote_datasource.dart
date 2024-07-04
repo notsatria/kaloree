@@ -22,7 +22,7 @@ class AnalysisRemoteDataSourceImpl implements AnalysisRemoteDataSource {
   @override
   Future<Map<String, double>> getTotalCaloriesInWeek() async {
     DateTime now = DateTime.now();
-    DateTime startOfWeek = _getStartOfWeek(now);
+    DateTime startOfWeek = getStartOfWeek(now);
 
     final uid = firebaseAuth.currentUser!.uid;
 
@@ -40,7 +40,7 @@ class AnalysisRemoteDataSourceImpl implements AnalysisRemoteDataSource {
     for (int i = 0; i < 7; i++) {
       DateTime day = startOfWeek.add(Duration(days: i));
       String dayFormatted = formatDateTo(date: day);
-      String dayName = _getDayName(day.weekday);
+      String dayName = getDayName(day.weekday);
 
       log('Day formatted: $dayFormatted');
 
@@ -127,28 +127,6 @@ class AnalysisRemoteDataSourceImpl implements AnalysisRemoteDataSource {
     }
   }
 
-  DateTime _getStartOfWeek(DateTime date) {
-    return date.subtract(Duration(days: date.weekday - 1));
-  }
 
-  String _getDayName(int weekday) {
-    switch (weekday) {
-      case DateTime.monday:
-        return 'monday';
-      case DateTime.tuesday:
-        return 'tuesday';
-      case DateTime.wednesday:
-        return 'wednesday';
-      case DateTime.thursday:
-        return 'thursday';
-      case DateTime.friday:
-        return 'friday';
-      case DateTime.saturday:
-        return 'saturday';
-      case DateTime.sunday:
-        return 'sunday';
-      default:
-        return '';
-    }
-  }
+  
 }

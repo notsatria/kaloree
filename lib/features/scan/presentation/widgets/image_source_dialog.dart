@@ -131,6 +131,7 @@ class _ImageSourceDialogState extends State<ImageSourceDialog> {
               cleanResult();
               final result = await imagePicker.pickImage(
                 source: ImageSource.gallery,
+                imageQuality: 50,
               );
 
               imagePath = result?.path;
@@ -147,6 +148,7 @@ class _ImageSourceDialogState extends State<ImageSourceDialog> {
                 cleanResult();
                 final result = await imagePicker.pickImage(
                   source: ImageSource.camera,
+                  imageQuality: 50,
                 );
 
                 imagePath = result?.path;

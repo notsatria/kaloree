@@ -4,6 +4,7 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:intl/date_symbol_data_local.dart';
 import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/core/theme/app_theme.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
@@ -23,6 +24,7 @@ import 'package:kaloree/features/main_menu/presentation/views/main_view.dart';
 import 'package:kaloree/features/onboarding/presentation/bloc/login_with_google_bloc.dart';
 import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';
+import 'package:kaloree/features/profile/presentation/bloc/edit_profile_bloc.dart';
 import 'package:kaloree/features/profile/presentation/bloc/get_user_data_on_profile_bloc.dart';
 import 'package:kaloree/features/scan/presentation/bloc/image_classification_bloc.dart';
 import 'package:kaloree/firebase_options.dart';
@@ -34,6 +36,8 @@ void main() async {
     options: DefaultFirebaseOptions.currentPlatform,
   );
   await initDependencies();
+
+  await initializeDateFormatting('id_ID');
 
   runApp(const MainApp());
 }
@@ -86,6 +90,8 @@ class MainApp extends StatelessWidget {
               create: (context) => serviceLocator<GetUserDataOnProfileBloc>()),
           BlocProvider<LoginWithGoogleBloc>(
               create: (context) => serviceLocator<LoginWithGoogleBloc>()),
+          BlocProvider<EditProfileBloc>(
+              create: (context) => serviceLocator<EditProfileBloc>()),
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme(lightScheme),

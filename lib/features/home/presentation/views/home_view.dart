@@ -3,10 +3,10 @@ import 'dart:developer';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
+import 'package:kaloree/core/utils/date_format.dart';
 import 'package:kaloree/core/widgets/loading.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_error_view.dart';
 import 'package:kaloree/features/home/presentation/bloc/daily_calories_bloc.dart';
@@ -23,7 +23,7 @@ class HomeView extends StatefulWidget {
 }
 
 class _HomeViewState extends State<HomeView> {
-  final today = DateFormat('EEEE, d MMMM yyyy').format(DateTime.now());
+  final today = formatDateTo(date: DateTime.now(), format: 'EEEE, d MMMM yyyy');
 
   @override
   void initState() {
@@ -164,7 +164,12 @@ class _HomeViewState extends State<HomeView> {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(100),
-          child: Image.network(photoUrl, fit: BoxFit.cover, width: 50),
+          child: Image.network(
+            photoUrl,
+            fit: BoxFit.cover,
+            width: 50,
+            height: 50,
+          ),
         ),
         const Gap(12),
         Column(
@@ -220,7 +225,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 const Gap(2),
                 Text(
-                  '${dailyCaloriesNeeded.toStringAsFixed(0)} kal',
+                  '${dailyCaloriesNeeded.toStringAsFixed(0)} kkal',
                   style: interBold.copyWith(fontSize: 14, color: Colors.white),
                 ),
                 const Gap(18),
@@ -233,7 +238,7 @@ class _HomeViewState extends State<HomeView> {
                 ),
                 const Gap(2),
                 Text(
-                  '${dailyCaloriesSupplied.toStringAsFixed(0)} kal',
+                  '${dailyCaloriesSupplied.toStringAsFixed(0)} kkal',
                   style: interBold.copyWith(fontSize: 14, color: Colors.white),
                 )
               ],
