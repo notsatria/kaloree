@@ -35,7 +35,7 @@ class Indicator extends StatelessWidget {
         Text(
           text,
           style: interSemiBold.copyWith(
-              fontSize: 16, color: lightColorScheme.outline),
+              fontSize: 14, color: lightColorScheme.outline),
         )
       ],
     );
