@@ -269,7 +269,8 @@ void _initAnalysis() {
 void _initProfile() {
   //  Datasources
   serviceLocator.registerFactory<ProfileRemoteDataSource>(
-    () => ProfileRemoteDataSourceImpl(serviceLocator(), serviceLocator()),
+    () => ProfileRemoteDataSourceImpl(
+        serviceLocator(), serviceLocator(), serviceLocator()),
   );
 
   // repositories

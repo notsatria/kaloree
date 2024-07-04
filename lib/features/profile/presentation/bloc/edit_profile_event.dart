@@ -9,6 +9,7 @@ sealed class EditProfileEvent extends Equatable {
 
 final class EditProfile extends EditProfileEvent {
   final String fullName;
+  final File? image;
 
-  const EditProfile(this.fullName);
+  const EditProfile(this.fullName, this.image);
 }

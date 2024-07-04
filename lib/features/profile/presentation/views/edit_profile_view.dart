@@ -1,6 +1,10 @@
+import 'dart:io';
+
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
+import 'package:image/image.dart' as img;
+import 'package:image_picker/image_picker.dart';
 import 'package:kaloree/core/model/user_model.dart';
 import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
@@ -21,6 +25,9 @@ class EditProfileView extends StatefulWidget {
 
 class _EditProfileViewState extends State<EditProfileView> {
   bool _isLoading = false;
+  final imagePicker = ImagePicker();
+  String? imagePath;
+  img.Image? image;
 
   @override
   void dispose() {
@@ -60,25 +67,41 @@ class _EditProfileViewState extends State<EditProfileView> {
                   },
                   icon: const Icon(Icons.save)),
             ]),
-        body: Padding(
-          padding: const EdgeInsets.symmetric(horizontal: margin_20),
-          child: Column(
-            children: [
-              _isLoading ? const LinearProgressIndicator() : const SizedBox(),
-              const Gap(12),
-              Stack(
-                children: [
-                  ClipRRect(
-                    borderRadius: BorderRadius.circular(100),
-                    child: Image.network(
-                      '${widget.user.profilePicture}',
-                      fit: BoxFit.cover,
-                      width: 120,
-                    ),
-                  ),
-                  Positioned(
-                    bottom: 0,
-                    right: 0,
+        body: Column(
+          children: [
+            _isLoading ? const LinearProgressIndicator() : const SizedBox(),
+            const Gap(30),
+            Stack(
+              children: [
+                ClipRRect(
+                  borderRadius: BorderRadius.circular(100),
+                  child: (imagePath == null)
+                      ? Image.network(
+                          '${widget.user.profilePicture}',
+                          fit: BoxFit.cover,
+                          width: 120,
+                          height: 120,
+                        )
+                      : Image.file(
+                          File(imagePath!),
+                          fit: BoxFit.cover,
+                          width: 120,
+                          height: 120,
+                        ),
+                ),
+                Positioned(
+                  bottom: 0,
+                  right: 0,
+                  child: GestureDetector(
+                    onTap: () async {
+                      final result = await imagePicker.pickImage(
+                        source: ImageSource.gallery,
+                        imageQuality: 25,
+                      );
+
+                      imagePath = result?.path;
+                      setState(() {});
+                    },
                     child: Container(
                       width: 40,
                       height: 40,
@@ -94,23 +117,29 @@ class _EditProfileViewState extends State<EditProfileView> {
                       ),
                     ),
                   ),
-                ],
-              ),
-              const Gap(70),
-              Align(
+                ),
+              ],
+            ),
+            const Gap(50),
+            Padding(
+              padding: const EdgeInsets.only(left: margin_20),
+              child: Align(
                 alignment: Alignment.centerLeft,
                 child: Text(
                   'Nama Lengkap',
                   style: interMedium.copyWith(fontSize: 16),
                 ),
               ),
-              const Gap(8),
-              EditProfileFormField(
+            ),
+            const Gap(8),
+            Padding(
+              padding: const EdgeInsets.symmetric(horizontal: margin_20),
+              child: EditProfileFormField(
                 hintText: 'Nama Lengkap',
                 controller: nameController,
               ),
-            ],
-          ),
+            ),
+          ],
         ),
       ),
     );
@@ -134,9 +163,9 @@ class _EditProfileViewState extends State<EditProfileView> {
               TextButton(
                 onPressed: () {
                   pop(context);
-                  context
-                      .read<EditProfileBloc>()
-                      .add(EditProfile(nameController.text));
+                  context.read<EditProfileBloc>().add(EditProfile(
+                      nameController.text,
+                      (imagePath == null) ? null : File(imagePath!)));
                 },
                 child: const Text('Yakin'),
               ),

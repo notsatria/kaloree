@@ -23,29 +23,10 @@ class ProfileView extends StatefulWidget {
   State<ProfileView> createState() => _ProfileViewState();
 }
 
-class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
+class _ProfileViewState extends State<ProfileView> {
   @override
   void initState() {
     super.initState();
-    WidgetsBinding.instance.addObserver(this);
-    context.read<GetUserDataOnProfileBloc>().add(GetUserDataOnProfile());
-  }
-
-  @override
-  void dispose() {
-    WidgetsBinding.instance.removeObserver(this);
-    super.dispose();
-  }
-
-  @override
-  void didChangeAppLifecycleState(AppLifecycleState state) {
-    if (state == AppLifecycleState.resumed) {
-      onResumed();
-    }
-  }
-
-  void onResumed() {
-    log('On resume');
     context.read<GetUserDataOnProfileBloc>().add(GetUserDataOnProfile());
   }
 
@@ -91,6 +72,7 @@ class _ProfileViewState extends State<ProfileView> with WidgetsBindingObserver {
               '${user.profilePicture}',
               fit: BoxFit.cover,
               width: 120,
+              height: 120,
             ),
           ),
           const Gap(20),

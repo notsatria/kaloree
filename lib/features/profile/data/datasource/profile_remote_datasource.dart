@@ -1,21 +1,25 @@
 import 'dart:developer';
+import 'dart:io';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:firebase_storage/firebase_storage.dart';
 import 'package:kaloree/core/errors/exceptions.dart';
 import 'package:kaloree/core/model/health_profile.dart';
 import 'package:kaloree/core/model/user_model.dart';
 
 abstract interface class ProfileRemoteDataSource {
   Future<UserModel> getUserData();
-  Future<void> editProfile({required String fullName});
+  Future<void> editProfile({required String fullName, File? image});
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   final FirebaseAuth firebaseAuth;
   final FirebaseFirestore firebaseFirestore;
+  final FirebaseStorage firebaseStorage;
 
-  ProfileRemoteDataSourceImpl(this.firebaseAuth, this.firebaseFirestore);
+  ProfileRemoteDataSourceImpl(
+      this.firebaseAuth, this.firebaseFirestore, this.firebaseStorage);
   @override
   Future<UserModel> getUserData() async {
     try {
@@ -62,7 +66,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
   }
 
   @override
-  Future<void> editProfile({required String fullName}) async {
+  Future<void> editProfile({required String fullName, File? image}) async {
     try {
       final user = firebaseAuth.currentUser;
       if (user == null) {
@@ -71,7 +75,30 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       DocumentReference userDoc =
           firebaseFirestore.collection("users").doc(user.uid);
 
-      userDoc.update({"fullName": fullName});
+      if (image != null) {
+        String fileName = DateTime.now().millisecondsSinceEpoch.toString();
+        Reference ref = firebaseStorage
+            .ref('user')
+            .child(user.uid)
+            .child('profile_picture')
+            .child('$fileName.png');
+
+        UploadTask uploadTask = ref.putFile(image);
+        TaskSnapshot taskSnapshot = await uploadTask;
+
+        String downloadUrl = await taskSnapshot.ref.getDownloadURL();
+
+        userDoc.update({
+          "fullName": fullName,
+          "profilePicture": downloadUrl,
+          "updatedAt": DateTime.now().toString(),
+        });
+      } else {
+        userDoc.update({
+          "fullName": fullName,
+          "updatedAt": DateTime.now().toString(),
+        });
+      }
     } catch (e) {
       log("Error on editProfile: $e");
       throw ServerException(e.toString());

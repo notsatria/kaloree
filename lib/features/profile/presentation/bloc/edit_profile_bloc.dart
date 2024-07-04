@@ -1,3 +1,5 @@
+import 'dart:io';
+
 import 'package:equatable/equatable.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:kaloree/features/profile/domain/usecases/edit_profile.dart';
@@ -16,7 +18,7 @@ class EditProfileBloc extends Bloc<EditProfileEvent, EditProfileState> {
   _onEditProfile(EditProfile event, Emitter<EditProfileState> emit) async {
     emit(EditProfileLoading());
     final result =
-        await _editProfileUseCase(EditProfileUseCaseParams(event.fullName));
+        await _editProfileUseCase(EditProfileUseCaseParams(event.fullName, event.image));
 
     result.fold(
       (l) => emit(EditProfileFailure(l.toString())),
