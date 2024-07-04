@@ -17,6 +17,7 @@ class NutritionHistoryPieChart extends StatefulWidget {
 
 class _NutritionHistoryPieChartState extends State<NutritionHistoryPieChart> {
   int touchedIndex = 0;
+  bool _isDefault = false;
 
   @override
   Widget build(BuildContext context) {
@@ -88,6 +89,11 @@ class _NutritionHistoryPieChartState extends State<NutritionHistoryPieChart> {
         (nutritionHistory.fat ?? 0) +
         (nutritionHistory.protein ?? 0);
 
+    if (total == 0) {
+      total = 1;
+      _isDefault = true;
+    }
+
     final caloriesPercentage =
         (nutritionHistory.calories / total * 100).toStringAsFixed(0);
     final carbsPercentage =
@@ -107,8 +113,8 @@ class _NutritionHistoryPieChartState extends State<NutritionHistoryPieChart> {
         case 0:
           return PieChartSectionData(
             color: Colors.blue[300],
-            value: nutritionHistory.calories,
-            title: '$caloriesPercentage%',
+            value: (_isDefault) ? 1 : nutritionHistory.calories,
+            title: (_isDefault) ? '0%' : '$caloriesPercentage%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -126,8 +132,8 @@ class _NutritionHistoryPieChartState extends State<NutritionHistoryPieChart> {
         case 1:
           return PieChartSectionData(
             color: Colors.yellow[300],
-            value: nutritionHistory.carbs,
-            title: '$carbsPercentage%',
+            value: (_isDefault) ? 1 : nutritionHistory.carbs,
+            title: (_isDefault) ? '0%' : '$carbsPercentage%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -145,8 +151,8 @@ class _NutritionHistoryPieChartState extends State<NutritionHistoryPieChart> {
         case 2:
           return PieChartSectionData(
             color: Colors.pink[300],
-            value: nutritionHistory.fat,
-            title: '$fatPercentage%',
+            value: (_isDefault) ? 1 : nutritionHistory.fat,
+            title: (_isDefault) ? '0%' : '$fatPercentage%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
@@ -164,8 +170,8 @@ class _NutritionHistoryPieChartState extends State<NutritionHistoryPieChart> {
         case 3:
           return PieChartSectionData(
             color: Colors.green[300],
-            value: nutritionHistory.protein,
-            title: '$proteinPercentage%',
+            value: (_isDefault) ? 1 : nutritionHistory.protein,
+            title: (_isDefault) ? '0%' : '$proteinPercentage%',
             radius: radius,
             titleStyle: TextStyle(
               fontSize: fontSize,
