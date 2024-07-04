@@ -2,15 +2,18 @@ import 'dart:developer';
 
 import 'package:cloud_firestore/cloud_firestore.dart';
 import 'package:firebase_auth/firebase_auth.dart';
+import 'package:intl/intl.dart';
 import 'package:kaloree/core/errors/exceptions.dart';
 import 'package:kaloree/core/model/classification_result.dart';
 import 'package:kaloree/core/model/health_profile.dart';
 import 'package:kaloree/core/model/user_model.dart';
 import 'package:kaloree/core/utils/date_format.dart';
+import 'package:kaloree/features/history/data/model/nutrition_history.dart';
 
 abstract interface class AnalysisRemoteDataSource {
   Future<Map<String, double>> getTotalCaloriesInWeek();
   Future<UserModel> getUserData();
+  Future<NutritionHistory> getNutritionHistoryInMonth();
 }
 
 class AnalysisRemoteDataSourceImpl implements AnalysisRemoteDataSource {
@@ -127,6 +130,64 @@ class AnalysisRemoteDataSourceImpl implements AnalysisRemoteDataSource {
     }
   }
 
+  @override
+  Future<NutritionHistory> getNutritionHistoryInMonth() async {
+    try {
+      final uid = firebaseAuth.currentUser!.uid;
 
-  
+      // Ambil bulan dan tahun saat ini
+      DateTime now = DateTime.now();
+      DateTime startOfMonth = DateTime(now.year, now.month, 1);
+      DateTime endOfMonth = DateTime(now.year, now.month + 1, 0);
+      double calories = 0;
+      double carbs = 0;
+      double protein = 0;
+      double fat = 0;
+
+      // Loop through each day of the current month
+      for (int i = 0; i < endOfMonth.day; i++) {
+        DateTime day = startOfMonth.add(Duration(days: i));
+        String dayFormatted = DateFormat('yyyy-MM-dd').format(day);
+
+        log('Day formatted: $dayFormatted');
+
+        // Construct the path to the document
+        String path = 'users/$uid/classification_result/$dayFormatted';
+
+        try {
+          // Get the document snapshot
+          DocumentSnapshot snapshot = await firebaseFirestore.doc(path).get();
+
+          // Check if the document exists and has data
+          if (snapshot.exists) {
+            final data = snapshot.data() as Map<String, dynamic>;
+            List<dynamic> classificationResultList =
+                data['classification_result_list'] as List<dynamic>;
+
+            List<ClassificationResult> result = classificationResultList
+                .map((classificationResult) =>
+                    ClassificationResult.fromMap(classificationResult))
+                .toList();
+
+            for (var classificationResult in result) {
+              final food = classificationResult.food;
+              calories += food.calories;
+              fat += food.fat;
+              carbs += food.carbohydrate;
+              protein += food.protein;
+            }
+            log('Calories: $calories, Fat: $fat, Carbs: $carbs, Protein: $protein');
+          }
+        } catch (e) {
+          log('Error fetching data for $dayFormatted: $e');
+          throw ServerException(e.toString());
+        }
+      }
+      return NutritionHistory(
+          calories: calories, protein: protein, fat: fat, carbs: carbs);
+    } catch (e) {
+      log('Error on getNutritionHistoryInMonth: $e');
+      throw ServerException(e.toString());
+    }
+  }
 }

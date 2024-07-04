@@ -15,6 +15,7 @@ import 'package:kaloree/features/assesment/presentation/views/personal_informati
 import 'package:kaloree/features/assesment/presentation/widgets/custom_error_view.dart';
 import 'package:kaloree/features/auth/presentaion/bloc/auth_bloc.dart';
 import 'package:kaloree/features/catatan/presentation/bloc/catatan_bloc.dart';
+import 'package:kaloree/features/history/presentation/bloc/get_nutrition_in_month_bloc.dart';
 import 'package:kaloree/features/history/presentation/bloc/get_total_calories_in_week_bloc.dart';
 import 'package:kaloree/features/history/presentation/bloc/get_user_data_bloc.dart';
 import 'package:kaloree/features/home/presentation/bloc/daily_calories_bloc.dart';
@@ -92,6 +93,8 @@ class MainApp extends StatelessWidget {
               create: (context) => serviceLocator<LoginWithGoogleBloc>()),
           BlocProvider<EditProfileBloc>(
               create: (context) => serviceLocator<EditProfileBloc>()),
+          BlocProvider<GetNutritionInMonthBloc>(
+              create: (context) => serviceLocator<GetNutritionInMonthBloc>()),
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme(lightScheme),

@@ -107,6 +107,8 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
             if (state is GetFoodDetailSuccess) {
               final food = state.food;
               foodName = food.name;
+              weight = food.weight;
+              weightController.text = weight.toStringAsFixed(0);
               return SingleChildScrollView(
                 padding: EdgeInsets.only(
                   top: kBottomNavigationBarHeight,
@@ -188,7 +190,7 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
           ),
           const Gap(8),
           Text(
-            'Berat (gram)',
+            '1 Porsi (gram)',
             style: interMedium.copyWith(fontSize: 14),
           ),
           const Gap(8),
