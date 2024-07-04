@@ -3,11 +3,11 @@ import 'package:flutter/material.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/utils/date_format.dart';
 
-class WeeklyCaloriesChart extends StatefulWidget {
+class WeeklyCaloriesBarChart extends StatefulWidget {
   final Map<String, double> data;
   final double dailyCaloriesNeeded;
 
-  WeeklyCaloriesChart(
+  WeeklyCaloriesBarChart(
       {super.key, required this.data, required this.dailyCaloriesNeeded});
 
   final Color barBackgroundColor =
@@ -16,10 +16,10 @@ class WeeklyCaloriesChart extends StatefulWidget {
   final Color touchedBarColor = lightColorScheme.primaryContainer;
 
   @override
-  State<StatefulWidget> createState() => WeeklyCaloriesChartState();
+  State<StatefulWidget> createState() => WeeklyCaloriesBarChartState();
 }
 
-class WeeklyCaloriesChartState extends State<WeeklyCaloriesChart> {
+class WeeklyCaloriesBarChartState extends State<WeeklyCaloriesBarChart> {
   final Duration animDuration = const Duration(milliseconds: 250);
   int touchedIndex = -1;
   DateTime startWeekDate = getStartOfWeek(DateTime.now());

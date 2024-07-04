@@ -25,11 +25,6 @@ class CatatanRemoteDataSourceImpl implements CatatanRemoteDataSource {
     try {
       final uid = auth.currentUser!.uid;
 
-      // CollectionReference classificationCollection = firestore
-      //     .collection('users')
-      //     .doc(uid)
-      //     .collection('classification_result');
-
       // Ambil bulan dan tahun saat ini
       DateTime now = DateTime.now();
       DateTime startOfMonth = DateTime(now.year, now.month, 1);

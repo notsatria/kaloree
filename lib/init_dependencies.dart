@@ -27,8 +27,10 @@ import 'package:kaloree/features/catatan/presentation/bloc/catatan_bloc.dart';
 import 'package:kaloree/features/history/data/datasource/analysis_remote_datasource.dart';
 import 'package:kaloree/features/history/data/repositories/analysis_repository_impl.dart';
 import 'package:kaloree/features/history/domain/repositories/analysis_repository.dart';
+import 'package:kaloree/features/history/domain/usecases/get_nutrition_history.dart';
 import 'package:kaloree/features/history/domain/usecases/get_total_calories_in_week.dart';
 import 'package:kaloree/features/history/domain/usecases/get_user_data.dart';
+import 'package:kaloree/features/history/presentation/bloc/get_nutrition_in_month_bloc.dart';
 import 'package:kaloree/features/history/presentation/bloc/get_total_calories_in_week_bloc.dart';
 import 'package:kaloree/features/history/presentation/bloc/get_user_data_bloc.dart';
 import 'package:kaloree/features/home/data/datasource/home_remote_datasource.dart';
@@ -254,6 +256,10 @@ void _initAnalysis() {
     () => GetUserDataOnAnalysisUseCase(serviceLocator()),
   );
 
+  serviceLocator.registerFactory(
+    () => GetNutritionHistoryUseCase(serviceLocator()),
+  );
+
   // blocs
   serviceLocator.registerLazySingleton(
     () => GetTotalCaloriesInWeekBloc(
@@ -263,6 +269,10 @@ void _initAnalysis() {
 
   serviceLocator.registerLazySingleton(
     () => GetUserDataBloc(getUserDataUseCase: serviceLocator()),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => GetNutritionInMonthBloc(getNutritionHistoryUseCase: serviceLocator()),
   );
 }
 
