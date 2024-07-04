@@ -164,7 +164,12 @@ class _HomeViewState extends State<HomeView> {
       children: [
         ClipRRect(
           borderRadius: BorderRadius.circular(100),
-          child: Image.network(photoUrl, fit: BoxFit.cover, width: 50),
+          child: Image.network(
+            photoUrl,
+            fit: BoxFit.cover,
+            width: 50,
+            height: 50,
+          ),
         ),
         const Gap(12),
         Column(
