@@ -4,8 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kaloree/core/routes/app_route.dart';
+import 'package:kaloree/core/secrets/app_secret.dart';
 import 'package:kaloree/core/theme/app_theme.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/custom_color.g.dart';
@@ -39,6 +41,8 @@ void main() async {
   await initDependencies();
 
   await initializeDateFormatting('id_ID');
+
+  Gemini.init(apiKey: AppSecret.geminiKey, enableDebugging: true);
 
   runApp(const MainApp());
 }

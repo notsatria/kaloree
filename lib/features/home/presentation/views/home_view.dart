@@ -2,15 +2,19 @@ import 'dart:developer';
 
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:gap/gap.dart';
+import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
 import 'package:kaloree/core/utils/date_format.dart';
 import 'package:kaloree/core/widgets/loading.dart';
+import 'package:kaloree/features/assesment/presentation/views/personal_assesment_view.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_error_view.dart';
 import 'package:kaloree/features/home/presentation/bloc/daily_calories_bloc.dart';
 import 'package:kaloree/features/home/presentation/bloc/user_home_bloc.dart';
+import 'package:kaloree/features/home/presentation/views/sport_recommendation_view.dart';
 import 'package:kaloree/features/home/presentation/widgets/food_card.dart';
 import 'package:kaloree/features/home/presentation/widgets/sport_card.dart';
 import 'package:syncfusion_flutter_gauges/gauges.dart';
@@ -24,6 +28,7 @@ class HomeView extends StatefulWidget {
 
 class _HomeViewState extends State<HomeView> {
   final today = formatDateTo(date: DateTime.now(), format: 'EEEE, d MMMM yyyy');
+  final gemini = Gemini.instance;
 
   @override
   void initState() {
@@ -111,13 +116,93 @@ class _HomeViewState extends State<HomeView> {
                             }
                           },
                         ),
-                        const Gap(12),
-                        _buildSubtitleText(text: 'Rekomendasi Olahraga'),
-                        const Gap(12),
-                        const SportCard(),
                         const Gap(24),
-                        _buildSubtitleText(text: 'Rekomendasi Makanan'),
-                        const Gap(12),
+                        SportCard(
+                          onTap: () {
+                            _showLoadingDialog(context);
+                            final healthProfile = user.healthProfile;
+                            final gender = (healthProfile!.gender == 0)
+                                ? 'laki-laki'
+                                : 'perempuan';
+
+                            ActivityStatus? activityStatusResult;
+                            HealthPurpose? healthPurposeResult;
+                            switch (healthProfile.activityStatus) {
+                              case 0:
+                                activityStatusResult =
+                                    ActivityStatus.sangatJarang;
+                                break;
+                              case 1:
+                                activityStatusResult = ActivityStatus.jarang;
+                                break;
+                              case 2:
+                                activityStatusResult = ActivityStatus.normal;
+                                break;
+                              case 3:
+                                activityStatusResult = ActivityStatus.sering;
+                                break;
+                              case 4:
+                                activityStatusResult =
+                                    ActivityStatus.sangatSering;
+                                break;
+                              default:
+                                activityStatusResult = ActivityStatus.normal;
+                                break;
+                            }
+
+                            switch (healthProfile.healthPurpose) {
+                              case 0:
+                                healthPurposeResult =
+                                    HealthPurpose.turunBBEkstrim;
+                                break;
+                              case 1:
+                                healthPurposeResult = HealthPurpose.turunBB;
+                                break;
+                              case 2:
+                                healthPurposeResult = HealthPurpose.pertahankan;
+                                break;
+                              case 3:
+                                healthPurposeResult = HealthPurpose.menaikkanBB;
+                                break;
+                              case 4:
+                                healthPurposeResult =
+                                    HealthPurpose.menaikkanBBEkstrim;
+                                break;
+                              default:
+                                healthPurposeResult = HealthPurpose.pertahankan;
+                                break;
+                            }
+
+                            final prompt = ''' 
+                            Berikan rekomendasi kepada saya olahraga apa yang baik untuk saya dengan deskripsi sebagai berikut.
+
+                            Saya adalah seorang dengan gender: $gender, usia: ${healthProfile.age} tahun, dengan index BMI: ${healthProfile.bmiIndex!.toStringAsFixed(2)} yang hidup di negara Indonesia.
+
+                            Aktivitas keseharian saya adalah ${activityStatusResult.label}.
+
+                            Tujuan kesehatan saya adalah ingin ${healthPurposeResult.label}.
+
+                            Berikan rekomendasi seolah olah Anda adalah dokter yang berpengalaman.
+                            ''';
+
+                            log('Prompt: $prompt');
+                            gemini.text(prompt).then((value) {
+                              final result = value?.content?.parts?.last.text;
+                              log('Result: $result');
+
+                              pop(context);
+
+                              goTo(
+                                  context,
+                                  SportRecommendationView(
+                                    result: result!,
+                                  ));
+                            }).catchError((e) {
+                              log('Error on Gemini: $e');
+                            });
+                          },
+                        ),
+                        const Gap(24),
                         const FoodCard(),
                         const Gap(50)
                       ],
@@ -139,23 +224,6 @@ class _HomeViewState extends State<HomeView> {
           }
         },
       ),
-    );
-  }
-
-  Row _buildSubtitleText({required String text}) {
-    return Row(
-      mainAxisAlignment: MainAxisAlignment.spaceBetween,
-      children: [
-        Text(
-          text,
-          style: interBold.copyWith(fontSize: 15),
-        ),
-        Text(
-          'Lihat semua',
-          style: interMedium.copyWith(
-              fontSize: 14, color: lightColorScheme.onSurface),
-        ),
-      ],
     );
   }
 
@@ -320,5 +388,24 @@ class _HomeViewState extends State<HomeView> {
         ),
       ],
     );
+  }
+
+  void _showLoadingDialog(BuildContext context) {
+    showDialog(
+        context: context,
+        builder: (context) {
+          return const AlertDialog(
+            content: Column(
+              mainAxisSize: MainAxisSize.min,
+              mainAxisAlignment: MainAxisAlignment.center,
+              crossAxisAlignment: CrossAxisAlignment.center,
+              children: [
+                CircularProgressIndicator(),
+                Gap(4),
+                Text('Tunggu sebentar...'),
+              ],
+            ),
+          );
+        });
   }
 }
