@@ -21,6 +21,7 @@ import 'package:kaloree/features/history/presentation/bloc/get_nutrition_in_mont
 import 'package:kaloree/features/history/presentation/bloc/get_total_calories_in_week_bloc.dart';
 import 'package:kaloree/features/history/presentation/bloc/get_user_data_bloc.dart';
 import 'package:kaloree/features/home/presentation/bloc/daily_calories_bloc.dart';
+import 'package:kaloree/features/home/presentation/bloc/save_recommendation_bloc.dart';
 import 'package:kaloree/features/home/presentation/bloc/user_home_bloc.dart';
 import 'package:kaloree/features/main_menu/presentation/cubit/bottom_navigation_cubit.dart';
 import 'package:kaloree/features/main_menu/presentation/views/main_view.dart';
@@ -99,6 +100,8 @@ class MainApp extends StatelessWidget {
               create: (context) => serviceLocator<EditProfileBloc>()),
           BlocProvider<GetNutritionInMonthBloc>(
               create: (context) => serviceLocator<GetNutritionInMonthBloc>()),
+          BlocProvider<SaveRecommendationBloc>(
+              create: (context) => serviceLocator<SaveRecommendationBloc>()),
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme(lightScheme),

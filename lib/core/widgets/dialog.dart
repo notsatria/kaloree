@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
+import 'package:gap/gap.dart';
 
 void showBackDialog(BuildContext context) {
   showDialog<void>(
@@ -33,4 +34,23 @@ void showBackDialog(BuildContext context) {
       );
     },
   );
+}
+
+void showLoadingDialog(BuildContext context) {
+  showDialog(
+      context: context,
+      builder: (context) {
+        return const AlertDialog(
+          content: Column(
+            mainAxisSize: MainAxisSize.min,
+            mainAxisAlignment: MainAxisAlignment.center,
+            crossAxisAlignment: CrossAxisAlignment.center,
+            children: [
+              CircularProgressIndicator(),
+              Gap(4),
+              Text('Tunggu sebentar...'),
+            ],
+          ),
+        );
+      });
 }

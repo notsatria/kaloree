@@ -9,6 +9,7 @@ import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
 import 'package:kaloree/core/utils/date_format.dart';
+import 'package:kaloree/core/widgets/dialog.dart';
 import 'package:kaloree/core/widgets/loading.dart';
 import 'package:kaloree/features/assesment/presentation/views/personal_assesment_view.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_error_view.dart';
@@ -125,7 +126,7 @@ class _HomeViewState extends State<HomeView> {
                           onTap: () {
                             _showConfirmationDialog(context, onYesPressed: () {
                               pop(context);
-                              _showLoadingDialog(context);
+                              showLoadingDialog(context);
                               final healthProfile = user.healthProfile;
                               final gender = (healthProfile!.gender == 0)
                                   ? 'laki-laki'
@@ -216,7 +217,7 @@ class _HomeViewState extends State<HomeView> {
                         FoodCard(
                           onTap: () {
                             _showConfirmationDialog(context, onYesPressed: () {
-                              _showLoadingDialog(context);
+                              showLoadingDialog(context);
                               final healthProfile = user.healthProfile;
                               final gender = (healthProfile!.gender == 0)
                                   ? 'laki-laki'
@@ -487,25 +488,6 @@ class _HomeViewState extends State<HomeView> {
         ),
       ],
     );
-  }
-
-  void _showLoadingDialog(BuildContext context) {
-    showDialog(
-        context: context,
-        builder: (context) {
-          return const AlertDialog(
-            content: Column(
-              mainAxisSize: MainAxisSize.min,
-              mainAxisAlignment: MainAxisAlignment.center,
-              crossAxisAlignment: CrossAxisAlignment.center,
-              children: [
-                CircularProgressIndicator(),
-                Gap(4),
-                Text('Tunggu sebentar...'),
-              ],
-            ),
-          );
-        });
   }
 
   void _showConfirmationDialog(BuildContext context,
