@@ -47,8 +47,10 @@ import 'package:kaloree/features/profile/data/datasource/profile_remote_datasour
 import 'package:kaloree/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:kaloree/features/profile/domain/repositories/profile_repository.dart';
 import 'package:kaloree/features/profile/domain/usecases/edit_profile.dart';
+import 'package:kaloree/features/profile/domain/usecases/get_recommendation.dart';
 import 'package:kaloree/features/profile/domain/usecases/get_user_data_on_profile.dart';
 import 'package:kaloree/features/profile/presentation/bloc/edit_profile_bloc.dart';
+import 'package:kaloree/features/profile/presentation/bloc/get_recommendation_bloc.dart';
 import 'package:kaloree/features/profile/presentation/bloc/get_user_data_on_profile_bloc.dart';
 import 'package:kaloree/features/scan/data/datasource/image_classification_remote_datasource.dart';
 import 'package:kaloree/features/scan/data/repositories/image_classification_repository_impl.dart';
@@ -305,8 +307,13 @@ void _initProfile() {
   serviceLocator.registerFactory(
     () => GetUserDataOnProfileUseCase(serviceLocator()),
   );
+
   serviceLocator.registerFactory(
     () => EditProfileUseCase(serviceLocator()),
+  );
+
+  serviceLocator.registerFactory(
+    () => GetRecommendationUseCase(serviceLocator()),
   );
 
   // blocs
@@ -315,9 +322,16 @@ void _initProfile() {
       getUserDataOnProfileUseCase: serviceLocator(),
     ),
   );
+
   serviceLocator.registerLazySingleton(
     () => EditProfileBloc(
       editProfileUseCase: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => GetRecommendationBloc(
+      getRecommendationUseCase: serviceLocator(),
     ),
   );
 }

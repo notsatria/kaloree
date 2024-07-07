@@ -29,6 +29,7 @@ import 'package:kaloree/features/onboarding/presentation/bloc/login_with_google_
 import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';
 import 'package:kaloree/features/profile/presentation/bloc/edit_profile_bloc.dart';
+import 'package:kaloree/features/profile/presentation/bloc/get_recommendation_bloc.dart';
 import 'package:kaloree/features/profile/presentation/bloc/get_user_data_on_profile_bloc.dart';
 import 'package:kaloree/features/scan/presentation/bloc/image_classification_bloc.dart';
 import 'package:kaloree/firebase_options.dart';
@@ -102,6 +103,8 @@ class MainApp extends StatelessWidget {
               create: (context) => serviceLocator<GetNutritionInMonthBloc>()),
           BlocProvider<SaveRecommendationBloc>(
               create: (context) => serviceLocator<SaveRecommendationBloc>()),
+          BlocProvider<GetRecommendationBloc>(
+              create: (context) => serviceLocator<GetRecommendationBloc>()),
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme(lightScheme),
