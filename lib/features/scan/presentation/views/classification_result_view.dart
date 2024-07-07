@@ -164,10 +164,10 @@ class _ClassificationResultViewState extends State<ClassificationResultView> {
   }
 
   Container _buildResultCard(Food food) {
-    foodCalories = food.calories / 100 * weight;
-    foodCarbs = food.carbohydrate / 100 * weight;
-    foodFat = food.fat / 100 * weight;
-    foodProtein = food.calories / 100 * weight;
+    foodCalories = food.calories;
+    foodCarbs = food.carbohydrate;
+    foodFat = food.fat;
+    foodProtein = food.protein;
     return Container(
       width: double.infinity,
       padding: const EdgeInsets.all(18),
