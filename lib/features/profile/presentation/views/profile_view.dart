@@ -65,94 +65,97 @@ class _ProfileViewState extends State<ProfileView> {
   Scaffold _buildProfileViewSuccess(UserModel user) {
     return Scaffold(
       appBar: _buildCatatanAppBar(),
-      body: Column(
-        children: [
-          const Gap(12),
-          ClipRRect(
-            borderRadius: BorderRadius.circular(100),
-            child: Image.network(
-              '${user.profilePicture}',
-              fit: BoxFit.cover,
-              width: 120,
-              height: 120,
+      body: SingleChildScrollView(
+        child: Column(
+          children: [
+            const Gap(12),
+            ClipRRect(
+              borderRadius: BorderRadius.circular(100),
+              child: Image.network(
+                '${user.profilePicture}',
+                fit: BoxFit.cover,
+                width: 120,
+                height: 120,
+              ),
             ),
-          ),
-          const Gap(20),
-          Text(
-            '${user.fullName}',
-            style: interBold.copyWith(fontSize: 24),
-          ),
-          Text(
-            user.email,
-            style: interMedium.copyWith(color: lightColorScheme.outline),
-          ),
-          const Gap(24),
-          Container(
-            padding: const EdgeInsets.all(margin_16),
-            margin: const EdgeInsets.symmetric(horizontal: margin_20),
-            decoration: BoxDecoration(
-              color: const Color(0xffF0F1ED),
-              borderRadius: BorderRadius.circular(20),
+            const Gap(20),
+            Text(
+              '${user.fullName}',
+              style: interBold.copyWith(fontSize: 24),
             ),
-            child: Column(
-              children: [
-                ProfileListTile(
-                  icon: Icons.person_outline,
-                  text: 'Edit Profile',
-                  onTap: () async {
-                    final result = await Navigator.push(
-                      context,
-                      MaterialPageRoute(
-                        builder: (context) => EditProfileView(user: user),
-                      ),
-                    );
+            Text(
+              user.email,
+              style: interMedium.copyWith(color: lightColorScheme.outline),
+            ),
+            const Gap(24),
+            Container(
+              padding: const EdgeInsets.all(margin_16),
+              margin: const EdgeInsets.symmetric(horizontal: margin_20),
+              decoration: BoxDecoration(
+                color: const Color(0xffF0F1ED),
+                borderRadius: BorderRadius.circular(20),
+              ),
+              child: Column(
+                children: [
+                  ProfileListTile(
+                    icon: Icons.person_outline,
+                    text: 'Edit Profile',
+                    onTap: () async {
+                      final result = await Navigator.push(
+                        context,
+                        MaterialPageRoute(
+                          builder: (context) => EditProfileView(user: user),
+                        ),
+                      );
 
-                    if (result == true) {
-                      context
-                          .read<GetUserDataOnProfileBloc>()
-                          .add(GetUserDataOnProfile());
-                    }
-                  },
-                ),
-                ProfileListTile(
-                  icon: Icons.book,
-                  text: 'Hasil Asesmen',
-                  onTap: () {
-                    goToNamed(context, AppRoute.assesmentResult);
-                  },
-                ),
-                ProfileListTile(
-                  icon: Icons.sports_gymnastics,
-                  text: 'Hasil Rekomendasi Olahraga',
-                  onTap: () {
-                    goTo(context, const SportRecommendationListView());
-                  },
-                ),
-                ProfileListTile(
-                  icon: Icons.fastfood_outlined,
-                  text: 'Hasil Rekomendasi Makanan',
-                  onTap: () {
-                    goTo(context, const FoodRecommendationListView());
-                  },
-                ),
-                const ProfileListTile(
-                  icon: Icons.privacy_tip,
-                  text: 'Kebijakan Privasi',
-                ),
-                ProfileListTile(
-                  icon: Icons.logout,
-                  text: 'Keluar',
-                  type: Type.logout,
-                  onTap: () {
-                    showLogoutConfirmationDialog(context, () {
-                      _logout(context);
-                    });
-                  },
-                )
-              ],
+                      if (result == true) {
+                        context
+                            .read<GetUserDataOnProfileBloc>()
+                            .add(GetUserDataOnProfile());
+                      }
+                    },
+                  ),
+                  ProfileListTile(
+                    icon: Icons.book,
+                    text: 'Hasil Asesmen',
+                    onTap: () {
+                      goToNamed(context, AppRoute.assesmentResult);
+                    },
+                  ),
+                  ProfileListTile(
+                    icon: Icons.sports_gymnastics,
+                    text: 'Hasil Rekomendasi Olahraga',
+                    onTap: () {
+                      goTo(context, const SportRecommendationListView());
+                    },
+                  ),
+                  ProfileListTile(
+                    icon: Icons.fastfood_outlined,
+                    text: 'Hasil Rekomendasi Makanan',
+                    onTap: () {
+                      goTo(context, const FoodRecommendationListView());
+                    },
+                  ),
+                  const ProfileListTile(
+                    icon: Icons.privacy_tip,
+                    text: 'Kebijakan Privasi',
+                  ),
+                  ProfileListTile(
+                    icon: Icons.logout,
+                    text: 'Keluar',
+                    type: Type.logout,
+                    onTap: () {
+                      showLogoutConfirmationDialog(context, () {
+                        _logout(context);
+                      });
+                    },
+                  )
+                ],
+              ),
             ),
-          )
-        ],
+            const Gap(50)
+          ],
+        ),
       ),
     );
   }
