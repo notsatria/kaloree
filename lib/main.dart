@@ -109,6 +109,7 @@ class MainApp extends StatelessWidget {
         child: MaterialApp(
           theme: AppTheme.lightTheme(lightScheme),
           darkTheme: AppTheme.darkTheme(darkScheme),
+          themeMode: ThemeMode.light,
           home: FutureBuilder<Widget>(
             future: _checkUserSignedIn(),
             builder: (context, snapshot) {
