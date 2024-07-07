@@ -14,6 +14,7 @@ import 'package:kaloree/core/widgets/loading.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_error_view.dart';
 import 'package:kaloree/features/profile/presentation/bloc/get_user_data_on_profile_bloc.dart';
 import 'package:kaloree/features/profile/presentation/views/edit_profile_view.dart';
+import 'package:kaloree/features/profile/presentation/views/food_recommendation_list_view.dart';
 import 'package:kaloree/features/profile/presentation/views/sport_recommendation_list_view.dart';
 import 'package:kaloree/features/profile/presentation/widgets/profile_list_tile.dart';
 
@@ -127,9 +128,12 @@ class _ProfileViewState extends State<ProfileView> {
                     goTo(context, const SportRecommendationListView());
                   },
                 ),
-                const ProfileListTile(
+                ProfileListTile(
                   icon: Icons.fastfood_outlined,
                   text: 'Hasil Rekomendasi Makanan',
+                  onTap: () {
+                    goTo(context, const FoodRecommendationListView());
+                  },
                 ),
                 const ProfileListTile(
                   icon: Icons.privacy_tip,

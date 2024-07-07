@@ -113,8 +113,8 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       {required bool isSportRecommendation}) async {
     try {
       List<Recommendation> recommendationList = [];
+      final uid = firebaseAuth.currentUser!.uid;
       if (isSportRecommendation) {
-        final uid = firebaseAuth.currentUser!.uid;
         if (isSportRecommendation) {
           CollectionReference ref = firebaseFirestore
               .collection('users')
@@ -130,6 +130,22 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
           }
         }
         log('Sport Recommendation List: $recommendationList');
+      } else {
+        if (isSportRecommendation) {
+          CollectionReference ref = firebaseFirestore
+              .collection('users')
+              .doc(uid)
+              .collection('food_recommendation');
+
+          final data = await ref.get();
+
+          for (var doc in data.docs) {
+            Recommendation recommendation =
+                Recommendation.fromMap(doc.data() as Map<String, dynamic>);
+            recommendationList.add(recommendation);
+          }
+        }
+        log('Food Recommendation List: $recommendationList');
       }
       return recommendationList;
     } catch (e) {
