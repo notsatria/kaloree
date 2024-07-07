@@ -120,7 +120,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         final recommendation = Recommendation(
             id: 'sport$createdAt', result: result, createdAt: createdAt);
 
-        collection.doc(uid).set(recommendation.toMap());
+        collection.doc().set(recommendation.toMap());
       } else {
         CollectionReference collection = firebaseFirestore
             .collection('users')
@@ -131,7 +131,7 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
         final recommendation = Recommendation(
             id: 'food$createdAt', result: result, createdAt: createdAt);
 
-        collection.doc(uid).set(recommendation.toMap());
+        collection.doc().set(recommendation.toMap());
       }
     } catch (e) {
       log('Error on saveRecommendation: $e');
