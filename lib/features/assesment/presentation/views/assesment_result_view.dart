@@ -61,79 +61,15 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
                 canPop: false,
                 backgroundColor: onBoardingBackgroundColor,
               ),
-              body: Stack(
+              bottomNavigationBar: buildCustomBottomAppBar(
+                text: 'Kembali ke Beranda',
+                color: Colors.white,
+                onTap: () {
+                  goAndRemoveUntilNamed(context, AppRoute.main);
+                },
+              ),
+              body: ListView(
                 children: [
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: Container(
-                      width: double.infinity,
-                      height: getMaxHeight(context) * 0.47,
-                      padding:
-                          const EdgeInsets.symmetric(horizontal: margin_20),
-                      decoration: const BoxDecoration(
-                        color: Colors.white,
-                        borderRadius: BorderRadius.only(
-                          topLeft: Radius.circular(30),
-                          topRight: Radius.circular(30),
-                        ),
-                      ),
-                      child: _buildClassificationActivitiesResult(
-                        activityStatus: healthProfile!.activityStatus,
-                        healthPurpose: healthProfile.healthPurpose,
-                        nutritionClassification:
-                            healthProfile.nutritionClassification!,
-                        gender: healthProfile.gender,
-                      ),
-                    ),
-                  ),
-                  Align(
-                    alignment: Alignment.bottomCenter,
-                    child: buildCustomBottomAppBar(
-                      text: 'Kembali ke Beranda',
-                      color: Colors.white,
-                      onTap: () {
-                        goAndRemoveUntilNamed(context, AppRoute.main);
-                      },
-                    ),
-                  ),
-                  Positioned(
-                    bottom: getMaxHeight(context) * 0.46,
-                    left: 20,
-                    right: 20,
-                    child: Container(
-                      width: getMaxHeight(context),
-                      padding: const EdgeInsets.symmetric(
-                          horizontal: 16, vertical: 20),
-                      decoration: BoxDecoration(
-                        color: lightColorScheme.primary,
-                        borderRadius: BorderRadius.circular(5),
-                        boxShadow: customBoxShadow,
-                      ),
-                      child: Row(
-                        children: [
-                          Expanded(
-                            flex: 3,
-                            child: Text(
-                              'Kebutuhan Kalori Harian',
-                              style: interMedium.copyWith(
-                                fontSize: 14,
-                                color: Colors.white,
-                              ),
-                            ),
-                          ),
-                          Expanded(
-                            child: Text(
-                              '$bmr kkal',
-                              style: interBold.copyWith(
-                                fontSize: 14,
-                                color: const Color(0xffFFAE12),
-                              ),
-                            ),
-                          )
-                        ],
-                      ),
-                    ),
-                  ),
                   Padding(
                     padding: const EdgeInsets.symmetric(horizontal: margin_20),
                     child: Column(
@@ -152,13 +88,71 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
                         ),
                         const Gap(20),
                         _buildResultScoreCard(
-                          age: healthProfile.age!,
+                          age: healthProfile!.age!,
                           bmi: healthProfile.bmiIndex!,
                           height: healthProfile.height,
                           weight: healthProfile.weight,
                         ),
                       ],
                     ),
+                  ),
+                  const Gap(10),
+                  Container(
+                    width: getMaxHeight(context),
+                    margin: const EdgeInsets.symmetric(horizontal: margin_20),
+                    padding: const EdgeInsets.symmetric(
+                        horizontal: 16, vertical: 20),
+                    decoration: BoxDecoration(
+                      color: lightColorScheme.primary,
+                      borderRadius: BorderRadius.circular(5),
+                      boxShadow: customBoxShadow,
+                    ),
+                    child: Row(
+                      children: [
+                        Expanded(
+                          flex: 3,
+                          child: Text(
+                            'Kebutuhan Kalori Harian',
+                            style: interMedium.copyWith(
+                              fontSize: 14,
+                              color: Colors.white,
+                            ),
+                          ),
+                        ),
+                        Expanded(
+                          child: Text(
+                            '$bmr kkal',
+                            style: interBold.copyWith(
+                              fontSize: 14,
+                              color: const Color(0xffFFAE12),
+                            ),
+                          ),
+                        )
+                      ],
+                    ),
+                  ),
+                  Stack(
+                    children: [
+                      Container(
+                        width: double.infinity,
+                        padding: const EdgeInsets.symmetric(
+                            horizontal: margin_20, vertical: margin_20),
+                        decoration: const BoxDecoration(
+                          color: Colors.white,
+                          borderRadius: BorderRadius.only(
+                            topLeft: Radius.circular(30),
+                            topRight: Radius.circular(30),
+                          ),
+                        ),
+                        child: _buildClassificationActivitiesResult(
+                          activityStatus: healthProfile.activityStatus,
+                          healthPurpose: healthProfile.healthPurpose,
+                          nutritionClassification:
+                              healthProfile.nutritionClassification!,
+                          gender: healthProfile.gender,
+                        ),
+                      ),
+                    ],
                   ),
                 ],
               ),
@@ -229,7 +223,6 @@ class _AssesmentResultViewState extends State<AssesmentResultView> {
 
     return Column(
       children: [
-        const Gap(40),
         Row(
           children: [
             Expanded(
