@@ -15,6 +15,7 @@ import 'package:kaloree/features/assesment/presentation/views/personal_assesment
 import 'package:kaloree/features/assesment/presentation/widgets/custom_error_view.dart';
 import 'package:kaloree/features/home/presentation/bloc/daily_calories_bloc.dart';
 import 'package:kaloree/features/home/presentation/bloc/user_home_bloc.dart';
+import 'package:kaloree/features/home/presentation/views/food_classification_list_view.dart';
 import 'package:kaloree/features/home/presentation/views/food_recommendation_view.dart';
 import 'package:kaloree/features/home/presentation/views/sport_recommendation_view.dart';
 import 'package:kaloree/features/home/presentation/widgets/food_card.dart';
@@ -121,7 +122,30 @@ class _HomeViewState extends State<HomeView> {
                             }
                           },
                         ),
-                        const Gap(24),
+                        const Gap(12),
+                        GestureDetector(
+                          onTap: () {
+                            goTo(context, const FoodClassificationListView());
+                          },
+                          child: Container(
+                            width: getMaxWidth(context),
+                            padding: const EdgeInsets.all(12),
+                            decoration: BoxDecoration(
+                              color: Colors.white,
+                              borderRadius: BorderRadius.circular(8),
+                              border:
+                                  Border.all(color: lightColorScheme.outline),
+                            ),
+                            child: const Row(
+                              children: [
+                                Text('Lihat daftar makanan yang bisa di-scan'),
+                                Spacer(),
+                                Icon(Icons.info)
+                              ],
+                            ),
+                          ),
+                        ),
+                        const Gap(12),
                         SportCard(
                           onTap: () {
                             _showConfirmationDialog(context,
