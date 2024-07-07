@@ -8,11 +8,15 @@ import 'package:kaloree/core/errors/exceptions.dart';
 import 'package:kaloree/core/model/classification_result.dart';
 import 'package:kaloree/core/model/health_profile.dart';
 import 'package:kaloree/core/model/user_model.dart';
+import 'package:kaloree/features/home/data/model/recommendation.dart';
 
 abstract interface class HomeRemoteDataSource {
   Future<UserModel> getUserData();
 
   Future<double> getDailyCaloriesSupplied();
+
+  Future<void> saveRecommendation(
+      {required bool isSportRecommendation, required String result});
 }
 
 class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
@@ -97,6 +101,40 @@ class HomeRemoteDataSourceImpl implements HomeRemoteDataSource {
       debugPrint("dailyCaloriesSupplied: $dailyCaloriesSupplied");
       return dailyCaloriesSupplied;
     } catch (e) {
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<void> saveRecommendation(
+      {required bool isSportRecommendation, required String result}) async {
+    try {
+      final uid = firebaseAuth.currentUser!.uid;
+      if (isSportRecommendation) {
+        CollectionReference collection = firebaseFirestore
+            .collection('users')
+            .doc(uid)
+            .collection('sport_recommendation');
+
+        final createdAt = DateTime.now().toString();
+        final recommendation = Recommendation(
+            id: 'sport$createdAt', result: result, createdAt: createdAt);
+
+        collection.doc().set(recommendation.toMap());
+      } else {
+        CollectionReference collection = firebaseFirestore
+            .collection('users')
+            .doc(uid)
+            .collection('food_recommendation');
+
+        final createdAt = DateTime.now().toString();
+        final recommendation = Recommendation(
+            id: 'food$createdAt', result: result, createdAt: createdAt);
+
+        collection.doc().set(recommendation.toMap());
+      }
+    } catch (e) {
+      log('Error on saveRecommendation: $e');
       throw ServerException(e.toString());
     }
   }

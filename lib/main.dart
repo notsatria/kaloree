@@ -4,8 +4,10 @@ import 'package:firebase_auth/firebase_auth.dart';
 import 'package:firebase_core/firebase_core.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:flutter_gemini/flutter_gemini.dart';
 import 'package:intl/date_symbol_data_local.dart';
 import 'package:kaloree/core/routes/app_route.dart';
+import 'package:kaloree/core/secrets/app_secret.dart';
 import 'package:kaloree/core/theme/app_theme.dart';
 import 'package:kaloree/core/theme/color_schemes.g.dart';
 import 'package:kaloree/core/theme/custom_color.g.dart';
@@ -19,6 +21,7 @@ import 'package:kaloree/features/history/presentation/bloc/get_nutrition_in_mont
 import 'package:kaloree/features/history/presentation/bloc/get_total_calories_in_week_bloc.dart';
 import 'package:kaloree/features/history/presentation/bloc/get_user_data_bloc.dart';
 import 'package:kaloree/features/home/presentation/bloc/daily_calories_bloc.dart';
+import 'package:kaloree/features/home/presentation/bloc/save_recommendation_bloc.dart';
 import 'package:kaloree/features/home/presentation/bloc/user_home_bloc.dart';
 import 'package:kaloree/features/main_menu/presentation/cubit/bottom_navigation_cubit.dart';
 import 'package:kaloree/features/main_menu/presentation/views/main_view.dart';
@@ -26,6 +29,7 @@ import 'package:kaloree/features/onboarding/presentation/bloc/login_with_google_
 import 'package:kaloree/features/onboarding/presentation/cubit/onboarding_cubit.dart';
 import 'package:kaloree/features/onboarding/presentation/views/onboarding_view.dart';
 import 'package:kaloree/features/profile/presentation/bloc/edit_profile_bloc.dart';
+import 'package:kaloree/features/profile/presentation/bloc/get_recommendation_bloc.dart';
 import 'package:kaloree/features/profile/presentation/bloc/get_user_data_on_profile_bloc.dart';
 import 'package:kaloree/features/scan/presentation/bloc/image_classification_bloc.dart';
 import 'package:kaloree/firebase_options.dart';
@@ -39,6 +43,8 @@ void main() async {
   await initDependencies();
 
   await initializeDateFormatting('id_ID');
+
+  Gemini.init(apiKey: AppSecret.geminiKey, enableDebugging: true);
 
   runApp(const MainApp());
 }
@@ -95,6 +101,10 @@ class MainApp extends StatelessWidget {
               create: (context) => serviceLocator<EditProfileBloc>()),
           BlocProvider<GetNutritionInMonthBloc>(
               create: (context) => serviceLocator<GetNutritionInMonthBloc>()),
+          BlocProvider<SaveRecommendationBloc>(
+              create: (context) => serviceLocator<SaveRecommendationBloc>()),
+          BlocProvider<GetRecommendationBloc>(
+              create: (context) => serviceLocator<GetRecommendationBloc>()),
         ],
         child: MaterialApp(
           theme: AppTheme.lightTheme(lightScheme),

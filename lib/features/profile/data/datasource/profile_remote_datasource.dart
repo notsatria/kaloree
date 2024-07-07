@@ -7,10 +7,13 @@ import 'package:firebase_storage/firebase_storage.dart';
 import 'package:kaloree/core/errors/exceptions.dart';
 import 'package:kaloree/core/model/health_profile.dart';
 import 'package:kaloree/core/model/user_model.dart';
+import 'package:kaloree/features/home/data/model/recommendation.dart';
 
 abstract interface class ProfileRemoteDataSource {
   Future<UserModel> getUserData();
   Future<void> editProfile({required String fullName, File? image});
+  Future<List<Recommendation>> getRecommendation(
+      {required bool isSportRecommendation});
 }
 
 class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
@@ -101,6 +104,51 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
       }
     } catch (e) {
       log("Error on editProfile: $e");
+      throw ServerException(e.toString());
+    }
+  }
+
+  @override
+  Future<List<Recommendation>> getRecommendation(
+      {required bool isSportRecommendation}) async {
+    try {
+      List<Recommendation> recommendationList = [];
+      final uid = firebaseAuth.currentUser!.uid;
+      if (isSportRecommendation) {
+        if (isSportRecommendation) {
+          CollectionReference ref = firebaseFirestore
+              .collection('users')
+              .doc(uid)
+              .collection('sport_recommendation');
+
+          final data = await ref.orderBy('createdAt', descending: false).get();
+
+          for (var doc in data.docs) {
+            Recommendation recommendation =
+                Recommendation.fromMap(doc.data() as Map<String, dynamic>);
+            recommendationList.add(recommendation);
+          }
+        }
+        log('Sport Recommendation List: $recommendationList');
+      } else {
+        CollectionReference ref = firebaseFirestore
+            .collection('users')
+            .doc(uid)
+            .collection('food_recommendation');
+
+        final data = await ref.orderBy('createdAt', descending: false).get();
+
+        for (var doc in data.docs) {
+          Recommendation recommendation =
+              Recommendation.fromMap(doc.data() as Map<String, dynamic>);
+          recommendationList.add(recommendation);
+        }
+      }
+      log('Food Recommendation List: $recommendationList');
+
+      return recommendationList;
+    } catch (e) {
+      log('Error on getRecommendation: $e');
       throw ServerException(e.toString());
     }
   }

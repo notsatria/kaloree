@@ -1,11 +1,11 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:gap/gap.dart';
-import 'package:intl/intl.dart';
 import 'package:kaloree/core/routes/app_route.dart';
 import 'package:kaloree/core/theme/colors.dart';
 import 'package:kaloree/core/theme/fonts.dart';
 import 'package:kaloree/core/theme/sizes.dart';
+import 'package:kaloree/core/utils/date_format.dart';
 import 'package:kaloree/core/utils/show_snackbar.dart';
 import 'package:kaloree/features/assesment/presentation/bloc/assesment_bloc.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_appbar.dart';
@@ -148,7 +148,8 @@ class _PersonalInformationViewState extends State<PersonalInformationView> {
       setState(() {
         selectedDate = pickedDate;
         debugPrint("Selected date: $selectedDate");
-        dateOfBirthController.text = DateFormat.yMMMMd().format(selectedDate);
+        dateOfBirthController.text =
+            formatDateTo(date: selectedDate, format: 'y MMMM d');
       });
     }
   }

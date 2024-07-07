@@ -27,4 +27,16 @@ class HomeRepositoryImpl implements HomeRepository {
       return left(Failure(e.toString()));
     }
   }
+
+  @override
+  Future<Either<Failure, void>> saveRecommendation(
+      {required bool isSportRecommendation, required String result}) async {
+    try {
+      final res = await datasource.saveRecommendation(
+          isSportRecommendation: isSportRecommendation, result: result);
+      return right(res);
+    } catch (e) {
+      return left(Failure(e.toString()));
+    }
+  }
 }

@@ -38,15 +38,19 @@ import 'package:kaloree/features/home/data/repositories/home_repository_impl.dar
 import 'package:kaloree/features/home/domain/repositories/home_repository.dart';
 import 'package:kaloree/features/home/domain/usecases/get_daily_calories_supplied_usecase.dart';
 import 'package:kaloree/features/home/domain/usecases/get_user_data_on_home_usecase.dart';
+import 'package:kaloree/features/home/domain/usecases/save_recommendation.dart';
 import 'package:kaloree/features/home/presentation/bloc/daily_calories_bloc.dart';
+import 'package:kaloree/features/home/presentation/bloc/save_recommendation_bloc.dart';
 import 'package:kaloree/features/home/presentation/bloc/user_home_bloc.dart';
 import 'package:kaloree/features/onboarding/presentation/bloc/login_with_google_bloc.dart';
 import 'package:kaloree/features/profile/data/datasource/profile_remote_datasource.dart';
 import 'package:kaloree/features/profile/data/repositories/profile_repository_impl.dart';
 import 'package:kaloree/features/profile/domain/repositories/profile_repository.dart';
 import 'package:kaloree/features/profile/domain/usecases/edit_profile.dart';
+import 'package:kaloree/features/profile/domain/usecases/get_recommendation.dart';
 import 'package:kaloree/features/profile/domain/usecases/get_user_data_on_profile.dart';
 import 'package:kaloree/features/profile/presentation/bloc/edit_profile_bloc.dart';
+import 'package:kaloree/features/profile/presentation/bloc/get_recommendation_bloc.dart';
 import 'package:kaloree/features/profile/presentation/bloc/get_user_data_on_profile_bloc.dart';
 import 'package:kaloree/features/scan/data/datasource/image_classification_remote_datasource.dart';
 import 'package:kaloree/features/scan/data/repositories/image_classification_repository_impl.dart';
@@ -223,15 +227,26 @@ void _initHome() {
     () => GetDailyCaloriesSuppliedUseCase(serviceLocator()),
   );
 
+  serviceLocator.registerFactory<SaveRecommendationUseCase>(
+    () => SaveRecommendationUseCase(serviceLocator()),
+  );
+
   // Blocs
   serviceLocator.registerLazySingleton<UserHomeBloc>(
     () => UserHomeBloc(
       getUserDataUseCase: serviceLocator(),
     ),
   );
+
   serviceLocator.registerLazySingleton<DailyCaloriesBloc>(
     () => DailyCaloriesBloc(
       getDailyCaloriesSuppliedUseCase: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton<SaveRecommendationBloc>(
+    () => SaveRecommendationBloc(
+      saveRecommendationUseCase: serviceLocator(),
     ),
   );
 }
@@ -292,8 +307,13 @@ void _initProfile() {
   serviceLocator.registerFactory(
     () => GetUserDataOnProfileUseCase(serviceLocator()),
   );
+
   serviceLocator.registerFactory(
     () => EditProfileUseCase(serviceLocator()),
+  );
+
+  serviceLocator.registerFactory(
+    () => GetRecommendationUseCase(serviceLocator()),
   );
 
   // blocs
@@ -302,9 +322,16 @@ void _initProfile() {
       getUserDataOnProfileUseCase: serviceLocator(),
     ),
   );
+
   serviceLocator.registerLazySingleton(
     () => EditProfileBloc(
       editProfileUseCase: serviceLocator(),
+    ),
+  );
+
+  serviceLocator.registerLazySingleton(
+    () => GetRecommendationBloc(
+      getRecommendationUseCase: serviceLocator(),
     ),
   );
 }
