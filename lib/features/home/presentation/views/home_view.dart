@@ -124,7 +124,8 @@ class _HomeViewState extends State<HomeView> {
                         const Gap(24),
                         SportCard(
                           onTap: () {
-                            _showConfirmationDialog(context, onYesPressed: () {
+                            _showConfirmationDialog(context,
+                                isSportRecommendation: true, onYesPressed: () {
                               pop(context);
                               showLoadingDialog(context);
                               final healthProfile = user.healthProfile;
@@ -216,7 +217,9 @@ class _HomeViewState extends State<HomeView> {
                         const Gap(24),
                         FoodCard(
                           onTap: () {
-                            _showConfirmationDialog(context, onYesPressed: () {
+                            _showConfirmationDialog(context,
+                                isSportRecommendation: false, onYesPressed: () {
+                              pop(context);
                               showLoadingDialog(context);
                               final healthProfile = user.healthProfile;
                               final gender = (healthProfile!.gender == 0)
@@ -491,12 +494,14 @@ class _HomeViewState extends State<HomeView> {
   }
 
   void _showConfirmationDialog(BuildContext context,
-      {required void Function()? onYesPressed}) {
+      {required void Function()? onYesPressed,
+      required bool isSportRecommendation}) {
     showDialog(
         context: context,
         builder: (context) {
           return AlertDialog(
-            title: const Text('Tunggu Sebentar'),
+            title: Text(
+                'Rekomendasi ${isSportRecommendation ? 'Olahraga' : 'Makanan'}'),
             content: const Text('Apakah kamu yakin ingin melanjutkan?'),
             actions: [
               TextButton(

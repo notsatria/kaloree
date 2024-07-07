@@ -10,9 +10,11 @@ import 'package:kaloree/features/home/presentation/bloc/save_recommendation_bloc
 
 class SportRecommendationView extends StatelessWidget {
   final String result;
+  final bool isFromHome;
   const SportRecommendationView({
     Key? key,
     required this.result,
+    this.isFromHome = true,
   }) : super(key: key);
 
   @override
@@ -36,24 +38,25 @@ class SportRecommendationView extends StatelessWidget {
       child: Scaffold(
         appBar: buildCustomAppBar(
             title: 'Personalisasi Olahraga Anda', context: context),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            _showConfirmationDialog(context, onYesPressed: () {
-              context.read<SaveRecommendationBloc>().add(
-                    SaveRecommendation(
-                        isSportRecommendation: true, result: result),
-                  );
-            });
-          },
-          label: const Text('Simpan'),
-          icon: const Icon(Icons.save),
-        ),
+        floatingActionButton: isFromHome
+            ? FloatingActionButton.extended(
+                onPressed: () {
+                  _showConfirmationDialog(context, onYesPressed: () {
+                    context.read<SaveRecommendationBloc>().add(
+                          SaveRecommendation(
+                              isSportRecommendation: true, result: result),
+                        );
+                  });
+                },
+                label: const Text('Simpan'),
+                icon: const Icon(Icons.save),
+              )
+            : null,
         body: Column(
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20)
-                    .copyWith(top: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Markdown(
                   data: result,
                 ),

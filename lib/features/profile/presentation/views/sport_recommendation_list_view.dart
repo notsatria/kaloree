@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
+import 'package:kaloree/core/routes/app_route.dart';
+import 'package:kaloree/core/widgets/loading.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_appbar.dart';
 import 'package:kaloree/features/assesment/presentation/widgets/custom_error_view.dart';
+import 'package:kaloree/features/home/presentation/views/sport_recommendation_view.dart';
 import 'package:kaloree/features/profile/presentation/bloc/get_recommendation_bloc.dart';
 import 'package:kaloree/features/profile/presentation/widgets/recommendation_list_tile.dart';
 
@@ -37,16 +40,30 @@ class _SportRecommendationListViewState
             appBar: buildCustomAppBar(
                 title: 'List Rekomendasi Olahraga Anda', context: context),
             body: ListView.separated(
-              separatorBuilder: (context, index) => const Padding(
-                padding: EdgeInsets.symmetric(horizontal: 20),
-                child: Divider(),
-              ),
+              separatorBuilder: (context, index) => const Divider(),
               itemCount: recommendationList.length,
               itemBuilder: (context, index) {
                 final recommendation = recommendationList[index];
-                return RecommendationListTile(recommendation: recommendation);
+                return RecommendationListTile(
+                  recommendation: recommendation,
+                  index: index + 1,
+                  onTap: () {
+                    goTo(
+                        context,
+                        SportRecommendationView(
+                          result: recommendation.result,
+                          isFromHome: false,
+                        ));
+                  },
+                );
               },
             ),
+          );
+        } else if (state is GetRecommendationLoading) {
+          return Scaffold(
+            appBar: buildCustomAppBar(
+                title: 'List Rekomendasi Olahraga Anda', context: context),
+            body: const Loading(),
           );
         } else if (state is GetRecommendationFailure) {
           return _buildErrorStateView(context, state.message);

@@ -121,7 +121,7 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
               .doc(uid)
               .collection('sport_recommendation');
 
-          final data = await ref.get();
+          final data = await ref.orderBy('createdAt', descending: false).get();
 
           for (var doc in data.docs) {
             Recommendation recommendation =
@@ -131,22 +131,21 @@ class ProfileRemoteDataSourceImpl implements ProfileRemoteDataSource {
         }
         log('Sport Recommendation List: $recommendationList');
       } else {
-        if (isSportRecommendation) {
-          CollectionReference ref = firebaseFirestore
-              .collection('users')
-              .doc(uid)
-              .collection('food_recommendation');
+        CollectionReference ref = firebaseFirestore
+            .collection('users')
+            .doc(uid)
+            .collection('food_recommendation');
 
-          final data = await ref.get();
+        final data = await ref.orderBy('createdAt', descending: false).get();
 
-          for (var doc in data.docs) {
-            Recommendation recommendation =
-                Recommendation.fromMap(doc.data() as Map<String, dynamic>);
-            recommendationList.add(recommendation);
-          }
+        for (var doc in data.docs) {
+          Recommendation recommendation =
+              Recommendation.fromMap(doc.data() as Map<String, dynamic>);
+          recommendationList.add(recommendation);
         }
-        log('Food Recommendation List: $recommendationList');
       }
+      log('Food Recommendation List: $recommendationList');
+
       return recommendationList;
     } catch (e) {
       log('Error on getRecommendation: $e');

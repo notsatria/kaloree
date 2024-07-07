@@ -1,4 +1,3 @@
-// ignore_for_file: public_member_api_docs, sort_constructors_first
 import 'package:flutter/material.dart';
 import 'package:flutter_bloc/flutter_bloc.dart';
 import 'package:flutter_markdown/flutter_markdown.dart';
@@ -10,9 +9,11 @@ import 'package:kaloree/features/home/presentation/bloc/save_recommendation_bloc
 
 class FoodRecommendationView extends StatelessWidget {
   final String result;
+  final bool isFromHome;
   const FoodRecommendationView({
     Key? key,
     required this.result,
+    this.isFromHome = true,
   }) : super(key: key);
 
   @override
@@ -36,24 +37,25 @@ class FoodRecommendationView extends StatelessWidget {
       child: Scaffold(
         appBar: buildCustomAppBar(
             title: 'Personalisasi Makanan Anda', context: context),
-        floatingActionButton: FloatingActionButton.extended(
-          onPressed: () {
-            _showConfirmationDialog(context, onYesPressed: () {
-              context.read<SaveRecommendationBloc>().add(
-                    SaveRecommendation(
-                        isSportRecommendation: false, result: result),
-                  );
-            });
-          },
-          label: const Text('Simpan'),
-          icon: const Icon(Icons.save),
-        ),
+        floatingActionButton: isFromHome
+            ? FloatingActionButton.extended(
+                onPressed: () {
+                  _showConfirmationDialog(context, onYesPressed: () {
+                    context.read<SaveRecommendationBloc>().add(
+                          SaveRecommendation(
+                              isSportRecommendation: false, result: result),
+                        );
+                  });
+                },
+                label: const Text('Simpan'),
+                icon: const Icon(Icons.save),
+              )
+            : null,
         body: Column(
           children: [
             Expanded(
               child: Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 20)
-                    .copyWith(top: 20),
+                padding: const EdgeInsets.symmetric(horizontal: 20),
                 child: Markdown(
                   data: result,
                 ),
